@@ -1,0 +1,2 @@
+# food_wastage_reduction_app
+This is food_wastage_reduction_app repository
