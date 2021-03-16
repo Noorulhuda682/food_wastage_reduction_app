@@ -10,6 +10,7 @@ import {
     SignUp
 } from "./components"
 
+
 const FoodWastageReductionApp = () => {
     return(
         <View>
