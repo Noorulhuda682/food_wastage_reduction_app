@@ -1,33 +1,25 @@
-import React from "react";
-import {
- View,
- Text,
- StyleSheet
-} from "react-native"
+import React from 'react';
+import 'react-native-gesture-handler';
 
-import {
-    Login,
-    SignUp
-} from "./components"
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import { Home, SignUp, Login } from "./components/index"
 
 
-const FoodWastageReductionApp = () => {
-    return(
-        <View>
-            <Text style={[styles.text,{backgroundColor:"#efefef",color:"dodgerblue"}]}>
-              Welcome to Food Wastage Reduction App
-            </Text>
-            <Login/>
-            <SignUp/>
-        </View>
+const Stack = createStackNavigator()
+
+const StackNavigation = () => {
+    return (
+        <Stack.Navigator initialRouteName="Home"
+            screenOptions={{
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                headerShown: false
+            }}
+        >
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+        </Stack.Navigator>
     )
 }
 
-const styles = StyleSheet.create({
-    text:{
-        fontSize:40,
-        textAlign:"center"
-    }
-})
-
-export default FoodWastageReductionApp;
+export default StackNavigation;
