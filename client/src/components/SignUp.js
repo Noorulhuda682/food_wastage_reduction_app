@@ -31,7 +31,7 @@ const SignUp = ({ navigation }) => {
         <Container style={styles.container}>
           <View style={styles.headingView}>
             <Text style={styles.headingTitle}>
-              Create Accout
+              Create Account
                       </Text>
             <Text style={styles.headingText}>
               SignUp to get starget!

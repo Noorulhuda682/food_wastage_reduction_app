@@ -14,22 +14,29 @@ import {
     Image
 } from 'react-native'
 import { Container, Header, Content, Item, Input, Icon, Spinner } from 'native-base';
-
-
+import { useSelector, useDispatch } from "react-redux"
+import { addUser } from "../store/actions/user"
 
 const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const data = useSelector(state => state);
+    console.log("LOGINDATA===>", data);
+    const dispatch = useDispatch();
 
+    const login = () => {
+        dispatch(addUser());
+        navigation.navigate("SignUp")
+    }
 
     return (
-        <KeyboardAvoidingView  style={style.keyboradAvoid}>
+        <KeyboardAvoidingView style={style.keyboradAvoid}>
             <ScrollView>
                 <Container style={style.container}>
                     <View style={style.logoView}>
-                        <Image source={require("../assets/logo.jpeg")} />
+                        <Image source={require("../assets/images/logo.jpeg")} />
                     </View>
                     <Item style={[{ marginTop: 70 }, style.input]} success>
                         <Input placeholder='email...' value={email} onChangeText={(emails) => { console.log("emails", emails); setEmail(emails) }}
@@ -50,11 +57,11 @@ const Login = ({ navigation }) => {
                     <Text style={{ marginTop: 50 }}>forgot password</Text>
 
                     <TouchableOpacity
-                        onPress={() => { navigation.navigate("SignUp") }}
+                        onPress={login}
                         style={{ marginTop: 50 }}>
                         {loading ?
                             <Text style={style.loginButton}>
-                                  ...   <ActivityIndicator size="small" color='lightgray' />   ...
+                                ...   <ActivityIndicator size="small" color='lightgray' />   ...
                             </Text> :
                             <Text style={style.loginButton}>
                                 LOGIN

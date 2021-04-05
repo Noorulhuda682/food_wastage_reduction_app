@@ -1,12 +1,9 @@
-import React, { useState,useContext } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
-    Button,
-    Image,
     StyleSheet
 } from 'react-native';
-
 import {
     DrawerContentScrollView,
     DrawerItem
@@ -17,18 +14,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Thumbnail, Switch, Left, Right, Container, Content, Body, List, ListItem } from 'native-base';
 import { useTheme } from '@react-navigation/native';
-import { ThemeContext } from "../../App"
+import {useSelector,useDispatch} from "react-redux";
+import {removeUser} from "../store/actions/user"
+import {toggleTheme} from "../store/actions/theming";
 
 
 const DrawerContent = (props) => {
     const { navigation } = props;
     const { colors } = useTheme();
-
     const [switchValue, setSwitchValue] = useState(false)
-
-    const value = useContext(ThemeContext);
-
     const {title,background,card,text,border,notification,icon} = colors;
+    const data = useSelector(state => state);
+    // console.log("LOGINDATA===>",data);
+    const dispatch = useDispatch();
 
     return (
         <Container style={{ flex: 1, backgroundColor: background }}>
@@ -38,7 +36,7 @@ const DrawerContent = (props) => {
                         <Thumbnail
                             size={50}
                             style={styles.profileImage}
-                            source={require('../assets/profile.jpg')} />
+                            source={require('../assets/images/profile.jpg')} />
                         <Text style={[styles.profileName,{color:title}]} >Ajaz uddin</Text>
                         <Text style={styles.profileEmail}>@gmail.com</Text>
                     </View>
@@ -85,8 +83,8 @@ const DrawerContent = (props) => {
                                 <Switch
                                     value={switchValue}
                                     onValueChange={() => { 
-                                        setSwitchValue(!switchValue)
-                                        value.handleTheme();
+                                        setSwitchValue(!switchValue);
+                                        dispatch(toggleTheme())
                                     }}
                                 />
                             </Right>
@@ -99,7 +97,7 @@ const DrawerContent = (props) => {
                         }}
                         label="Logout"
                         inactiveTintColor='gray'
-                        onPress={() => { navigation.navigate('Login') }}
+                        onPress={() => { dispatch(removeUser());navigation.navigate('Login') }}
                     />
                 </Content>
             </DrawerContentScrollView>
