@@ -46,7 +46,15 @@ const DrawerContent = (props) => {
                         }}
                         label="Home"
                         inactiveTintColor='gray'
-                        onPress={() => { }}
+                        onPress={() => {  navigation.navigate("home")  }}
+                    />
+                    <DrawerItem style={styles.drawerItem}
+                        icon={({ color, size }) => {
+                            return <FontAwesome name="home" size={22} color={icon} />
+                        }}
+                        label="Profile"
+                        inactiveTintColor='gray'
+                        onPress={() => { navigation.navigate("profile") }}
                     />
                     <DrawerItem style={styles.drawerItem}
                         icon={({ color, size }) => {
