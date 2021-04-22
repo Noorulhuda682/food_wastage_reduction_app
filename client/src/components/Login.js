@@ -36,9 +36,9 @@ const Login = ({ navigation }) => {
             <ScrollView>
                 <Container style={style.container}>
                     <View style={style.logoView}>
-                        <Image source={require("../assets/images/logo.jpeg")} />
+                        <Image style={{width:230,height:200}} source={require("../assets/images/app-logo.jpeg")} />
                     </View>
-                    <Item style={[{ marginTop: 70 }, style.input]} success>
+                    <Item style={[{ marginTop: 40 }, style.input]} success>
                         <Input placeholder='email...' value={email} onChangeText={(emails) => { console.log("emails", emails); setEmail(emails) }}
                         />
                         <Icon name='checkmark-circle' />
@@ -83,7 +83,7 @@ const style = StyleSheet.create({
 
     },
     container: {
-        marginTop: 150,
+        marginTop: 110,
         paddingHorizontal: 40,
     },
     logoView: {
@@ -107,7 +107,7 @@ const style = StyleSheet.create({
         height: 40,
     },
     loginButton: {
-        backgroundColor: '#082860',
+        backgroundColor: "#00203FFF",
         borderRadius: 3,
         color: 'white',
         textAlign: 'center',

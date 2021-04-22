@@ -17,7 +17,7 @@ const { width, height } = Dimensions.get('window')
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 
-const Home = ({ navigation }) => {
+const MyPosts = ({ navigation }) => {
     return (
         <Container>
             <Header style={{ backgroundColor: "#00203FFF" }}>
@@ -25,10 +25,9 @@ const Home = ({ navigation }) => {
                     <Button transparent onPress={() => navigation.openDrawer()}>
                         <Icon name='menu' />
                     </Button>
-
                 </Left>
                 <Body>
-                    <Title>Home</Title>
+                    <Title>All Posts</Title>
                 </Body>
                 <Right>
                     <Button transparent>
@@ -38,25 +37,19 @@ const Home = ({ navigation }) => {
             </Header>
             <Content style={styles.mainContent} padder>
                 <Content padder style={{ backgroundColor: "" }}>
-                    <Text style={styles.heading}>Safe Wasting Food</Text>
-                    <Text style={styles.para}>
-                        Reducing the wastage of food can boot economy of a country
-                     </Text>
                     <Content>
                         <Card>
-                           <CardItem>
+                            <CardItem>
                                 <Left>
-                                    {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                 */}
+                                <Thumbnail source={require('../assets/images/profile.jpg')} />
                                     <Body>
-                                        {/* <Text>NativeBase</Text>
-                                        <Text note>GeekyAnts</Text> */}
-                                      <Text style={{fontSize:18,fontWeight:"bold"}}>Food Items </Text>
-                                    </Body> 
+                                        <Text >by ajaz</Text>
+                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
+                                    </Body>
                                 </Left>
                             </CardItem>
-                             <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 150, width: null, flex: 1 }} />
+                            <CardItem cardBody>
+                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
                             </CardItem>
                             <CardItem>
                                 <Left>
@@ -77,19 +70,17 @@ const Home = ({ navigation }) => {
                             </CardItem>
                         </Card>
                         <Card>
-                           <CardItem>
+                            <CardItem>
                                 <Left>
-                                    {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                 */}
+                                <Thumbnail source={require('../assets/images/profile.jpg')} />
                                     <Body>
-                                        {/* <Text>NativeBase</Text>
-                                        <Text note>GeekyAnts</Text> */}
-                                      <Text style={{fontSize:18,fontWeight:"bold"}}>Distribution Locations</Text>
-                                    </Body> 
+                                        <Text >by darius</Text>
+                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
+                                    </Body>
                                 </Left>
                             </CardItem>
-                             <CardItem cardBody>
-                                <Image source={require('../assets/images/location.jpg')} style={{ height: 150, width: null, flex: 1 }} />
+                            <CardItem cardBody>
+                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
                             </CardItem>
                             <CardItem>
                                 <Left>
@@ -110,19 +101,17 @@ const Home = ({ navigation }) => {
                             </CardItem>
                         </Card>
                         <Card>
-                           <CardItem>
+                            <CardItem>
                                 <Left>
-                                    {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                 */}
+                                <Thumbnail source={require('../assets/images/profile.jpg')} />
                                     <Body>
-                                        {/* <Text>NativeBase</Text>
-                                        <Text note>GeekyAnts</Text> */}
-                                      <Text style={{fontSize:18,fontWeight:"bold"}}>Distribution Per Family</Text>
-                                    </Body> 
+                                        <Text >by noor</Text>
+                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
+                                    </Body>
                                 </Left>
                             </CardItem>
-                             <CardItem cardBody>
-                                <Image source={require('../assets/images/distribution.jpg')} style={{ height: 150, width: null, flex: 1 }} />
+                            <CardItem cardBody>
+                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
                             </CardItem>
                             <CardItem>
                                 <Left>
@@ -142,37 +131,10 @@ const Home = ({ navigation }) => {
                                 </Right>
                             </CardItem>
                         </Card>
-
-
-
-                       
-                       
                     </Content>
                 </Content>
 
-               
             </Content>
-            <Footer style={{ backgroundColor: "white" }}>
-                <Fab
-                    active={true}
-                    direction="up"
-                    containerStyle={{}}
-                    style={{ backgroundColor: "#00203FFF" }}
-                    position="bottomRight"
-                // onPress={() => this.setState({ active: !this.state.active })}
-                >
-                    <Icon name="share" />
-                    {/* <Button style={{ backgroundColor: '#34A34F' }}>
-                        <Icon name="logo-whatsapp" />
-                    </Button>
-                    <Button style={{ backgroundColor: '#3B5998' }}>
-                        <Icon name="logo-facebook" />
-                    </Button>
-                    <Button disabled style={{ backgroundColor: '#DD5144' }}>
-                        <Icon name="mail" />
-                    </Button> */}
-                </Fab>
-            </Footer>
         </Container>
 
     );
@@ -184,12 +146,12 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontWeight: "bold",
-        fontSize: 20,
-        color: "#00203FFF",
+        fontSize: 35,
+        color: "#00203FFF"
         // textAlign:"center"
     },
     para: {
-        fontSize: 13,
+        fontSize: 16,
         paddingLeft: 5,
         color: "#00203FFF",
         paddingBottom: 20
@@ -212,4 +174,4 @@ const styles = StyleSheet.create({
     }
 
 })
-export default Home;
+export default MyPosts;

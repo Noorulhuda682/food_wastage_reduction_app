@@ -9,8 +9,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import {
   Container, Header, Left, Body, Right, Button, Icon, Title, Content,
-  Card, CardItem, H2, Footer,
-  Fab, Thumbnail
+  Card, CardItem, H2, Footer, Badge,
+  Fab, Thumbnail, Item, Input
 } from "native-base"
 
 const Profile = ({ navigation }) => {
@@ -38,20 +38,85 @@ const Profile = ({ navigation }) => {
         <View style={{
           alignItems: "center", borderBottomWidth: 1,
           borderBottomColor: "lightgray", paddingBottom: 20,
-          marginBottom:10
+          marginBottom: 10
         }}>
-          <Thumbnail
-            size={50}
-            style={styles.profileImage}
-            large source={require('../assets/images/profile.jpg')} />
+          <View>
+            <Thumbnail
+              size={50}
+              style={styles.profileImage}
+              large source={require('../assets/images/profile.jpg')}
+            />
+            <Badge success style={styles.badge}></Badge>
+          </View>
+
+          <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Noorul Huda</Text>
         </View>
-        <View style={{alignItems:"center"}}>
-          <Text>
-            <Text style={styles.letftText}>Name : </Text>
-            <Text style={styles.rightText}>
-              Noorul Huda
-            </Text>
-          </Text>
+
+        <Content style={{ paddingHorizontal: "5%" }} padder>
+          <Text style={{ color: "lightgray", fontWeight: "bold", textAlign: "center", }} >Edit Profile</Text>
+          <Text style={styles.grayText} >Username</Text>
+          <Item
+            // success
+            style={styles.item}
+          >
+            <Input
+              value={"Noorul Huda"}
+              style={styles.input}
+            //  onChangeText={(emails) => { console.log("emails", emails);
+            //   setEmail(emails) }}
+            />
+            {/* <Icon name='checkmark-circle' /> */}
+          </Item>
+          <Text style={styles.grayText} >Email</Text>
+          <Item style={styles.item}>
+            <Input
+              value={"noorulhuda682@gmail.com"}
+              style={styles.input}
+            //  onChangeText={(emails) => { console.log("emails", emails);
+            //   setEmail(emails) }}
+            />
+            {/* <Icon name='checkmark-circle' /> */}
+          </Item>
+          <Text style={styles.grayText} >Gender</Text>
+          <Item style={styles.item}>
+            <Input
+              value={"Male"}
+              style={styles.input}
+            //  onChangeText={(emails) => { console.log("emails", emails);
+            //   setEmail(emails) }}
+            />
+            {/* <Icon name='checkmark-circle' /> */}
+          </Item>
+          <Text style={styles.grayText} >Date of Birth</Text>
+          <Item style={styles.item}>
+            <Input
+              value={"03/07/1996"}
+              style={styles.input}
+            //  onChangeText={(emails) => { console.log("emails", emails);
+            //   setEmail(emails) }}
+            />
+            {/* <Icon name='checkmark-circle' /> */}
+          </Item>
+          <Text style={styles.grayText} >Address</Text>
+          <Item style={styles.item}>
+            <Input
+              value={"gulshan sikandar abad keamari karachi"}
+              style={styles.input}
+            //  onChangeText={(emails) => { console.log("emails", emails);
+            //   setEmail(emails) }}
+            />
+            {/* <Icon name='checkmark-circle' /> */}
+          </Item>
+        </Content>
+        <View style={styles.btnsView} padder>
+          <Button style={styles.button}>
+            <Text style={styles.btnText}>Cancel</Text>
+          </Button>
+          <Button
+            style={[styles.button, styles.activeBtn]}
+          >
+            <Text style={[styles.btnText, styles.activeBtnText]}>Save</Text>
+          </Button>
         </View>
       </Content>
 
@@ -61,22 +126,69 @@ const Profile = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   profileImage: {
-    height: 150,
-    width: 150,
+    height: 130,
+    width: 130,
     borderWidth: 1,
     borderColor: 'lightgray',
     marginTop: 25
   },
-  letftText:{
-   fontWeight:'bold',
-   fontSize:18
+  letftText: {
+    fontWeight: 'bold',
+    fontSize: 18
   },
-  rightText:{
-    fontSize:18,
-    color:'gray',
-    marginLeft:20,
-    backgroundColor:"lightgray"
+  rightText: {
+    fontSize: 18,
+    color: 'gray',
+    marginLeft: 20,
+    backgroundColor: "lightgray"
+  },
+  btnsView: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    paddingHorizontal: "10%",
+    marginTop: 20
+  },
+  button: {
+    borderColor: "#00203FFF",
+    borderWidth: 1,
+    backgroundColor: "white",
+    paddingHorizontal: 25,
+  },
+  btnText: {
+    color: "#00203FFF",
+    fontWeight: 'bold',
+  },
+  activeBtn: {
+    backgroundColor: "#00203FFF",
+    borderRadius: 3
+  },
+  activeBtnText: {
+    color: "white"
+  },
+  grayText: {
+    color: "#88929c",
+    paddingLeft: 6,
+    marginTop: 15
+  },
+  item: {
+    marginTop: -10,
+    borderBottomColor: "gray"
+  },
+  input: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginBottom: -5
+  },
+  badge: {
+    width: 23,
+    height: 23,
+    borderWidth: 1,
+    borderColor: "lightgray",
+    marginTop: -25,
+    alignSelf: "flex-end"
   }
+
 })
 
 export default Profile;

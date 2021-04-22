@@ -12,18 +12,18 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Thumbnail, Switch, Left, Right, Container, Content, Body, List, ListItem } from 'native-base';
+import { Thumbnail, Switch, Left, Right, Container, Content, Body, List, ListItem,Badge } from 'native-base';
 import { useTheme } from '@react-navigation/native';
-import {useSelector,useDispatch} from "react-redux";
-import {removeUser} from "../store/actions/user"
-import {toggleTheme} from "../store/actions/theming";
+import { useSelector, useDispatch } from "react-redux";
+import { removeUser } from "../store/actions/user"
+import { toggleTheme } from "../store/actions/theming";
 // AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY
 
 const DrawerContent = (props) => {
     const { navigation } = props;
     const { colors } = useTheme();
     const [switchValue, setSwitchValue] = useState(false)
-    const {title,background,card,text,border,notification,icon} = colors;
+    const { title, background, card, text, border, notification, icon } = colors;
     const data = useSelector(state => state);
     // console.log("LOGINDATA===>",data);
     const dispatch = useDispatch();
@@ -33,11 +33,15 @@ const DrawerContent = (props) => {
             <DrawerContentScrollView {...props}>
                 <Content style={styles.mainView}>
                     <View style={styles.profileView}>
-                        <Thumbnail
-                            size={50}
-                            style={styles.profileImage}
-                            source={require('../assets/images/profile.jpg')} />
-                        <Text style={[styles.profileName,{color:title}]} >Ajaz uddin</Text>
+                        <View>
+                            <Thumbnail
+                                size={50}
+                                style={styles.profileImage}
+                                large source={require('../assets/images/profile.jpg')}
+                            />
+                            <Badge success style={styles.badge}></Badge>
+                        </View>
+                        <Text style={[styles.profileName, { color: title }]} >Ajaz uddin</Text>
                         <Text style={styles.profileEmail}>@gmail.com</Text>
                     </View>
                     <DrawerItem style={styles.drawerItem}
@@ -46,11 +50,11 @@ const DrawerContent = (props) => {
                         }}
                         label="Home"
                         inactiveTintColor='gray'
-                        onPress={() => {  navigation.navigate("home")  }}
+                        onPress={() => { navigation.navigate("home") }}
                     />
                     <DrawerItem style={styles.drawerItem}
                         icon={({ color, size }) => {
-                            return <FontAwesome name="home" size={22} color={icon} />
+                            return <AntDesign name="profile" size={24} color={icon} />
                         }}
                         label="Profile"
                         inactiveTintColor='gray'
@@ -62,7 +66,7 @@ const DrawerContent = (props) => {
                         }}
                         label="All Posts"
                         inactiveTintColor='gray'
-                        onPress={() => { }}
+                        onPress={() => { navigation.navigate('allPosts') }}
                     />
                     <DrawerItem style={styles.drawerItem}
                         icon={({ color, size }) => {
@@ -70,7 +74,7 @@ const DrawerContent = (props) => {
                         }}
                         label="My Posts"
                         inactiveTintColor='gray'
-                        onPress={() => { }}
+                        onPress={() => { navigation.navigate('myPosts') }}
                     />
                     <DrawerItem style={styles.drawerItem}
                         icon={({ color, size }) => {
@@ -78,19 +82,26 @@ const DrawerContent = (props) => {
                         }}
                         label="Add Post"
                         inactiveTintColor='gray'
-                        onPress={() => { }}
+                        onPress={() => { navigation.navigate('addPost') }}
                     />
-                   
+                    <DrawerItem style={styles.drawerItem}
+                        icon={({ color, size }) => {
+                            return <MaterialCommunityIcons name="google-maps" size={24} color={icon} />
+                        }}
+                        label="See Map"
+                        inactiveTintColor='gray'
+                        onPress={() => { navigation.navigate('map') }}
+                    />
 
                     <List style={{ paddingTop: 100 }}>
                         <ListItem>
                             <Left>
-                                <Text style={{color:'gray',paddingVertical:5}}>Dark Mode</Text>
+                                <Text style={{ color: 'gray', paddingVertical: 5 }}>Dark Mode</Text>
                             </Left>
                             <Right>
                                 <Switch
                                     value={switchValue}
-                                    onValueChange={() => { 
+                                    onValueChange={() => {
                                         setSwitchValue(!switchValue);
                                         dispatch(toggleTheme())
                                     }}
@@ -99,13 +110,13 @@ const DrawerContent = (props) => {
                         </ListItem>
                     </List>
 
-                    <DrawerItem style={[styles.drawerItem,{paddingTop:150}]}
+                    <DrawerItem style={[styles.drawerItem, { paddingTop: 150 }]}
                         icon={({ color, size }) => {
                             return <AntDesign name="logout" size={23} color={icon} />
                         }}
                         label="Logout"
                         inactiveTintColor='gray'
-                        onPress={() => { dispatch(removeUser());navigation.navigate('Login') }}
+                        onPress={() => { dispatch(removeUser()); navigation.navigate('Login') }}
                     />
                 </Content>
             </DrawerContentScrollView>
@@ -140,6 +151,14 @@ const styles = StyleSheet.create({
     drawerItem: {
         borderBottomWidth: 1,
         borderColor: 'lightgray'
+    },
+    badge: {
+      width: 20,
+      height: 20,
+      borderWidth: 1,
+      borderColor: "lightgray",
+      marginTop: -25,
+      alignSelf: "flex-end"
     }
 
 })
