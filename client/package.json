@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/netinfo": "^6.0.0",
     "@react-native-masked-view/masked-view": "^0.2.3",
     "@react-navigation/drawer": "^6.0.0-next.2",
     "@react-navigation/native": "^6.0.0-next.1",

@@ -2,14 +2,16 @@ import React from 'react';
 import {
     View,
     Text, Dimensions,
-    StyleSheet,Image
+    StyleSheet, Image,
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { useNetInfo } from "@react-native-community/netinfo";
+
 import {
     Container, Header, Left, Body, Right, Button, Icon, Title, Content,
-    Card, CardItem, H2, Footer,Thumbnail,
+    Card, CardItem, H2, Footer, Thumbnail,
     Fab
     // Text
 } from 'native-base';
@@ -18,6 +20,9 @@ const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 
 const Home = ({ navigation }) => {
+    const netInfo = useNetInfo();
+
+console.log("netInfo",netInfo);
     return (
         <Container>
             <Header style={{ backgroundColor: "#00203FFF" }}>
@@ -38,24 +43,28 @@ const Home = ({ navigation }) => {
             </Header>
             <Content style={styles.mainContent} padder>
                 <Content padder style={{ backgroundColor: "" }}>
+                    <View>
+                        <Text>Type: {netInfo.type}</Text>
+                        <Text>Is Connected {`${netInfo.isConnected}`}</Text>
+                    </View>
                     <Text style={styles.heading}>Safe Wasting Food</Text>
                     <Text style={styles.para}>
                         Reducing the wastage of food can boot economy of a country
                      </Text>
                     <Content>
                         <Card>
-                           <CardItem>
+                            <CardItem>
                                 <Left>
                                     {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
                                  */}
                                     <Body>
                                         {/* <Text>NativeBase</Text>
                                         <Text note>GeekyAnts</Text> */}
-                                      <Text style={{fontSize:18,fontWeight:"bold"}}>Food Items </Text>
-                                    </Body> 
+                                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Food Items </Text>
+                                    </Body>
                                 </Left>
                             </CardItem>
-                             <CardItem cardBody>
+                            <CardItem cardBody>
                                 <Image source={require('../assets/images/foods.jpeg')} style={{ height: 150, width: null, flex: 1 }} />
                             </CardItem>
                             <CardItem>
@@ -77,18 +86,18 @@ const Home = ({ navigation }) => {
                             </CardItem>
                         </Card>
                         <Card>
-                           <CardItem>
+                            <CardItem>
                                 <Left>
                                     {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
                                  */}
                                     <Body>
                                         {/* <Text>NativeBase</Text>
                                         <Text note>GeekyAnts</Text> */}
-                                      <Text style={{fontSize:18,fontWeight:"bold"}}>Distribution Locations</Text>
-                                    </Body> 
+                                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Distribution Locations</Text>
+                                    </Body>
                                 </Left>
                             </CardItem>
-                             <CardItem cardBody>
+                            <CardItem cardBody>
                                 <Image source={require('../assets/images/location.jpg')} style={{ height: 150, width: null, flex: 1 }} />
                             </CardItem>
                             <CardItem>
@@ -110,18 +119,18 @@ const Home = ({ navigation }) => {
                             </CardItem>
                         </Card>
                         <Card>
-                           <CardItem>
+                            <CardItem>
                                 <Left>
                                     {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
                                  */}
                                     <Body>
                                         {/* <Text>NativeBase</Text>
                                         <Text note>GeekyAnts</Text> */}
-                                      <Text style={{fontSize:18,fontWeight:"bold"}}>Distribution Per Family</Text>
-                                    </Body> 
+                                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Distribution Per Family</Text>
+                                    </Body>
                                 </Left>
                             </CardItem>
-                             <CardItem cardBody>
+                            <CardItem cardBody>
                                 <Image source={require('../assets/images/distribution.jpg')} style={{ height: 150, width: null, flex: 1 }} />
                             </CardItem>
                             <CardItem>
@@ -145,12 +154,12 @@ const Home = ({ navigation }) => {
 
 
 
-                       
-                       
+
+
                     </Content>
                 </Content>
 
-               
+
             </Content>
             <Footer style={{ backgroundColor: "white" }}>
                 <Fab

@@ -4,14 +4,12 @@ import React, {
 import {
     View,
     Text,
-    Button,
-    TextInput,
     KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
     TouchableOpacity,
     ActivityIndicator,
-    Image
+    Image,
 } from 'react-native'
 import { Container, Header, Content, Item, Input, Icon, Spinner } from 'native-base';
 import { useSelector, useDispatch } from "react-redux"
@@ -30,6 +28,8 @@ const Login = ({ navigation }) => {
         dispatch(addUser());
         navigation.navigate("SignUp")
     }
+
+   
 
     return (
         <KeyboardAvoidingView style={style.keyboradAvoid}>
