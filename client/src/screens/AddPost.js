@@ -19,13 +19,16 @@ import {
     Card, CardItem, H2, Footer,
 } from 'native-base';
 import { useSelector, useDispatch } from "react-redux"
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const AddPost = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [img1,setImg1] = useState(null)
     const data = useSelector(state => state);
     console.log("LOGINDATA===>", data);
     const dispatch = useDispatch();
@@ -34,6 +37,34 @@ const AddPost = ({ navigation }) => {
         dispatch(addUser());
         navigation.navigate("SignUp")
     }
+
+    launchCameraHandler = () => {
+        let options = {
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+                alert(response.customButton);
+            } else {
+                const source = { uri: response.uri };
+                console.log('response', JSON.stringify(response));
+                console.log('source', source);
+                setImg1(response.uri)
+            }
+        });
+
+    }
+
 
     return (
         <KeyboardAvoidingView >
@@ -51,6 +82,22 @@ const AddPost = ({ navigation }) => {
                         </Right>
                     </Header>
                     <Content padder>
+                        <Text style={styles.grayText} >Food Image</Text>
+                        <View  style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}} >
+                            {img1 && <TouchableOpacity style={styles.cameraView}>
+                                {/* <Ionicons name="ios-camera" size={24} color="gray" /> */}
+                                <Image style={{height:"100%",width:"100%"}} source={{uri:img1}}/>
+                            </TouchableOpacity>}
+
+                           {/*  <TouchableOpacity style={{backgroundColor:"lightgray",marginHorizontal:2,
+                                height:100,width:"33%",justifyContent:"center",alignItems:"center"}}>
+                                <Ionicons name="ios-camera" size={24} color="gray" />
+                            </TouchableOpacity> */}
+                            <TouchableOpacity onPress={launchCameraHandler} style={styles.cameraView}>
+                                <Ionicons name="ios-camera" size={24} color="gray" />
+                                {/* <Image style={{height:"100%",width:"100%"}} source={{uri:img1}}/> */}
+                            </TouchableOpacity>
+                        </View>
                         <Text style={styles.grayText} >Food Title</Text>
                         <Item
                             // success
@@ -92,9 +139,6 @@ const AddPost = ({ navigation }) => {
                         </Item>
 
 
-
-
-                        <Text style={{ marginTop: 50 }}>forgot password</Text>
                         <TouchableOpacity
                             onPress={login}
                             style={{ marginTop: 50 }}>
@@ -121,6 +165,12 @@ const AddPost = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+    cameraView:{
+        backgroundColor:"lightgray",
+        height:100,width:"33%",
+        justifyContent:"center",
+        alignItems:"center"
+    },
     loginButton: {
         backgroundColor: "#00203FFF",
         borderRadius: 3,
@@ -133,16 +183,16 @@ const styles = StyleSheet.create({
         color: "#88929c",
         paddingLeft: 6,
         marginTop: 15
-      },
-      item:{
+    },
+    item: {
         marginTop: -10,
-        borderBottomColor:"gray"
-      },
-      input:{
-        fontSize: 15, 
+        borderBottomColor: "gray"
+    },
+    input: {
+        fontSize: 15,
         fontWeight: "bold",
-         marginBottom: -5 
-      }
+        marginBottom: -5
+    }
 
 
 })

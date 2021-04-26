@@ -17,9 +17,11 @@ import { useTheme } from '@react-navigation/native';
 import { useSelector, useDispatch } from "react-redux";
 import { removeUser } from "../store/actions/user"
 import { toggleTheme } from "../store/actions/theming";
+import { useNetInfo } from "@react-native-community/netinfo";
 // AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY
 
 const DrawerContent = (props) => {
+    const netInfo = useNetInfo();
     const { navigation } = props;
     const { colors } = useTheme();
     const [switchValue, setSwitchValue] = useState(false)
@@ -39,9 +41,9 @@ const DrawerContent = (props) => {
                                 style={styles.profileImage}
                                 large source={require('../assets/images/profile.jpg')}
                             />
-                            <Badge success style={styles.badge}></Badge>
+                            <Badge success={ netInfo.type === 'wifi' && netInfo.isConnected   ? true : false} style={styles.badge}></Badge>
                         </View>
-                        <Text style={[styles.profileName, { color: title }]} >Ajaz uddin</Text>
+                        <Text style={[styles.profileName, { color: title }]} >Ajaz uddinaa</Text>
                         <Text style={styles.profileEmail}>@gmail.com</Text>
                     </View>
                     <DrawerItem style={styles.drawerItem}
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
       width: 20,
       height: 20,
       borderWidth: 1,
-      borderColor: "lightgray",
+      borderColor: "white",
       marginTop: -25,
       alignSelf: "flex-end"
     }
