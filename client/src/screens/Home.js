@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
     View,
     Text, Dimensions,
     StyleSheet, Image,
+    Alert
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +16,7 @@ import {
     Fab
     // Text
 } from 'native-base';
+import messaging from '@react-native-firebase/messaging';
 const { width, height } = Dimensions.get('window')
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
@@ -22,7 +24,36 @@ const SCREEN_WIDTH = width
 const Home = ({ navigation }) => {
     const netInfo = useNetInfo();
 
-console.log("netInfo",netInfo);
+    const getTokens = async () => {
+        let token = await messaging().getToken();
+        console.log("token",token);
+    }
+ 
+    useEffect( ()  =>  {
+        getTokens();
+        messaging().onMessage(async remoteMessage => {
+            Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+            console.log("A new FCM message arrived!", JSON.stringify(remoteMessage));
+        });
+
+        messaging().onNotificationOpenedApp(remoteMessage => {
+            console.log("onNotificationOpenedApp: ", JSON.stringify(remoteMessage));
+        })
+
+        messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          if (remoteMessage) {
+            console.log(
+              'Notification caused app to open from quit state:',
+              JSON.stringify(remoteMessage),
+            );
+          }
+        });
+
+    }, []);
+
+    // console.log("netInfo", netInfo);
     return (
         <Container>
             <Header style={{ backgroundColor: "#00203FFF" }}>
