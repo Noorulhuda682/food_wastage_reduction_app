@@ -7,7 +7,8 @@ import { Form } from "native-base";
 import MaterialIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const Camera = ({ initialProps }) => {
+const Camera = ({initialProps, takePhotoFunc }) => {
+  console.log("initialProps",takePhotoFunc);
   const [
     { cameraRef, type, ratio, autoFocus, autoFocusPoint, isRecording },
     {
@@ -21,7 +22,7 @@ const Camera = ({ initialProps }) => {
     },
   ] = useCamera(initialProps);
 
-  console.log("cameraRef",cameraRef);
+  // console.log("cameraRef",cameraRef);
   const takePhoto = async () => {
     if (cameraRef.current) {
       const options = { quality: 0.5, base64: true, skipProcessing: true };
@@ -32,6 +33,7 @@ const Camera = ({ initialProps }) => {
         // setIsPreview(true);
         console.log("picture source", source);
       }
+      takePhotoFunc(data)
     }
   }
 

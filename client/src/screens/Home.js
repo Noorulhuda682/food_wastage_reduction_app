@@ -8,7 +8,6 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { useNetInfo } from "@react-native-community/netinfo";
 
 import {
     Container, Header, Left, Body, Right, Button, Icon, Title, Content,
@@ -22,7 +21,6 @@ const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 
 const Home = ({ navigation }) => {
-    const netInfo = useNetInfo();
 
     const getTokens = async () => {
         let token = await messaging().getToken();
@@ -74,10 +72,6 @@ const Home = ({ navigation }) => {
             </Header>
             <Content style={styles.mainContent} padder>
                 <Content padder style={{ backgroundColor: "" }}>
-                    <View>
-                        <Text>Type: {netInfo.type}</Text>
-                        <Text>Is Connected {`${netInfo.isConnected}`}</Text>
-                    </View>
                     <Text style={styles.heading}>Safe Wasting Food</Text>
                     <Text style={styles.para}>
                         Reducing the wastage of food can boot economy of a country

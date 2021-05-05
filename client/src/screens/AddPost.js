@@ -4,7 +4,7 @@ import React, {
 import {
     View,
     Text,
-    Button,
+
     TextInput,
     KeyboardAvoidingView,
     ScrollView,
@@ -15,20 +15,24 @@ import {
 } from 'react-native'
 import {
     Container, Header, Content, Item, Input, Icon, Spinner,
-    Body, Right, Title, Left,
+    Body, Right, Title, Left, Button,
     Card, CardItem, H2, Footer,
 } from 'native-base';
 import { useSelector, useDispatch } from "react-redux"
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Camera from "./Camera";
 
 const AddPost = ({ navigation }) => {
-
+    const [uploadImg, setUploadImg] = useState(false);
+    const [usingCamera, setUsingCamera] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [img1,setImg1] = useState(null)
+    const [img1, setImg1] = useState(null)
     const data = useSelector(state => state);
     console.log("LOGINDATA===>", data);
     const dispatch = useDispatch();
@@ -64,112 +68,147 @@ const AddPost = ({ navigation }) => {
         });
 
     }
-
+ 
+    const takePhoto = (imgData) => {
+       console.log("URI",imgData);
+       setImg1(imgData.uri)
+       setUsingCamera(false)
+       uploadImg(false)
+    }
 
     return (
-        <KeyboardAvoidingView >
-            <ScrollView>
-                <Container >
-                    <Header style={{ backgroundColor: "#00203FFF" }}>
-                        <Left >
-                            <Icon onPress={() => navigation.openDrawer()} name='menu' style={{ color: "white" }} />
-                        </Left>
-                        <Body>
-                            <Title>Upload Food</Title>
-                        </Body>
-                        <Right>
-                            <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
-                        </Right>
-                    </Header>
-                    <Content padder>
-                        <Text style={styles.grayText} >Food Image</Text>
-                        <View  style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}} >
-                            {img1 && <TouchableOpacity style={styles.cameraView}>
-                                {/* <Ionicons name="ios-camera" size={24} color="gray" /> */}
-                                <Image style={{height:"100%",width:"100%"}} source={{uri:img1}}/>
-                            </TouchableOpacity>}
+        !usingCamera ?
+            <KeyboardAvoidingView >
+                <ScrollView>
+                    <Container >
+                        <Header style={{ backgroundColor: "#00203FFF" }}>
+                            <Left >
+                                <Icon onPress={() => navigation.openDrawer()} name='menu' style={{ color: "white" }} />
+                            </Left>
+                            <Body>
+                                <Title>Upload Food</Title>
+                            </Body>
+                            <Right>
+                                <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
+                            </Right>
+                        </Header>
+                        <Content padder>
+                            <Text style={styles.grayText} >Food Image</Text>
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }} >
+                                {img1 && <TouchableOpacity style={styles.cameraView}>
+                                    {/* <Ionicons name="ios-camera" size={24} color="gray" /> */}
+                                    <Image style={{ height: "100%", width: "100%" }} source={{ uri: img1 }} />
+                                </TouchableOpacity>}
 
-                           {/*  <TouchableOpacity style={{backgroundColor:"lightgray",marginHorizontal:2,
+                                {/*  <TouchableOpacity style={{backgroundColor:"lightgray",marginHorizontal:2,
                                 height:100,width:"33%",justifyContent:"center",alignItems:"center"}}>
                                 <Ionicons name="ios-camera" size={24} color="gray" />
                             </TouchableOpacity> */}
-                            <TouchableOpacity onPress={launchCameraHandler} style={styles.cameraView}>
-                                <Ionicons name="ios-camera" size={24} color="gray" />
-                                {/* <Image style={{height:"100%",width:"100%"}} source={{uri:img1}}/> */}
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={styles.grayText} >Food Title</Text>
-                        <Item
-                            // success
-                            style={styles.item}
-                        >
-                            <Input
-                                value={"Biryani"}
-                                style={styles.input}
-                            //  onChangeText={(emails) => { console.log("emails", emails);
-                            //   setEmail(emails) }}
-                            />
-                            {/* <Icon name='checkmark-circle' /> */}
-                        </Item>
-                        <Text style={styles.grayText} >Food Desciption</Text>
-                        <Item
-                            // success
-                            style={styles.item}
-                        >
-                            <Input
-                                value={"Only for needy people"}
-                                style={styles.input}
-                            //  onChangeText={(emails) => { console.log("emails", emails);
-                            //   setEmail(emails) }}
-                            />
-                            {/* <Icon name='checkmark-circle' /> */}
-                        </Item>
-                        <Text style={styles.grayText} >Food Weight</Text>
-                        <Item
-                            // success
-                            style={styles.item}
-                        >
-                            <Input
-                                value={"20kg"}
-                                style={styles.input}
-                            //  onChangeText={(emails) => { console.log("emails", emails);
-                            //   setEmail(emails) }}
-                            />
-                            {/* <Icon name='checkmark-circle' /> */}
-                        </Item>
+                                <TouchableOpacity onPress={() => setUploadImg(!uploadImg)} style={styles.cameraView}>
+                                    {/* <Ionicons name="ios-camera" size={24} color="gray" /> */}
+                                    <FontAwesome name="photo" size={24} color="gray" />
+                                    {/* <Image style={{height:"100%",width:"100%"}} source={{uri:img1}}/> */}
+                                </TouchableOpacity>
+                            </View>
+                            {uploadImg &&
+                                <Item style={{ justifyContent: "space-around", marginTop: 10 }}>
+                                    <Button iconLeft
+                                        style={{ paddingRight: 15 }}
+                                        onPress={() => setUsingCamera(true)}
+                                    >
+                                        <Icon name='ios-camera' />
+                                        <Text style={{ marginLeft: 5, color: "white" }}>Take Photo</Text>
+                                    </Button>
+                                    <Button iconLeft
+                                        style={{ paddingHorizontal: 15 }}
+                                    >
+                                        <MaterialIcons name="photo-library" size={24} color="white" />
+                                        <Text style={{ marginLeft: 5, color: "white" }}>Gallery</Text>
+                                    </Button>
+                                    <Button iconLeft
+                                        style={{ paddingHorizontal: 15 }}
+                                    >
+                                        <MaterialIcons name="camera" size={24} color="white" />
+                                        <Text style={{ marginLeft: 5, color: "white" }}>Camera</Text>
+                                    </Button>
 
-
-                        <TouchableOpacity
-                            onPress={login}
-                            style={{ marginTop: 50 }}>
-                            {loading ?
-                                <Text style={styles.loginButton}>
-                                    ...   <ActivityIndicator size="small" color='lightgray' />   ...
-        </Text> :
-                                <Text style={styles.loginButton}>
-                                    UPLOAD+
-        </Text>
+                                </Item>
                             }
-                        </TouchableOpacity>
 
 
-                    </Content>
+                            <Text style={styles.grayText} >Food Title</Text>
+                            <Item
+                                // success
+                                style={styles.item}
+                            >
+                                <Input
+                                    value={"Biryani"}
+                                    style={styles.input}
+                                //  onChangeText={(emails) => { console.log("emails", emails);
+                                //   setEmail(emails) }}
+                                />
+                                {/* <Icon name='checkmark-circle' /> */}
+                            </Item>
+                            <Text style={styles.grayText} >Food Desciption</Text>
+                            <Item
+                                // success
+                                style={styles.item}
+                            >
+                                <Input
+                                    value={"Only for needy people"}
+                                    style={styles.input}
+                                //  onChangeText={(emails) => { console.log("emails", emails);
+                                //   setEmail(emails) }}
+                                />
+                                {/* <Icon name='checkmark-circle' /> */}
+                            </Item>
+                            <Text style={styles.grayText} >Food Weight</Text>
+                            <Item
+                                // success
+                                style={styles.item}
+                            >
+                                <Input
+                                    value={"20kg"}
+                                    style={styles.input}
+                                //  onChangeText={(emails) => { console.log("emails", emails);
+                                //   setEmail(emails) }}
+                                />
+                                {/* <Icon name='checkmark-circle' /> */}
+                            </Item>
+
+
+                            <TouchableOpacity
+                                onPress={login}
+                                style={{ marginTop: 50 }}>
+                                {loading ?
+                                    <Text style={styles.loginButton}>
+                                        ...   <ActivityIndicator size="small" color='lightgray' />   ...
+        </Text> :
+                                    <Text style={styles.loginButton}>
+                                        UPLOAD+
+        </Text>
+                                }
+                            </TouchableOpacity>
+
+
+                        </Content>
 
 
 
 
-                </Container>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                    </Container>
+                </ScrollView>
+            </KeyboardAvoidingView>
+            : <Camera takePhotoFunc={takePhoto} />
     );
 }
 
 const styles = StyleSheet.create({
-    cameraView:{
-        backgroundColor:"lightgray",
-        height:100,width:"33%",
-        justifyContent:"center",
-        alignItems:"center"
+    cameraView: {
+        backgroundColor: "lightgray",
+        height: 100, width: "33%",
+        justifyContent: "center",
+        alignItems: "center"
     },
     loginButton: {
         backgroundColor: "#00203FFF",
