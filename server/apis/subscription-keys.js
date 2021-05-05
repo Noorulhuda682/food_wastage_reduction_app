@@ -1,0 +1,6 @@
+const USER_ADDED = 'USER_ADDED';
+const RECEIVER_ADDED = 'RECEIVER_ADDED'
+module.exports = {
+    USER_ADDED,
+    RECEIVER_ADDED
+}
