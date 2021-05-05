@@ -7,7 +7,8 @@ import {
    AddPost,
    MyPosts,
    AllPosts,
-   Map
+   Map,
+   Camera
  } from "../screens"
 
 const Drawer = createDrawerNavigator();
