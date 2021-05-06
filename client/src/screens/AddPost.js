@@ -4,14 +4,14 @@ import React, {
 import {
     View,
     Text,
-
     TextInput,
     KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
     TouchableOpacity,
     ActivityIndicator,
-    Image
+    Image,
+    Alert
 } from 'react-native'
 import {
     Container, Header, Content, Item, Input, Icon, Spinner,
@@ -25,6 +25,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Camera from "./Camera";
+import uploadImageToCloud from "../config/uploadImageToCloudinary";
+import setImageFileForCloudinary from "../config/setImageForCloudinary";
 
 const AddPost = ({ navigation }) => {
     const [uploadImg, setUploadImg] = useState(false);
@@ -42,7 +44,7 @@ const AddPost = ({ navigation }) => {
         navigation.navigate("SignUp")
     }
 
-    launchCameraHandler = () => {
+    const launchImageLibraryHandler =  () => {
         let options = {
             storageOptions: {
                 skipBackup: true,
@@ -51,29 +53,61 @@ const AddPost = ({ navigation }) => {
         };
         launchImageLibrary(options, (response) => {
             console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-                alert(response.customButton);
-            } else {
-                const source = { uri: response.uri };
-                console.log('response', JSON.stringify(response));
-                console.log('source', source);
-                setImg1(response.uri)
-            }
+            checkPhotoValidation(response)
         });
 
     }
+    const launchCameraHandler =  () => {
+        let options = {
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        launchCamera(options, (response) => {
+            console.log('Response = ', response);
+            checkPhotoValidation(response)
+        });
+    }
+
+    const checkPhotoValidation = async (response) => {
+        if (response.didCancel) {
+            console.log('User cancelled image picker');
+        } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+            alert(response.customButton);
+        } else {
+            const source = { uri: response.uri };
+            // console.log('response', JSON.stringify(response));
+            console.log('source', source);
+            setUsingCamera(false)
+            setUploadImg(false)
+            // setImg1(response.uri)
+            let imageFile = setImageFileForCloudinary(response.uri)
+            let data = await uploadImageToCloud(imageFile)
+            let {uploading,message,url} = data
+            if(uploading){
+             setImg1(url)
+            }else{
+                Alert.alert(message)
+            } 
+        }
+    }
  
-    const takePhoto = (imgData) => {
-       console.log("URI",imgData);
-       setImg1(imgData.uri)
+
+    const takePhoto = async (imgData) => {
        setUsingCamera(false)
-       uploadImg(false)
+       setUploadImg(false)
+       let imageFile = setImageFileForCloudinary(imgData.uri)
+       let data = await uploadImageToCloud(imageFile)
+       let {uploading,message,url} = data
+       if(uploading){
+        setImg1(url)
+       }else{
+           Alert.alert(message)
+       } 
     }
 
     return (
@@ -121,12 +155,14 @@ const AddPost = ({ navigation }) => {
                                     </Button>
                                     <Button iconLeft
                                         style={{ paddingHorizontal: 15 }}
+                                        onPress={launchImageLibraryHandler}
                                     >
                                         <MaterialIcons name="photo-library" size={24} color="white" />
                                         <Text style={{ marginLeft: 5, color: "white" }}>Gallery</Text>
                                     </Button>
                                     <Button iconLeft
                                         style={{ paddingHorizontal: 15 }}
+                                        onPress={launchCameraHandler}
                                     >
                                         <MaterialIcons name="camera" size={24} color="white" />
                                         <Text style={{ marginLeft: 5, color: "white" }}>Camera</Text>
@@ -179,14 +215,14 @@ const AddPost = ({ navigation }) => {
 
                             <TouchableOpacity
                                 onPress={login}
-                                style={{ marginTop: 50 }}>
+                                style={{ marginTop: 50,}}>
                                 {loading ?
                                     <Text style={styles.loginButton}>
                                         ...   <ActivityIndicator size="small" color='lightgray' />   ...
-        </Text> :
+                                    </Text> :
                                     <Text style={styles.loginButton}>
                                         UPLOAD+
-        </Text>
+                                   </Text>
                                 }
                             </TouchableOpacity>
 
@@ -216,7 +252,8 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontSize: 14,
-        paddingVertical: 10,
+        height:45,
+        paddingTop:12
     },
     grayText: {
         color: "#88929c",
