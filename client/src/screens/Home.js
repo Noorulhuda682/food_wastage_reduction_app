@@ -13,14 +13,42 @@ import {
     Container, Header, Left, Body, Right, Button, Icon, Title, Content,
     Card, CardItem, H2, Footer, Thumbnail,
     Fab
-    // Text
 } from 'native-base';
 import messaging from '@react-native-firebase/messaging';
 const { width, height } = Dimensions.get('window')
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
+import {gql,useQuery,useSubscription} from "@apollo/client"
+
+// const GET_USERS = gql`
+//   query users{
+//   users{
+//     name
+//     email
+//     _id
+//   }
+// }
+// `;
+
+const RECEIVER_ADDED = gql`
+  subscription  receiverAdded {
+  receiverAdded{
+    _id
+    name
+    email
+  }
+  }
+`;
 
 const Home = ({ navigation }) => {
+
+    // const { loading, error, data } = useQuery(GET_USERS);
+    const { data, loading, error  } = useSubscription(RECEIVER_ADDED);
+
+    if (loading)  console.log('Loading...');
+    if (error)  console.log(`Error! ${error.message}`);
+    console.log("DATA==>",data);
+    
 
     const getTokens = async () => {
         let token = await messaging().getToken();
@@ -28,6 +56,7 @@ const Home = ({ navigation }) => {
     }
  
     useEffect( ()  =>  {
+       
         getTokens();
         messaging().onMessage(async remoteMessage => {
             Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));

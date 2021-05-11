@@ -1,5 +1,5 @@
 import React, {
-    useState
+    useState,useEffect
 } from 'react';
 import {
     View,
@@ -14,19 +14,61 @@ import {
 import { Container, Header, Content, Item, Input, Icon, Spinner } from 'native-base';
 import { useSelector, useDispatch } from "react-redux"
 import { addUser } from "../store/actions/user"
+import {gql,useMutation} from "@apollo/client"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import {
+  saveData,
+  readData
+} from "../config/setToken"
 
-const Login = ({ navigation }) => {
+const LOGIN = gql`
+ mutation login($email:String! $password:String!){
+  login(email:$email password:$password){
+    token
+    user {
+      _id
+      name
+      email
+    }
+  }
+}
+
+`;
+
+const Login =  ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const data = useSelector(state => state);
-    console.log("LOGINDATA===>", data);
+    const [change, setChange] = useState(true);
+    const storeData = useSelector(state => state);
+    // console.log("storeData===>", storeData);
     const dispatch = useDispatch();
 
-    const login = () => {
+      
+    const [_login, {data} ] = useMutation(LOGIN);
+    console.log("login===",data);
+   
+    if(data?.login?.user && change ){
+        saveData("norr123");
         dispatch(addUser());
-        navigation.navigate("SignUp")
+        navigation.navigate("Home")
+        setChange(false)
+    } 
+
+  
+
+
+    const login = () => {
+       
+        _login({
+            variables:{
+                email:email,
+                password:password
+            }
+        })       
+
+       
     }
 
    
@@ -36,16 +78,16 @@ const Login = ({ navigation }) => {
             <ScrollView>
                 <Container style={style.container}>
                     <View style={style.logoView}>
-                        <Image style={{width:230,height:200}} source={require("../assets/images/app-logo.jpeg")} />
+                        <Image style={{width:210,height:180}} source={require("../assets/images/app-logo.jpeg")} />
                     </View>
                     <Item style={[{ marginTop: 40 }, style.input]} success>
-                        <Input placeholder='email...' value={email} onChangeText={(emails) => { console.log("emails", emails); setEmail(emails) }}
+                        <Input placeholder='email...' value={email} onChangeText={(emails) => {setEmail(emails) }}
                         />
                         <Icon name='checkmark-circle' />
                     </Item>
                     <Item style={[{ marginTop: 25 }, style.input]} error>
                         <Input placeholder='password....'
-                            value={password} onChangeText={(pass) => { setPassword(pass) }}
+                            value={password} onChangeText={(pass) => {  setPassword(pass) }}
                         />
                         <Icon
                             //  name='checkmark-circle'
