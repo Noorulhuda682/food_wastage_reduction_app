@@ -1,9 +1,11 @@
 import {ADD_USER,REMOVE_USER} from "../actionTypes";
 
-export const addUser = () => ({
-    type:ADD_USER
+export const addUser = (data) => ({
+    type:ADD_USER,
+    data
 })
 
 export const removeUser = () => ({
-    type:REMOVE_USER
+    type:REMOVE_USER,
+    data:null
 })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -10,15 +10,22 @@ import {
 } from "@react-navigation/drawer"
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Thumbnail, Switch, Left, Right, Container, Content, Body, List, ListItem,Badge } from 'native-base';
+import { Thumbnail, Switch, Left, Right, Container, Content, Body, List, ListItem, Badge } from 'native-base';
 import { useTheme } from '@react-navigation/native';
 import { useSelector, useDispatch } from "react-redux";
 import { removeUser } from "../store/actions/user"
 import { toggleTheme } from "../store/actions/theming";
 import { useNetInfo } from "@react-native-community/netinfo";
 // AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY
+import {
+    userRoutes,
+    receiverRoutes,
+    adminRoutes
+} from "../config/routes"
+var displayRoutes = [];
 
 const DrawerContent = (props) => {
     const netInfo = useNetInfo();
@@ -27,9 +34,22 @@ const DrawerContent = (props) => {
     const [switchValue, setSwitchValue] = useState(false)
     const { title, background, card, text, border, notification, icon } = colors;
     const data = useSelector(state => state);
-    // console.log("LOGINDATA===>",data);
+    console.log("LOGINDATA===>", data);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        switch ("ADMIN"){
+            case "USER": displayRoutes = userRoutes
+                break;
+            case "RECEIVER": displayRoutes = receiverRoutes
+                break;
+            case "ADMIN": displayRoutes = adminRoutes
+                break;
+        }
+    }, [])
+
+
+    console.log("displayRoutes", displayRoutes);
     return (
         <Container style={{ flex: 1, backgroundColor: background }}>
             <DrawerContentScrollView {...props}>
@@ -41,7 +61,7 @@ const DrawerContent = (props) => {
                                 style={styles.profileImage}
                                 large source={require('../assets/images/profile.jpg')}
                             />
-                            <Badge success={ netInfo.type === 'wifi' && netInfo.isConnected   ? true : false} style={styles.badge}></Badge>
+                            <Badge success={netInfo.type === 'wifi' && netInfo.isConnected ? true : false} style={styles.badge}></Badge>
                         </View>
                         <Text style={[styles.profileName, { color: title }]} >Ajaz uddinaa</Text>
                         <Text style={styles.profileEmail}>@gmail.com</Text>
@@ -54,7 +74,34 @@ const DrawerContent = (props) => {
                         inactiveTintColor='gray'
                         onPress={() => { navigation.navigate("home") }}
                     />
-                    <DrawerItem style={styles.drawerItem}
+
+                    {
+                        displayRoutes.map(route => {
+                            return (
+                                <DrawerItem style={styles.drawerItem}
+                                    icon={({ color, size }) => {
+                                        switch (route.iconCompnay) {
+                                            case "MaterialCommunityIcons":
+                                                return <MaterialCommunityIcons name={route.iconName} size={route.iconSize} color={icon} />
+                                            case "FontAwesome":
+                                                return <FontAwesome name={route.iconName} size={route.iconSize} color={icon} />
+                                            case "AntDesign":
+                                                return <AntDesign name={route.iconName} size={route.iconSize} color={icon} />
+                                            case "MaterialIcons":
+                                                return <MaterialIcons name={route.iconName} size={route.iconSize} color={icon} />
+                                            case "FontAwesome5":
+                                                return <FontAwesome5 name={route.iconName} size={route.iconSize} color={icon} />
+                                        }
+                                    }}
+                                    label={route.label}
+                                    inactiveTintColor='gray'
+                                    onPress={() => { navigation.navigate(route.routeName) }}
+                                />)
+                        })
+                    }
+
+
+                    {/* <DrawerItem style={styles.drawerItem}
                         icon={({ color, size }) => {
                             return <AntDesign name="profile" size={24} color={icon} />
                         }}
@@ -93,7 +140,7 @@ const DrawerContent = (props) => {
                         label="See Map"
                         inactiveTintColor='gray'
                         onPress={() => { navigation.navigate('map') }}
-                    />
+                    /> */}
 
                     <List style={{ paddingTop: 100 }}>
                         <ListItem>
@@ -155,12 +202,12 @@ const styles = StyleSheet.create({
         borderColor: 'lightgray'
     },
     badge: {
-      width: 20,
-      height: 20,
-      borderWidth: 1,
-      borderColor: "white",
-      marginTop: -25,
-      alignSelf: "flex-end"
+        width: 20,
+        height: 20,
+        borderWidth: 1,
+        borderColor: "white",
+        marginTop: -25,
+        alignSelf: "flex-end"
     }
 
 })

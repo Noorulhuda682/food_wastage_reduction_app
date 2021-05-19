@@ -51,7 +51,7 @@ const Login =  ({ navigation }) => {
    
     if(data?.login?.user && change ){
         saveData("norr123");
-        dispatch(addUser());
+        dispatch(addUser({role:"USER"}));
         navigation.navigate("Home")
         setChange(false)
     } 

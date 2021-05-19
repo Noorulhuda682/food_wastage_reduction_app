@@ -5,14 +5,15 @@ import {
 } from "../actionTypes";
 
 const initialState = {
-    user: null,
+    user: { role:"USER"},
     changeLightTheme: false
 }
 
 export const mainReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_USER:
-            return { ...state, user: { name: 'Noorul Huda', email: 'noorulhuda682@gmail.com', id: 12 } }
+            return { ...state, user: action.data }
+            // return { ...state, user: { name: 'Noorul Huda', email: 'noorulhuda682@gmail.com', id: 12 } }
         case REMOVE_USER:
             return { ...state, user: null }
         case TOGGLE_THEME:
