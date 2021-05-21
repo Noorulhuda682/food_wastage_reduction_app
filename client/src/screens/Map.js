@@ -50,8 +50,9 @@ const Map = ({ navigation }) => {
                 >
                     <Marker
                         coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-                        image={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiB-bRDmzoE5zTM3sEhBjygRx8IA0XwHgvnQ&usqp=CAU' }}
-                    />
+                    >
+                        <MaterialCommunityIcons name="map-marker" size={50} color="#00238b" />
+                    </Marker>
                 </MapView>
                 <List>
                     <ListItem thumbnail>

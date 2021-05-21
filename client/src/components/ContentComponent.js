@@ -16,8 +16,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Thumbnail, Switch, Left, Right, Container, Content, Body, List, ListItem, Badge } from 'native-base';
 import { useTheme } from '@react-navigation/native';
 import { useSelector, useDispatch } from "react-redux";
-import { removeUser } from "../store/actions/user"
-import { toggleTheme } from "../store/actions/theming";
+import { removeUser } from "../redux/actions/user"
+import { toggleTheme } from "../redux/actions/theming";
 import { useNetInfo } from "@react-native-community/netinfo";
 // AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY
 import {
@@ -38,7 +38,7 @@ const DrawerContent = (props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        switch ("ADMIN"){
+        switch (data.user.role){
             case "USER": displayRoutes = userRoutes
                 break;
             case "RECEIVER": displayRoutes = receiverRoutes
@@ -48,8 +48,6 @@ const DrawerContent = (props) => {
         }
     }, [])
 
-
-    console.log("displayRoutes", displayRoutes);
     return (
         <Container style={{ flex: 1, backgroundColor: background }}>
             <DrawerContentScrollView {...props}>
@@ -101,46 +99,6 @@ const DrawerContent = (props) => {
                     }
 
 
-                    {/* <DrawerItem style={styles.drawerItem}
-                        icon={({ color, size }) => {
-                            return <AntDesign name="profile" size={24} color={icon} />
-                        }}
-                        label="Profile"
-                        inactiveTintColor='gray'
-                        onPress={() => { navigation.navigate("profile") }}
-                    />
-                    <DrawerItem style={styles.drawerItem}
-                        icon={({ color, size }) => {
-                            return <MaterialCommunityIcons name="post-outline" size={24} color={icon} />
-                        }}
-                        label="All Posts"
-                        inactiveTintColor='gray'
-                        onPress={() => { navigation.navigate('allPosts') }}
-                    />
-                    <DrawerItem style={styles.drawerItem}
-                        icon={({ color, size }) => {
-                            return <MaterialCommunityIcons name="post-outline" size={24} color={icon} />
-                        }}
-                        label="My Posts"
-                        inactiveTintColor='gray'
-                        onPress={() => { navigation.navigate('myPosts') }}
-                    />
-                    <DrawerItem style={styles.drawerItem}
-                        icon={({ color, size }) => {
-                            return <MaterialIcons name="post-add" size={24} color={icon} />
-                        }}
-                        label="Add Post"
-                        inactiveTintColor='gray'
-                        onPress={() => { navigation.navigate('addPost') }}
-                    />
-                    <DrawerItem style={styles.drawerItem}
-                        icon={({ color, size }) => {
-                            return <MaterialCommunityIcons name="google-maps" size={24} color={icon} />
-                        }}
-                        label="See Map"
-                        inactiveTintColor='gray'
-                        onPress={() => { navigation.navigate('map') }}
-                    /> */}
 
                     <List style={{ paddingTop: 100 }}>
                         <ListItem>

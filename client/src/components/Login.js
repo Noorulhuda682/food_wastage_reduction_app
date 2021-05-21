@@ -1,5 +1,5 @@
 import React, {
-    useState,useEffect
+    useState, useEffect
 } from 'react';
 import {
     View,
@@ -10,16 +10,22 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Image,
+    Alert,
+    ToastAndroid
 } from 'react-native'
-import { Container, Header, Content, Item, Input, Icon, Spinner } from 'native-base';
+import { Container, Header, Content, Item, Input, Icon, Spinner,Toast } from 'native-base';
 import { useSelector, useDispatch } from "react-redux"
-import { addUser } from "../store/actions/user"
-import {gql,useMutation} from "@apollo/client"
+import { addUser } from "../redux/actions/user"
+import { gql, useMutation } from "@apollo/client"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
-  saveData,
-  readData
+    saveData,
+    readData
 } from "../config/setToken"
+import {
+ emailRegex,
+ passwordRegex
+} from "../config/Regex"
 
 const LOGIN = gql`
  mutation login($email:String! $password:String!){
@@ -35,88 +41,166 @@ const LOGIN = gql`
 
 `;
 
-const Login =  ({ navigation }) => {
+const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
+    const [checkEmail, setCheckEmail] = useState(false)
     const [password, setPassword] = useState("");
+    const [checkPassword, setCheckPassword] = useState(false)
     const [loading, setLoading] = useState(false);
     const [change, setChange] = useState(true);
     const storeData = useSelector(state => state);
     // console.log("storeData===>", storeData);
     const dispatch = useDispatch();
 
-      
-    const [_login, {data} ] = useMutation(LOGIN);
-    console.log("login===",data);
-   
-    if(data?.login?.user && change ){
+
+    const [_login, { data }] = useMutation(LOGIN);
+    // console.log("login===",data);
+
+    if (data?.login?.user && change) {
         saveData("norr123");
-        dispatch(addUser({role:"USER"}));
+        dispatch(addUser({ role: "USER" }));
         navigation.navigate("Home")
         setChange(false)
-    } 
+    }
 
-  
+
 
 
     const login = () => {
-       
-        _login({
-            variables:{
-                email:email,
-                password:password
-            }
-        })       
 
-       
+        if(email === ""){
+            ToastAndroid.showWithGravity(
+                `Enter ${password === "" ? "email and password" : "email" }`,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            return false
+        }  
+
+        if(password === "")  ToastAndroid.showWithGravity(
+            "Enter password",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+
+        if (checkEmail && checkPassword) {
+            Alert.alert("Run Login api")
+            dispatch(addUser({ role: "USER" }));
+            navigation.navigate("Home")
+            // _login({
+            //     variables: {
+            //         email: email,
+            //         password: password
+            //     }
+            // })
+
+        }
+
     }
 
-   
+
+    useEffect(() => {
+        if (emailRegex.test(email) === false) {
+            setCheckEmail(false)
+        }
+        else {
+            setCheckEmail(true)
+        }
+    }, [email])
+
+
+    useEffect(() => {
+        if (passwordRegex.test(password) === false) {
+            setCheckPassword(false)
+        }
+        else {
+            setCheckPassword(true)
+        }
+    }, [password])
+
 
     return (
-        <KeyboardAvoidingView style={style.keyboradAvoid}>
+        <KeyboardAvoidingView style={styles.keyboradAvoid}>
             <ScrollView>
-                <Container style={style.container}>
-                    <View style={style.logoView}>
-                        <Image style={{width:210,height:180}} source={require("../assets/images/app-logo.jpeg")} />
+                <Container style={styles.container}>
+                    <View style={styles.logoView}>
+                        <Image style={{ width: 170, height: 150 }} source={require("../assets/images/app-logo.jpeg")} />
+                        <Text style={styles.logoTitle}>
+                            Food Wastage Reduction
+                        </Text>
                     </View>
-                    <Item style={[{ marginTop: 40 }, style.input]} success>
-                        <Input placeholder='email...' value={email} onChangeText={(emails) => {setEmail(emails) }}
+
+                    <Item style={[{ marginTop: 50 }, styles.item]}
+                        success={email !== "" && (checkEmail ? true : false)}
+                        error={email !== "" && (checkEmail ? false : true)}
+                    >
+                        <Input
+                            style={{ fontSize: 15 }}
+                            placeholder='Email...'
+                            value={email}
+                            onChangeText={(emails) => { setEmail(emails) }}
                         />
-                        <Icon name='checkmark-circle' />
-                    </Item>
-                    <Item style={[{ marginTop: 25 }, style.input]} error>
-                        <Input placeholder='password....'
-                            value={password} onChangeText={(pass) => {  setPassword(pass) }}
-                        />
-                        <Icon
-                            //  name='checkmark-circle'
-                            name='close-circle'
-                        />
+                        {email !== "" && <Icon style={{fontSize:20}} name={checkEmail ? 'checkmark-circle' : 'close-circle'} />}
                     </Item>
 
+                    <Item style={[{ marginTop: 20 }, styles.item]}
+                        success={password !== "" && (checkPassword ? true : false)}
+                        error={password !== "" && (checkPassword ? false : true)}
+                    >
+                        <Input
+                            style={{ fontSize: 15 }}
+                            placeholder='Password....'
+                            value={password}
+                            onChangeText={(pass) => { setPassword(pass) }}
+                        />
+                        {password !== "" && <Icon style={{fontSize:20}} name={checkPassword ? 'checkmark-circle' : 'close-circle'} />}
+                    </Item>
 
-                    <Text style={{ marginTop: 50 }}>forgot password</Text>
+                    {password !== "" && !checkPassword &&
+                        <Text style={{ color: "red", fontSize: 13 }}>
+                            Password should container
+                            at least one digit,
+                            one lower case,
+                            one upper case,
+                            8  mentioned characters!
+                        </Text>
+                    }
+
+                    <TouchableOpacity>
+                        <Text style={styles.forgotPassword}>forgot-password</Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                         onPress={login}
                         style={{ marginTop: 50 }}>
                         {loading ?
-                            <Text style={style.loginButton}>
+                            <Text style={styles.loginButton}>
                                 ...   <ActivityIndicator size="small" color='lightgray' />   ...
                             </Text> :
-                            <Text style={style.loginButton}>
+                            <Text style={styles.loginButton}>
                                 LOGIN
                             </Text>
                         }
                     </TouchableOpacity>
+
+                    <Text style={styles.greyLine}>
+                        ------------------------------------------------------------------
+                    </Text>
+
+                    <TouchableOpacity>
+                        <Text style={styles.signUp}>
+                            New User? <Text style={styles.signUpBlue}>Sign Up</Text>
+                        </Text>
+                    </TouchableOpacity>
+
                 </Container>
             </ScrollView>
         </KeyboardAvoidingView>
     );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     keyboradAvoid: {
         flex: 1,
         backgroundColor: "white"
@@ -125,7 +209,7 @@ const style = StyleSheet.create({
 
     },
     container: {
-        marginTop: 110,
+        marginTop: 160,
         paddingHorizontal: 40,
     },
     logoView: {
@@ -134,7 +218,8 @@ const style = StyleSheet.create({
     },
     inputView: {
     },
-    input: {
+    item: {
+        paddingLeft: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -145,7 +230,6 @@ const style = StyleSheet.create({
         elevation: 3,
         borderRadius: 4,
         backgroundColor: 'white',
-        fontSize: 15,
         height: 40,
     },
     loginButton: {
@@ -156,8 +240,33 @@ const style = StyleSheet.create({
         fontSize: 14,
         paddingVertical: 10,
     },
-
-
+    logoTitle: {
+        fontSize: 15,
+        color: "#a7c5e1",
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: -1, height: 1 },
+        textShadowRadius: 1,
+        fontWeight: "bold"
+    },
+    signUp: {
+        textAlign: "center",
+        marginTop: 20,
+        fontWeight: "bold"
+    },
+    signUpBlue: {
+        color: "navy"
+    },
+    forgotPassword: {
+        marginTop: 20,
+        textAlign: "right",
+        color: "navy",
+        fontWeight: "bold"
+    },
+    greyLine: {
+        textAlign: "center",
+        marginTop: 50,
+        color: "lightgray"
+    }
 
 })
 
