@@ -16,6 +16,7 @@ const Drawer = createDrawerNavigator();
 
 const MainHome = ({ navigation }) => {
   let stateData = useSelector( state => state);
+
   useEffect( () => {
     console.log("stateData====>",stateData.user);
     if(stateData.user !== null){

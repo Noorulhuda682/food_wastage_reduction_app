@@ -13,7 +13,7 @@ import {
     Alert,
     ToastAndroid
 } from 'react-native'
-import { Container, Header, Content, Item, Input, Icon, Spinner,Toast } from 'native-base';
+import { Container, Header, Content, Item, Input, Icon, Spinner, Toast } from 'native-base';
 import { useSelector, useDispatch } from "react-redux"
 import { addUser } from "../redux/actions/user"
 import { gql, useMutation } from "@apollo/client"
@@ -23,8 +23,8 @@ import {
     readData
 } from "../config/setToken"
 import {
- emailRegex,
- passwordRegex
+    emailRegex,
+    passwordRegex
 } from "../config/Regex"
 
 const LOGIN = gql`
@@ -69,31 +69,33 @@ const Login = ({ navigation }) => {
 
     const login = () => {
 
-        if(email === ""){
+        if (email === "") {
             ToastAndroid.showWithGravity(
-                `Enter ${password === "" ? "email and password" : "email" }`,
+                `Enter ${password === "" ? "email and password" : "email"}`,
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
             return false
-        }  
+        }
 
-        if(password === "")  ToastAndroid.showWithGravity(
+        if (password === "") ToastAndroid.showWithGravity(
             "Enter password",
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
         );
-
+        setLoading(true)
         if (checkEmail && checkPassword) {
-            Alert.alert("Run Login api")
-            dispatch(addUser({ role: "USER" }));
-            navigation.navigate("Home")
+            // Alert.alert("Run Login api")
+            // dispatch(addUser({ role: "USER" }));
+            // navigation.navigate("Home")
             // _login({
             //     variables: {
             //         email: email,
             //         password: password
             //     }
             // })
+
+            setLoading(false)
 
         }
 
@@ -141,7 +143,7 @@ const Login = ({ navigation }) => {
                             value={email}
                             onChangeText={(emails) => { setEmail(emails) }}
                         />
-                        {email !== "" && <Icon style={{fontSize:20}} name={checkEmail ? 'checkmark-circle' : 'close-circle'} />}
+                        {email !== "" && <Icon style={{ fontSize: 20 }} name={checkEmail ? 'checkmark-circle' : 'close-circle'} />}
                     </Item>
 
                     <Item style={[{ marginTop: 20 }, styles.item]}
@@ -154,7 +156,7 @@ const Login = ({ navigation }) => {
                             value={password}
                             onChangeText={(pass) => { setPassword(pass) }}
                         />
-                        {password !== "" && <Icon style={{fontSize:20}} name={checkPassword ? 'checkmark-circle' : 'close-circle'} />}
+                        {password !== "" && <Icon style={{ fontSize: 20 }} name={checkPassword ? 'checkmark-circle' : 'close-circle'} />}
                     </Item>
 
                     {password !== "" && !checkPassword &&
@@ -174,21 +176,19 @@ const Login = ({ navigation }) => {
                     <TouchableOpacity
                         onPress={login}
                         style={{ marginTop: 50 }}>
-                        {loading ?
-                            <Text style={styles.loginButton}>
-                                ...   <ActivityIndicator size="small" color='lightgray' />   ...
-                            </Text> :
-                            <Text style={styles.loginButton}>
-                                LOGIN
-                            </Text>
+                               <View style={styles.loginButton} >
+                        {loading ? <ActivityIndicator color = 'white'size = "small"/> 
+                        :
+                        <Text style={{color:"white",textAlign:"center"}} >LOGIN</Text> 
                         }
+                         </View>
                     </TouchableOpacity>
 
                     <Text style={styles.greyLine}>
                         ------------------------------------------------------------------
                     </Text>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("SignUp")} >
                         <Text style={styles.signUp}>
                             New User? <Text style={styles.signUpBlue}>Sign Up</Text>
                         </Text>
@@ -233,12 +233,20 @@ const styles = StyleSheet.create({
         height: 40,
     },
     loginButton: {
-        backgroundColor: "#00203FFF",
-        borderRadius: 3,
+        backgroundColor: "#1e319d",
+        borderRadius: 6,
         color: 'white',
         textAlign: 'center',
         fontSize: 14,
-        paddingVertical: 10,
+        paddingVertical: 13,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 7,
     },
     logoTitle: {
         fontSize: 15,
@@ -254,12 +262,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     signUpBlue: {
-        color: "navy"
+        color: "#1e319d"
     },
     forgotPassword: {
         marginTop: 20,
         textAlign: "right",
-        color: "navy",
+        color: "#1e319d",
         fontWeight: "bold"
     },
     greyLine: {
