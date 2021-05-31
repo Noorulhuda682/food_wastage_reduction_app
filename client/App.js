@@ -1,18 +1,21 @@
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react"
 import React, { useState, useEffect, createContext } from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import StackNavigation from './src/index';
-import { store } from "./src/redux/store";
+
 import SplashScreen from 'react-native-splash-screen'
-import { ApolloClient, ApolloLink, HttpLink ,InMemoryCache, ApolloProvider,split } from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, ApolloProvider, split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from "@apollo/client/link/ws";
-import {readData} from "./src/config/setToken";
+import { readData } from "./src/config/setToken";
+import stores from "./src/redux/store";
+const { store, persistor } = stores();
+
+// console.log("DAT1====",store);
+// console.log("DAT2====",persistor);
 // Initialize Apollo Client
-
-
-
 const httpLink = new HttpLink({
   uri: "http://10.0.2.2:4000/graphql",
 });
@@ -37,22 +40,24 @@ const splitLink = split(
 );
 
 const client = new ApolloClient({
-   link:splitLink,
-   cache: new InMemoryCache()
+  link: splitLink,
+  cache: new InMemoryCache()
 });
 
 const App = () => {
 
-  useEffect( async () => {
+  useEffect(async () => {
     let tokenRead = await readData();
-    console.log("TOKENSASYNC=====",tokenRead);
+    console.log("TOKENSASYNC=====", tokenRead);
     SplashScreen.hide();
   })
-  // console.log("Client==>",client);
+  console.log("Client==>",client);
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <StackNavigation></StackNavigation>
+        <PersistGate loading={null} persistor={persistor}>
+          <StackNavigation></StackNavigation>
+        </PersistGate>
       </Provider>
     </ApolloProvider>
   );

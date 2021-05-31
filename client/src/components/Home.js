@@ -18,7 +18,7 @@ const MainHome = ({ navigation }) => {
   let stateData = useSelector( state => state);
 
   useEffect( () => {
-    console.log("stateData====>",stateData.user);
+    console.log("MainHome====>",stateData.user);
     if(stateData.user !== null){
       navigation.navigate("Home")
     }else{

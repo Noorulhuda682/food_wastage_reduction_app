@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeUser } from "../redux/actions/user"
 import { toggleTheme } from "../redux/actions/theming";
 import { useNetInfo } from "@react-native-community/netinfo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY
 import {
     userRoutes,
@@ -33,12 +34,22 @@ const DrawerContent = (props) => {
     const { colors } = useTheme();
     const [switchValue, setSwitchValue] = useState(false)
     const { title, background, card, text, border, notification, icon } = colors;
-    const data = useSelector(state => state);
-    console.log("LOGINDATA===>", data);
+
+    const data= useSelector(state => state);
+    console.log("DrawerContentData===>saad", data);
     const dispatch = useDispatch();
+    
+    switch (data?.user?.role){
+        case "USER": displayRoutes = userRoutes
+            break;
+        case "RECEIVER": displayRoutes = receiverRoutes
+            break;
+        case "ADMIN": displayRoutes = adminRoutes
+            break;
+    }
 
     useEffect(() => {
-        switch (data.user.role){
+        switch (data?.user?.role){
             case "USER": displayRoutes = userRoutes
                 break;
             case "RECEIVER": displayRoutes = receiverRoutes
@@ -74,9 +85,9 @@ const DrawerContent = (props) => {
                     />
 
                     {
-                        displayRoutes.map(route => {
+                        displayRoutes.map((route ,index) => {
                             return (
-                                <DrawerItem style={styles.drawerItem}
+                                <DrawerItem key={index} style={styles.drawerItem}
                                     icon={({ color, size }) => {
                                         switch (route.iconCompnay) {
                                             case "MaterialCommunityIcons":
@@ -123,7 +134,14 @@ const DrawerContent = (props) => {
                         }}
                         label="Logout"
                         inactiveTintColor='gray'
-                        onPress={() => { dispatch(removeUser()); navigation.navigate('Login') }}
+                        onPress={ async () => { 
+                            // await AsyncStorage.setItem(
+                            //     'state',
+                            //     JSON.stringify({user:null})
+                            // );
+                            dispatch(removeUser());
+                            navigation.navigate('Login')
+                        }}
                     />
                 </Content>
             </DrawerContentScrollView>

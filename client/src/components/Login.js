@@ -26,6 +26,7 @@ import {
     emailRegex,
     passwordRegex
 } from "../config/Regex"
+import InputText from "../shared/TextInput"
 
 const LOGIN = gql`
  mutation login($email:String! $password:String!){
@@ -47,27 +48,30 @@ const Login = ({ navigation }) => {
     const [checkEmail, setCheckEmail] = useState(false)
     const [password, setPassword] = useState("");
     const [checkPassword, setCheckPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(true);
     const [loading, setLoading] = useState(false);
     const [change, setChange] = useState(true);
     const storeData = useSelector(state => state);
-    // console.log("storeData===>", storeData);
+    console.log("storeData===>", storeData);
     const dispatch = useDispatch();
+
+    // let userobj ={user:{ role: "USER",name:"noor",email:"noorulhuda@gmail.com" }}
 
 
     const [_login, { data }] = useMutation(LOGIN);
     // console.log("login===",data);
 
     if (data?.login?.user && change) {
-        saveData("norr123");
-        dispatch(addUser({ role: "USER" }));
-        navigation.navigate("Home")
-        setChange(false)
+        // saveData("norr123");
+        // dispatch(addUser({ role: "USER" }));
+        // navigation.navigate("Home")
+        // setChange(false)
     }
 
 
 
 
-    const login = () => {
+    const login = async () => {
 
         if (email === "") {
             ToastAndroid.showWithGravity(
@@ -85,9 +89,10 @@ const Login = ({ navigation }) => {
         );
         setLoading(true)
         if (checkEmail && checkPassword) {
-            // Alert.alert("Run Login api")
-            // dispatch(addUser({ role: "USER" }));
-            // navigation.navigate("Home")
+            Alert.alert("Run Login api")
+            dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
+
+            navigation.navigate("Home")
             // _login({
             //     variables: {
             //         email: email,
@@ -95,31 +100,12 @@ const Login = ({ navigation }) => {
             //     }
             // })
 
-            setLoading(false)
+            // setLoading(false)
 
         }
 
     }
 
-
-    useEffect(() => {
-        if (emailRegex.test(email) === false) {
-            setCheckEmail(false)
-        }
-        else {
-            setCheckEmail(true)
-        }
-    }, [email])
-
-
-    useEffect(() => {
-        if (passwordRegex.test(password) === false) {
-            setCheckPassword(false)
-        }
-        else {
-            setCheckPassword(true)
-        }
-    }, [password])
 
 
     return (
@@ -133,41 +119,28 @@ const Login = ({ navigation }) => {
                         </Text>
                     </View>
 
-                    <Item style={[{ marginTop: 50 }, styles.item]}
-                        success={email !== "" && (checkEmail ? true : false)}
-                        error={email !== "" && (checkEmail ? false : true)}
-                    >
-                        <Input
-                            style={{ fontSize: 15 }}
-                            placeholder='Email...'
-                            value={email}
-                            onChangeText={(emails) => { setEmail(emails) }}
-                        />
-                        {email !== "" && <Icon style={{ fontSize: 20 }} name={checkEmail ? 'checkmark-circle' : 'close-circle'} />}
-                    </Item>
+                    <InputText
+                        email={email}
+                        setEmail={setEmail}
+                        checkEmail={checkEmail}
+                        setCheckEmail={setCheckEmail}
+                        type={"email"}
+                        placeholder={"Email..."}
+                        customStyle={{marginTop:50}}
+                    />
 
-                    <Item style={[{ marginTop: 20 }, styles.item]}
-                        success={password !== "" && (checkPassword ? true : false)}
-                        error={password !== "" && (checkPassword ? false : true)}
-                    >
-                        <Input
-                            style={{ fontSize: 15 }}
-                            placeholder='Password....'
-                            value={password}
-                            onChangeText={(pass) => { setPassword(pass) }}
-                        />
-                        {password !== "" && <Icon style={{ fontSize: 20 }} name={checkPassword ? 'checkmark-circle' : 'close-circle'} />}
-                    </Item>
+                    <InputText
+                        email={password}
+                        setEmail={setPassword}
+                        checkEmail={checkPassword}
+                        setCheckEmail={setCheckPassword}
+                        type={"password"}
+                        placeholder={"Password..."}
+                        showPassword={showPassword}
+                        setShowPassword={setShowPassword}
+                    />
 
-                    {password !== "" && !checkPassword &&
-                        <Text style={{ color: "red", fontSize: 13 }}>
-                            Password should container
-                            at least one digit,
-                            one lower case,
-                            one upper case,
-                            8  mentioned characters!
-                        </Text>
-                    }
+                   
 
                     <TouchableOpacity>
                         <Text style={styles.forgotPassword}>forgot-password</Text>
@@ -176,12 +149,12 @@ const Login = ({ navigation }) => {
                     <TouchableOpacity
                         onPress={login}
                         style={{ marginTop: 50 }}>
-                               <View style={styles.loginButton} >
-                        {loading ? <ActivityIndicator color = 'white'size = "small"/> 
-                        :
-                        <Text style={{color:"white",textAlign:"center"}} >LOGIN</Text> 
-                        }
-                         </View>
+                        <View style={styles.loginButton} >
+                            {loading ? <ActivityIndicator color='white' size="small" />
+                                :
+                                <Text style={{ color: "white", textAlign: "center" }} >LOGIN</Text>
+                            }
+                        </View>
                     </TouchableOpacity>
 
                     <Text style={styles.greyLine}>
@@ -250,7 +223,7 @@ const styles = StyleSheet.create({
     },
     logoTitle: {
         fontSize: 15,
-        color: "#a7c5e1",
+        color: '#d1d8ff',
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 1,

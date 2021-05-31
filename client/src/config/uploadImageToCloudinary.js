@@ -15,7 +15,7 @@ const uploadImageToCloud = async (image) => {
         }
     }).then( res => res.json())
     .then( data => {
-        console.log("DATA",data);
+        console.log("DATA=====> saad1",data);
         return {
             uploading:true,
             message:"Uploading successfull",

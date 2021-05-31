@@ -37,6 +37,20 @@ const receiverRoutes = [
         iconName: "post-outline",
         iconSize: 24,
     },
+    {
+        routeName: "newOrder",
+        label: "New Order",
+        iconCompnay: "MaterialCommunityIcons",
+        iconName: "post-outline",
+        iconSize: 24,
+    },
+    {
+        routeName: "completedOrders",
+        label: "My Completed Orders",
+        iconCompnay: "MaterialCommunityIcons",
+        iconName: "post-outline",
+        iconSize: 24,
+    },
 ]
 
 

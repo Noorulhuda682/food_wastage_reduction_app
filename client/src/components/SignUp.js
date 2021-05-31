@@ -11,23 +11,61 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Image
+  ToastAndroid
 } from 'react-native'
 import { Container, Header, Content, Item, Input, Icon, Spinner, Button, } from 'native-base';
 import { Picker } from '@react-native-picker/picker';
 import DropDownInput from "../shared/DropDown"
-
+import InputText from "../shared/TextInput"
 
 const SignUp = ({ navigation }) => {
 
   const [name, setName] = useState("");
+  const [checkName, setCheckName] = useState(false);
   const [email, setEmail] = useState("");
+  const [checkEmail, setCheckEmail] = useState(false)
   const [password, setPassword] = useState("");
+  const [checkPassword, setCheckPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false)
-  const [role,setRole] = useState("")
+  const [role, setRole] = useState("")
 
   const signUp = () => {
-    setLoading(true)
+
+    if (name === "") {
+      ToastAndroid.showWithGravity("Enter username", ToastAndroid.SHORT, ToastAndroid.CENTER);
+      return false
+    }
+    if (email === "") {
+      ToastAndroid.showWithGravity("Enter email", ToastAndroid.SHORT, ToastAndroid.CENTER);
+      return false
+    }
+    if (password === "") {
+      ToastAndroid.showWithGravity("Enter password", ToastAndroid.SHORT, ToastAndroid.CENTER);
+      return false
+    }
+    if (role === "") {
+      ToastAndroid.showWithGravity("Select Account Type", ToastAndroid.SHORT, ToastAndroid.CENTER);
+      return false
+    }
+
+  
+    if (checkEmail && checkPassword && checkName && role !== "") {
+      setLoading(true)
+      // Alert.alert("Run Login api")
+      // dispatch(addUser({ role: "USER" }));
+      // navigation.navigate("Home")
+      // _login({
+      //     variables: {
+      //         email: email,
+      //         password: password
+      //     }
+      // })
+
+      // setLoading(false)
+
+    }
+
   }
 
 
@@ -43,36 +81,52 @@ const SignUp = ({ navigation }) => {
               SignUp to get starget!
             </Text>
           </View>
-          <Item style={[{ marginTop: 70 }, styles.input]} success>
-            <Input placeholder='Name...' value={name} onChangeText={(inpVal) => { console.log("emails", emails); setName(inpVal) }}
-            />
-            <Icon name='checkmark-circle' />
-          </Item>
-          <Item style={[{ marginTop: 25 }, styles.input]} success>
-            <Input placeholder='Email...' value={email} onChangeText={(emails) => { console.log("emails", emails); setEmail(emails) }}
-            />
-            <Icon name='checkmark-circle' />
-          </Item>
-          <Item style={[{ marginTop: 25 }, styles.input]} error>
-            <Input placeholder='Password....'
-              value={password} onChangeText={(pass) => { setPassword(pass) }}
-            />
-            <Icon
-              //  name='checkmark-circle'
-              name='close-circle'
-            />
-          </Item>
 
+          <InputText
+            email={name}
+            setEmail={setName}
+            checkEmail={checkName}
+            setCheckEmail={setCheckName}
+            type={"name"}
+            placeholder={"Name..."}
+            customStyle={{ marginTop: 60 }}
+          />
+          <InputText
+            email={email}
+            setEmail={setEmail}
+            checkEmail={checkEmail}
+            setCheckEmail={setCheckEmail}
+            type={"email"}
+            placeholder={"Email..."}
+          />
 
+          <InputText
+            email={password}
+            setEmail={setPassword}
+            checkEmail={checkPassword}
+            setCheckEmail={setCheckPassword}
+            type={"password"}
+            placeholder={"Password..."}
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+          />
 
-       
-            
-          <DropDownInput 
-            pickerItems={["Account Type","USER","RECEIVER",]}
+          {password !== "" && !checkPassword &&
+            <Text style={{ color: "red", fontSize: 13 }}>
+              Password should container
+              at least one digit,
+              one lower case,
+              one upper case,
+              8  mentioned characters!
+                        </Text>
+          }
+
+          <DropDownInput
+            pickerItems={["Account Type", "USER", "RECEIVER",]}
             onChange={setRole}
           />
 
-        
+
 
           <TouchableOpacity
             onPress={signUp}
@@ -111,7 +165,7 @@ const styles = StyleSheet.create({
 
   },
   container: {
-    marginTop: 150,
+    marginTop: 110,
     paddingHorizontal: 40,
   },
   headingView: {
@@ -120,13 +174,18 @@ const styles = StyleSheet.create({
   },
   headingTitle: {
     fontSize: 30,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textShadowColor: 'black',
+    textShadowOffset: { width: -2, height: 2 },
+    textShadowRadius: 1,
   },
   headingText: {
-    fontWeight: 'bold',
-    color: '#BCC6CC',
+    color: '#d1d8ff',
     fontSize: 17,
-    paddingLeft: 5
+    paddingLeft: 5,
+    textShadowColor: 'black',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
   },
   inputView: {
   },
