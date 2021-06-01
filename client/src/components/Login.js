@@ -36,6 +36,7 @@ const LOGIN = gql`
       _id
       name
       email
+      role
     }
   }
 }
@@ -58,17 +59,22 @@ const Login = ({ navigation }) => {
     // let userobj ={user:{ role: "USER",name:"noor",email:"noorulhuda@gmail.com" }}
 
 
-    const [_login, { data }] = useMutation(LOGIN);
-    // console.log("login===",data);
+    const [_login, { data,error }] = useMutation(LOGIN);
+    console.log("login===",data,error);
 
     if (data?.login?.user && change) {
         // saveData("norr123");
-        // dispatch(addUser({ role: "USER" }));
-        // navigation.navigate("Home")
-        // setChange(false)
+        ToastAndroid.showWithGravity(
+            "Login Successfull",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        dispatch(addUser(data?.login?.user));
+        navigation.navigate("Home")
+        setChange(false)
     }
 
-
+   
 
 
     const login = async () => {
@@ -89,20 +95,30 @@ const Login = ({ navigation }) => {
         );
         setLoading(true)
         if (checkEmail && checkPassword) {
-            Alert.alert("Run Login api")
-            dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
-
-            navigation.navigate("Home")
-            // _login({
-            //     variables: {
-            //         email: email,
-            //         password: password
-            //     }
-            // })
-
-            // setLoading(false)
+            // Alert.alert("Run Login api")
+            
+            
+            _login({
+                variables: {
+                    email: email,
+                    password: password
+                }
+            })
+            
+            // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
+            // navigation.navigate("Home")
+            setLoading(false)
 
         }
+
+        if(error){
+            ToastAndroid.showWithGravity(
+                `${error}`,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            // setLoading(false)
+        } 
 
     }
 

@@ -17,11 +17,11 @@ const { store, persistor } = stores();
 // console.log("DAT2====",persistor);
 // Initialize Apollo Client
 const httpLink = new HttpLink({
-  uri: "http://10.0.2.2:4000/graphql",
+  uri: "https://hh-hhh.herokuapp.com/graphql",
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://10.0.2.2:4000/graphql",
+  uri: "ws://hh-hhh.herokuapp.com/graphql",
   options: {
     reconnect: true
   }
@@ -48,10 +48,9 @@ const App = () => {
 
   useEffect(async () => {
     let tokenRead = await readData();
-    console.log("TOKENSASYNC=====", tokenRead);
+    // console.log("TOKENSASYNC=====", tokenRead);
     SplashScreen.hide();
   })
-  console.log("Client==>",client);
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>

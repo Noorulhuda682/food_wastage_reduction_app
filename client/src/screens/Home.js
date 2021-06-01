@@ -47,7 +47,7 @@ const Home = ({ navigation }) => {
 
     if (loading)  console.log('Loading...');
     if (error)  console.log(`Error! ${error.message}`);
-    console.log("DATA==>",data);
+    // console.log("DATA==>",data);
     
 
     const getTokens = async () => {
@@ -83,7 +83,7 @@ const Home = ({ navigation }) => {
     // console.log("netInfo", netInfo);
     return (
         <Container>
-            <Header style={{ backgroundColor: "#00203FFF" }}>
+            <Header style={{ backgroundColor: "#1e319d" }}>
                 <Left>
                     <Button transparent onPress={() => navigation.openDrawer()}>
                         <Icon name='menu' />
@@ -215,27 +215,16 @@ const Home = ({ navigation }) => {
 
 
             </Content>
-            <Footer style={{ backgroundColor: "white" }}>
                 <Fab
                     active={true}
                     direction="up"
                     containerStyle={{}}
-                    style={{ backgroundColor: "#00203FFF" }}
+                    style={{ backgroundColor: "#1e319d"}}
                     position="bottomRight"
-                // onPress={() => this.setState({ active: !this.state.active })}
+                    onPress={() => navigation.navigate("addPost") }
                 >
-                    <Icon name="share" />
-                    {/* <Button style={{ backgroundColor: '#34A34F' }}>
-                        <Icon name="logo-whatsapp" />
-                    </Button>
-                    <Button style={{ backgroundColor: '#3B5998' }}>
-                        <Icon name="logo-facebook" />
-                    </Button>
-                    <Button disabled style={{ backgroundColor: '#DD5144' }}>
-                        <Icon name="mail" />
-                    </Button> */}
+                    <Icon name="add" />
                 </Fab>
-            </Footer>
         </Container>
 
     );
