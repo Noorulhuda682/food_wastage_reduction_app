@@ -63,7 +63,7 @@ const Login = ({ navigation }) => {
     console.log("login===",data,error);
 
     if (data?.login?.user && change) {
-        // saveData("norr123");
+        saveData(data?.login?.token);
         ToastAndroid.showWithGravity(
             "Login Successfull",
             ToastAndroid.SHORT,
@@ -79,37 +79,37 @@ const Login = ({ navigation }) => {
 
     const login = async () => {
 
-        if (email === "") {
-            ToastAndroid.showWithGravity(
-                `Enter ${password === "" ? "email and password" : "email"}`,
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER
-            );
-            return false
-        }
+        // if (email === "") {
+        //     ToastAndroid.showWithGravity(
+        //         `Enter ${password === "" ? "email and password" : "email"}`,
+        //         ToastAndroid.SHORT,
+        //         ToastAndroid.CENTER
+        //     );
+        //     return false
+        // }
 
-        if (password === "") ToastAndroid.showWithGravity(
-            "Enter password",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
-        setLoading(true)
-        if (checkEmail && checkPassword) {
+        // if (password === "") ToastAndroid.showWithGravity(
+        //     "Enter password",
+        //     ToastAndroid.SHORT,
+        //     ToastAndroid.CENTER
+        // );
+        // setLoading(true)
+        // if (checkEmail && checkPassword) {
             // Alert.alert("Run Login api")
             
             
             _login({
                 variables: {
-                    email: email,
-                    password: password
+                    email: "sad@gmail.com",
+                    password: "Saad1234"
                 }
             })
             
             // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
             // navigation.navigate("Home")
-            setLoading(false)
+            // setLoading(false)
 
-        }
+        // }
 
         if(error){
             ToastAndroid.showWithGravity(
@@ -117,7 +117,7 @@ const Login = ({ navigation }) => {
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
-            // setLoading(false)
+            setLoading(false)
         } 
 
     }

@@ -20,6 +20,8 @@ import { removeUser } from "../redux/actions/user"
 import { toggleTheme } from "../redux/actions/theming";
 import { useNetInfo } from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {clearStorage} from "../config/setToken";
+
 // AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY
 import {
     userRoutes,
@@ -135,11 +137,8 @@ const DrawerContent = (props) => {
                         label="Logout"
                         inactiveTintColor='gray'
                         onPress={ async () => { 
-                            // await AsyncStorage.setItem(
-                            //     'state',
-                            //     JSON.stringify({user:null})
-                            // );
                             dispatch(removeUser());
+                            clearStorage()
                             navigation.navigate('Login')
                         }}
                     />

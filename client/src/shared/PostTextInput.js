@@ -19,7 +19,8 @@ import Entypo from "react-native-vector-icons/Entypo";
 import {
     emailRegex,
     passwordRegex,
-    nameRegex
+    nameRegex,
+    TextRegex
 } from "../config/Regex"
 
 

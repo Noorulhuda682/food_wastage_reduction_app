@@ -1,23 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-    View,
+    View, ActivityIndicator,
     Text, Dimensions,
-    StyleSheet,Image
+    StyleSheet, Image, Alert, TextInput
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import {
     Container, Header, Left, Body, Right, Button, Icon, Title, Content,
-    Card, CardItem, H2, Footer,Thumbnail,
-    Fab
+    Card, CardItem, H2, Footer, Thumbnail,
+    Fab, Spinner, SwipeRow,Input,Item
     // Text
 } from 'native-base';
 const { width, height } = Dimensions.get('window')
-const SCREEN_HEIGHT = height
-const SCREEN_WIDTH = width
+import { useSelector } from "react-redux";
+import { useQuery } from "@apollo/client";
+import { MYPOSTS } from "../typeDefs/Post";
+
 
 const MyPosts = ({ navigation }) => {
+    const storeData = useSelector(state => state);
+    console.log("MyPosts===>", storeData?.user._id);
+
+    const { loading, error, data } = useQuery(MYPOSTS, {
+        variables: { userId: storeData?.user._id }
+    });
+
+
+    if (error) Alert.alert(`Error! ${error.message}`);
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            console.log("navigation**********************", data);
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+
+    console.log("navigation**********************22", data);
+
     return (
         <Container>
             <Header style={{ backgroundColor: "#00203FFF" }}>
@@ -27,7 +49,7 @@ const MyPosts = ({ navigation }) => {
                     </Button>
                 </Left>
                 <Body>
-                    <Title>All Posts</Title>
+                    <Title>MyPosts</Title>
                 </Body>
                 <Right>
                     <Button transparent>
@@ -36,15 +58,41 @@ const MyPosts = ({ navigation }) => {
                 </Right>
             </Header>
             <Content style={styles.mainContent} padder>
+                <Item style={{marginBottom:10}}>
+                    <Icon name="ios-search" />
+                    <Input placeholder="Search" />
+                    <Icon name="ios-people" />
+                </Item>
+
+                <View style={{ borderBottomWidth: 1, paddingBottom: 5, borderColor: "lightgray", flex: 1, flexDirection: "row", marginRight: 10 }}>
+                    <View style={{ width: 140 }}>
+                        <Image source={require('../assets/images/foods.jpeg')}
+                            style={{
+                                height: 120, width: null, flex: 1,
+                                borderRadius: 5,
+
+                            }} />
+                    </View>
+
+                    <View style={{ marginLeft: "3%" }}>
+                        <Text style={{ fontWeight: 'bold' }}>Vegetables</Text>
+                        <Text>asd</Text>
+                    </View>
+
+                </View>
+
                 <Content padder style={{ backgroundColor: "" }}>
                     <Content>
-                        <Card>
+                        {loading && <ActivityIndicator color='blue' size="large" />}
+
+
+                        <Card style={{ marginTop: 100 }}>
                             <CardItem>
                                 <Left>
-                                <Thumbnail source={require('../assets/images/profile.jpg')} />
+                                    <Thumbnail source={require('../assets/images/profile.jpg')} />
                                     <Body>
                                         <Text >by ajaz</Text>
-                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 20 }} note>Biryani</Text>
                                     </Body>
                                 </Left>
                             </CardItem>
@@ -72,10 +120,10 @@ const MyPosts = ({ navigation }) => {
                         <Card>
                             <CardItem>
                                 <Left>
-                                <Thumbnail source={require('../assets/images/profile.jpg')} />
+                                    <Thumbnail source={require('../assets/images/profile.jpg')} />
                                     <Body>
                                         <Text >by darius</Text>
-                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 20 }} note>Biryani</Text>
                                     </Body>
                                 </Left>
                             </CardItem>
@@ -103,10 +151,10 @@ const MyPosts = ({ navigation }) => {
                         <Card>
                             <CardItem>
                                 <Left>
-                                <Thumbnail source={require('../assets/images/profile.jpg')} />
+                                    <Thumbnail source={require('../assets/images/profile.jpg')} />
                                     <Body>
                                         <Text >by noor</Text>
-                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
+                                        <Text style={{ fontWeight: "bold", fontSize: 20 }} note>Biryani</Text>
                                     </Body>
                                 </Left>
                             </CardItem>
@@ -143,6 +191,9 @@ const MyPosts = ({ navigation }) => {
 const styles = StyleSheet.create({
     mainContent: {
         //  paddingTop:20
+        textAlign:"center",
+        // flex:1,
+        // alignItems:"center"
     },
     heading: {
         fontWeight: "bold",

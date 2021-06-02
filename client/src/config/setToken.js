@@ -6,7 +6,7 @@ import {
 
 export const saveData = async (token) => {
     try {
-      await AsyncStorage.setItem("TOKEN_KEY", token)
+      await AsyncStorage.setItem("token", token)
       return 'Data successfully saved';
     } catch (e) {
       Alert.alert('Failed to save the data to the storage')
@@ -15,7 +15,7 @@ export const saveData = async (token) => {
 
 export const readData = async () => {
     try {
-      const token = await AsyncStorage.getItem("TOKEN_KEY")
+      const token = await AsyncStorage.getItem("token")
       return token
     } catch (e) {
       Alert.alert('Failed to fetch the data from storage')

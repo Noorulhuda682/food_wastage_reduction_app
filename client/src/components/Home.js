@@ -19,12 +19,11 @@ const MainHome = ({ navigation }) => {
 
   useEffect( () => {
     console.log("MainHome====>",stateData.user);
-    if(stateData.user !== null){
+    if(stateData.user.role){
       navigation.navigate("Home")
     }else{
       navigation.navigate("Login")
     }
-
   },[])
 
   return (

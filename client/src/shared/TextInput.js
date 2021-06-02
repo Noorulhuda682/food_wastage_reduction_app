@@ -19,7 +19,8 @@ import Entypo from "react-native-vector-icons/Entypo";
 import {
     emailRegex,
     passwordRegex,
-    nameRegex
+    nameRegex,
+    TextRegex
 } from "../config/Regex"
 
 
@@ -44,6 +45,8 @@ const TextInput = ({
                 break;
             case 'name': regex = nameRegex
                 break;
+            case 'text': regex = TextRegex
+                break;
         }
         if (regex.test(email) === false) {
             setCheckEmail(false)
@@ -55,12 +58,12 @@ const TextInput = ({
 
 
     return (
-        <Item style={[{ marginTop: 25 }, styles.item, customStyle]}
+        <Item style={[ styles.item, customStyle]}
             success={email !== "" && (checkEmail ? true : false)}
             error={email !== "" && (checkEmail ? false : true)}
         >
             <Input
-                style={{ fontSize: 15 }}
+                style={styles.input}
                 placeholder={placeholder}
                 value={email}
                 onChangeText={(emails) => { setEmail(emails) }}
@@ -91,19 +94,13 @@ const TextInput = ({
 
 const styles = StyleSheet.create({
     item: {
-        paddingLeft: 5,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
-        elevation: 3,
-        borderRadius: 4,
-        backgroundColor: 'white',
-        height: 40,
+        marginTop: -3,
+        borderBottomColor: "lightgray",
     },
+    input: {
+        fontSize:15,
+        marginBottom: -6
+    }
 })
 
 export default TextInput;

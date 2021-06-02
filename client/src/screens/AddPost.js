@@ -4,7 +4,7 @@ import React, {
 import {
     View,
     Text,
-    TextInput,
+    ToastAndroid,
     KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
@@ -30,47 +30,110 @@ import setImageFileForCloudinary from "../config/setImageForCloudinary";
 import { useMutation } from "@apollo/client";
 import { useSelector, useDispatch } from "react-redux"
 import { ADDPOST } from "../typeDefs/Post"
+import PostTextInput from "../shared/TextInput"
 
+const options = {
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
 
 const AddPost = ({ navigation }) => {
+    const [title, setTitle] = useState("");
+    const [checkTitle, setCheckTitle] = useState(false)
+    const [description, setDescription] = useState("");
+    const [checkDescription, setCheckDescription] = useState(false)
+    const [quantity, setQuantity] = useState("");
+    const [checkQuantity, setCheckQuantity] = useState(false)
+    const [weight, setWeight] = useState("");
+    const [checkWeight, setCheckWeight] = useState(false)
+
+
     const [uploadImg, setUploadImg] = useState(false);
     const [usingCamera, setUsingCamera] = useState(false);
-    const [form, setForm] = useState({
-        title: "", description: "", quantity: 2,
-         img1: "http://res.cloudinary.com/dccdiflrm/image/upload/v1622558371/kghjwezuzkhk9xcd075e.jpg", 
-         img2: "", img3: ""
-    })
+
     const [loading, setLoading] = useState(false);
     const [img1, setImg1] = useState(null)
     const data = useSelector(state => state);
-    console.log("LOGINDATA===>", data.user._id);
-    const dispatch = useDispatch();
+    console.log("AddPOSST===>", data?.user._id);
 
     const [_addDATA, { datas, error }] = useMutation(ADDPOST);
 
     console.log("DATA-=>", datas, error);
 
-    const uploadFood = () => {
+    const uploadFood = async () => {
+        if (title === "") {
+            ToastAndroid.showWithGravity(
+                "Empty title",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            return false
+        }
+        // if (quantity === "") {
+        //     ToastAndroid.showWithGravity(
+        //         "Empty quantity",
+        //         ToastAndroid.SHORT,
+        //         ToastAndroid.CENTER
+        //     ); return false
+        // }
+        // if (quantity === "") {
+        //     ToastAndroid.showWithGravity(
+        //         "Empty quantity",
+        //         ToastAndroid.SHORT,
+        //         ToastAndroid.CENTER
+        //     ); return false
+        // }
 
-        
-        form.userId = data.user._id;
-        console.log("_addDATA", form);
+        setLoading(true)
+
+
+        //upload image to Cloudinary
+        // if(img1){
+        //     let imageFile = setImageFileForCloudinary(img1)
+        //     let data = await uploadImageToCloud(imageFile)
+        //     var { uploading, message, url } = data
+        //     if(uploading){
+
+        //     }else{
+        //         Alert.alert(`${message}`)
+        //         return false
+        //     }
+        // }
+
+        // console.log("IMG", url);
+        // console.log("DATA-=>", datas, error);
         _addDATA({
-            variables:form
+            variables: {
+                userId: data?.user._id,
+                title,
+                description,
+                quantity: 12,
+                img1,
+            }
+        }).then(({ data }) => {
+            Alert.alert(`${data}`)
+            setLoading(false)
+            navigation.navigate("myPosts")
+            // you can do something with the response here
         })
-        // dispatch(addUser());
-        // navigation.navigate("SignUp")
+            .catch(e => {
+                // Alert.alert(`${e}`)
+                setLoading(false)
+                // you can do something with the error here
+            })
+        // navigation.navigate("myPosts")
+
+
+        if (error) {
+            Alert.alert(`${error}`)
+        }
     }
 
 
 
     const launchImageLibraryHandler = () => {
-        let options = {
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
         launchImageLibrary(options, (response) => {
             console.log('Response = ', response);
             checkPhotoValidation(response)
@@ -78,12 +141,6 @@ const AddPost = ({ navigation }) => {
 
     }
     const launchCameraHandler = () => {
-        let options = {
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
         launchCamera(options, (response) => {
             console.log('Response = ', response);
             checkPhotoValidation(response)
@@ -100,20 +157,9 @@ const AddPost = ({ navigation }) => {
             alert(response.customButton);
         } else {
             const source = { uri: response.uri };
-            // console.log('response', JSON.stringify(response));
-            console.log('source', source);
+            setImg1(response.uri)
             setUsingCamera(false)
             setUploadImg(false)
-            // setImg1(response.uri)
-            let imageFile = setImageFileForCloudinary(response.uri)
-            let data = await uploadImageToCloud(imageFile)
-            let { uploading, message, url } = data
-            if (uploading) {
-                setImg1(url)
-                setForm({...form,img1:url})
-            } else {
-                Alert.alert(message)
-            }
         }
     }
 
@@ -121,15 +167,7 @@ const AddPost = ({ navigation }) => {
     const takePhoto = async (imgData) => {
         setUsingCamera(false)
         setUploadImg(false)
-        let imageFile = setImageFileForCloudinary(imgData.uri)
-        let data = await uploadImageToCloud(imageFile)
-        let { uploading, message, url } = data
-        if (uploading) {
-            setImg1(url)
-            setForm({...form,img1:url})
-        } else {
-            Alert.alert(message)
-        }
+        setImg1(imgData.uri)
     }
 
     return (
@@ -192,66 +230,57 @@ const AddPost = ({ navigation }) => {
 
                                 </Item>
                             }
-                          
+
 
                             <Text style={styles.grayText} >Food Title</Text>
-                            <Item
-                                // success
-                                style={styles.item}
-                            >
-                                <Input
-                                    value={form.title}
-                                    style={styles.input}
-                                    onChangeText={title => setForm({ ...form, title })}
-                                />
-                                {/* <Icon name='checkmark-circle' /> */}
-                            </Item>
-                            <Text style={styles.grayText} >Food Desciption</Text>
-                            <Item
-                                // success
-                                style={styles.item}
-                            >
-                                <Input
-                                    value={form.description}
-                                    style={styles.input}
-                                    onChangeText={description => setForm({ ...form, description })}
-                                />
-                                {/* <Icon name='checkmark-circle' /> */}
-                            </Item>
+                            <PostTextInput
+                                email={title}
+                                setEmail={setTitle}
+                                checkEmail={checkTitle}
+                                setCheckEmail={setCheckTitle}
+                                type={"text"}
+                            />
 
-                            <Text style={styles.grayText} >Quantity</Text>
-                            <Item
-                                // success
-                                style={styles.item}
-                            >
-                                <Input
-                                    value={form.quantity}
-                                    style={styles.input}
-                                    onChangeText={quantity => setForm({ ...form, quantity })}
-                                />
-                                {/* <Icon name='checkmark-circle' /> */}
-                            </Item>
+                            <Text style={styles.grayText} >Food Description (optional)</Text>
+                            <PostTextInput
+                                email={description}
+                                setEmail={setDescription}
+                                checkEmail={checkDescription}
+                                setCheckEmail={setCheckDescription}
+                                type={"text"}
+                            />
+
+                            <Text style={styles.grayText} >Food Quantity</Text>
+                            <PostTextInput
+                                email={quantity}
+                                setEmail={setQuantity}
+                                checkEmail={checkQuantity}
+                                setCheckEmail={setCheckQuantity}
+                                type={'text'}
+                            />
+
+                            <Text style={styles.grayText} >Food Weight</Text>
+                            <PostTextInput
+                                email={weight}
+                                setEmail={setWeight}
+                                checkEmail={checkWeight}
+                                setCheckEmail={setCheckWeight}
+                                type={'text'}
+                            />
+
 
 
                             <TouchableOpacity
                                 onPress={uploadFood}
                                 style={{ marginTop: 50, }}>
-                                {loading ?
-                                    <Text style={styles.loginButton}>
-                                        ...   <ActivityIndicator size="small" color='lightgray' />   ...
-                                    </Text> :
-                                    <Text style={styles.loginButton}>
-                                        UPLOAD+
-                                   </Text>
-                                }
+                                <View style={styles.loginButton} >
+                                    {loading ? <ActivityIndicator color='white' size="small" />
+                                        :
+                                        <Text style={{ color: "white", textAlign: "center" }} >LOGIN</Text>
+                                    }
+                                </View>
                             </TouchableOpacity>
-
-
                         </Content>
-
-
-
-
                     </Container>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -278,7 +307,7 @@ const styles = StyleSheet.create({
     grayText: {
         color: "#88929c",
         paddingLeft: 6,
-        marginTop: 50
+        marginTop: 35
     },
     item: {
         marginTop: -10,
