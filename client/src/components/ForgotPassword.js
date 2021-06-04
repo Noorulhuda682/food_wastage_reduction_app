@@ -1,5 +1,5 @@
 import React, {
-    useState, useEffect,useContext
+    useState, useEffect
 } from 'react';
 import {
     View,
@@ -27,8 +27,6 @@ import {
     passwordRegex
 } from "../config/Regex"
 import InputText from "../shared/TextInput"
-import PostTextInput from "../shared/PostTextInput"
-import {ChangeTokenHandlerContext} from "../../App"
 
 const LOGIN = gql`
  mutation login($email:String! $password:String!){
@@ -45,43 +43,22 @@ const LOGIN = gql`
 
 `;
 
-const Login = ({ navigation }) => {
-    const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
+const ForgotPassword = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [checkEmail, setCheckEmail] = useState(false)
-    const [password, setPassword] = useState("");
-    const [checkPassword, setCheckPassword] = useState(false)
-    const [showPassword, setShowPassword] = useState(true);
     const [loading, setLoading] = useState(false);
     const [change, setChange] = useState(true);
-    // const storeData = useSelector(state => state);
-    // console.log("storeData===>", storeData.user.role);
     const dispatch = useDispatch();
 
-    // let userobj ={user:{ role: "USER",name:"noor",email:"noorulhuda@gmail.com" }}
-
-
     const [_login, { data, error }] = useMutation(LOGIN);
-    // console.log("login===", data, error);
-
-    // if (data?.login?.user && change) {
-    //     saveData(data?.login?.token);
-    //     ToastAndroid.showWithGravity(
-    //         "Login Successfull",
-    //         ToastAndroid.SHORT,
-    //         ToastAndroid.CENTER
-    //     );
-    //     dispatch(addUser(data?.login?.user));
-    //     navigation.navigate("Home")
-    //     setChange(false)
-    // }
+    console.log("login===", data, error);
 
 
 
 
-    const login = async () => {
-
+    const sendRequest = async () => {
+      Alert.alert("Chal gaya")
         // if (email === "") {
         //     ToastAndroid.showWithGravity(
         //         `Enter ${password === "" ? "email and password" : "email"}`,
@@ -91,42 +68,10 @@ const Login = ({ navigation }) => {
         //     return false
         // }
 
-        // if (password === "") ToastAndroid.showWithGravity(
-        //     "Enter password",
-        //     ToastAndroid.SHORT,
-        //     ToastAndroid.CENTER
-        // );
-        // setLoading(true)
-        // if (checkEmail && checkPassword) {
-        // Alert.alert("Run Login api")
-        // ChangeTokenHandler()
-
-        _login({
-            variables: {
-                email: "sad@gmail.com",
-                password: "Saad1234"
-            }
-        }).then( ({data}) => {
-            console.log("LOGIN=======", data);
-            saveData(data?.login?.token);
-            ChangeTokenHandler(data?.login?.token);
-            ToastAndroid.showWithGravity(
-                "Login Successfull",
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER
-            );
-            dispatch(addUser(data?.login?.user));
-            navigation.navigate("Home")
-            setChange(false)
-        }).catch(err => {
-            Alert.alert(`Error : ${err}`);
-        })
-
         // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
-        // navigation.navigate("Home")
+        navigation.navigate("resetPassword")
         // setLoading(false)
 
-        // }
 
     }
 
@@ -137,58 +82,47 @@ const Login = ({ navigation }) => {
             <ScrollView>
                 <Container style={styles.container}>
                     <View style={styles.logoView}>
-                        <Image style={{ width: 170, height: 170,borderWidth:5,
+                        {/* <Image style={{ width: 170, height: 170,borderWidth:2,
                             borderRadius:100,
-                            borderColor:'#d1d8ff',
-                            shadowColor: "#000",
-                            shadowOffset: {
-                                width: 0,
-                                height: 1,
-                            },
-                            shadowOpacity: 0.22,
-                            shadowRadius: 2.22,
-                            elevation: 3,
-                        }} source={require("../assets/images/app-logo.jpeg")} />
+                            borderColor:'#d1d8ff'}} source={require("../assets/images/app-logo.jpeg")} /> */}
                         <Text style={styles.logoTitle}>
-                            Food Wastage Reduction
+                            Forgot Password
                         </Text>
                     </View>
-                    
 
+                    <Text
+                    style={{
+                        backgroundColor:'#e6e9ff',
+                        borderRadius:10,
+                        paddingHorizontal:7,
+                        paddingVertical:10,
+                        color:"#4d61ff",
+                        borderColor:"#808eff",
+                        // borderWidth:2
+                    }}
+                    >Type your email below to get OTP code in respect to reset your password </Text>
                     <InputText
                         email={email}
                         setEmail={setEmail}
                         checkEmail={checkEmail}
                         setCheckEmail={setCheckEmail}
                         type={"email"}
-                        placeholder={"Email..."}
+                        placeholder={"type email... "}
                         customStyle={{ marginTop: 50 }}
                     />
 
-                    <InputText
-                        email={password}
-                        setEmail={setPassword}
-                        checkEmail={checkPassword}
-                        setCheckEmail={setCheckPassword}
-                        type={"password"}
-                        placeholder={"Password..."}
-                        showPassword={showPassword}
-                        setShowPassword={setShowPassword}
-                    />
 
-
-
-                    <TouchableOpacity onPress={() => navigation.navigate("forgotPassword")}>
-                        <Text style={styles.forgotPassword}>forgot-password</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.forgotPassword}>back-to-login</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={login}
+                        onPress={sendRequest}
                         style={{ marginTop: 50 }}>
                         <View style={styles.loginButton} >
                             {loading ? <ActivityIndicator color='white' size="small" />
                                 :
-                                <Text style={{ color: "white", textAlign: "center" }} >LOGIN</Text>
+                                <Text style={{ color: "white", textAlign: "center" }} >Send Request</Text>
                             }
                         </View>
                     </TouchableOpacity>
@@ -264,6 +198,8 @@ const styles = StyleSheet.create({
         textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 1,
         fontWeight: "bold",
+        marginBottom:100,
+       
     },
     signUp: {
         textAlign: "center",
@@ -287,4 +223,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Login;
+export default ForgotPassword;

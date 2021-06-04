@@ -20,7 +20,8 @@ import {
     emailRegex,
     passwordRegex,
     nameRegex,
-    TextRegex
+    TextRegex,
+    NumberRegex
 } from "../config/Regex"
 
 
@@ -45,6 +46,10 @@ const PostTextInput = ({
                 break;
             case 'name': regex = nameRegex
                 break;
+            case 'text': regex = TextRegex
+                break;
+            case 'numeric': regex = NumberRegex
+                break;
         }
         if (regex.test(email) === false) {
             setCheckEmail(false)
@@ -56,33 +61,34 @@ const PostTextInput = ({
 
 
     return (
-        <Item style={[{ marginTop: 25 }, styles.item, customStyle]}
+        <Item style={[styles.item, customStyle]}
             success={email !== "" && (checkEmail ? true : false)}
             error={email !== "" && (checkEmail ? false : true)}
         >
             <Input
                 style={{ fontSize: 15 }}
                 placeholder={placeholder}
-                value={email}
+                keyboardType={type === 'numeric' ? type : ""}
+                value={type === 'numeric' && email !== null ?  email.toString() : email }
                 onChangeText={(emails) => { setEmail(emails) }}
                 secureTextEntry={type === 'password' && showPassword ? true : false}
             />
             {type === 'password' &&
                 <Entypo
                     onPress={() => setShowPassword(!showPassword)}
-                    name={`${showPassword ? 'eye-with-line': 'eye'}`}
-                    size={20} 
+                    name={`${showPassword ? 'eye-with-line' : 'eye'}`}
+                    size={20}
                     color="gray"
-                    style={{marginRight:10}}
+                    style={{ marginRight: 10 }}
                 />
             }
             {email !== "" && <Icon
-             style={{ fontSize: 20 }} 
-             name={checkEmail ? 'checkmark-circle' : 'close-circle'} 
-             onPress={() => email !== "" && !checkEmail && setEmail("")}
-             />
+                style={{ fontSize: 20 }}
+                name={checkEmail ? 'checkmark-circle' : 'close-circle'}
+                onPress={() => email !== "" && !checkEmail && setEmail("")}
+            />
             }
-            
+
         </Item>
 
     );
@@ -92,18 +98,9 @@ const PostTextInput = ({
 
 const styles = StyleSheet.create({
     item: {
-        paddingLeft: 5,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
-        elevation: 3,
-        borderRadius: 4,
         backgroundColor: 'white',
         height: 40,
+        marginTop: 5
     },
 })
 

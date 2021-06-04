@@ -30,7 +30,7 @@ import setImageFileForCloudinary from "../config/setImageForCloudinary";
 import { useMutation } from "@apollo/client";
 import { useSelector, useDispatch } from "react-redux"
 import { ADDPOST } from "../typeDefs/Post"
-import PostTextInput from "../shared/TextInput"
+import PostTextInput from "../shared/PostTextInput"
 
 const options = {
     storageOptions: {
@@ -44,7 +44,7 @@ const AddPost = ({ navigation }) => {
     const [checkTitle, setCheckTitle] = useState(false)
     const [description, setDescription] = useState("");
     const [checkDescription, setCheckDescription] = useState(false)
-    const [quantity, setQuantity] = useState("");
+    const [quantity, setQuantity] = useState('');
     const [checkQuantity, setCheckQuantity] = useState(false)
     const [weight, setWeight] = useState("");
     const [checkWeight, setCheckWeight] = useState(false)
@@ -55,12 +55,12 @@ const AddPost = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
     const [img1, setImg1] = useState(null)
-    const data = useSelector(state => state);
-    console.log("AddPOSST===>", data?.user._id);
+    const datas = useSelector(state => state);
+    console.log("AddPOSST===>", datas?.user._id);
 
-    const [_addDATA, { datas, error }] = useMutation(ADDPOST);
+    const [_addDATA, { data }] = useMutation(ADDPOST);
 
-    console.log("DATA-=>", datas, error);
+    console.log("DATA-=>",title,description,quantity , weight);
 
     const uploadFood = async () => {
         if (title === "") {
@@ -71,64 +71,64 @@ const AddPost = ({ navigation }) => {
             );
             return false
         }
-        // if (quantity === "") {
-        //     ToastAndroid.showWithGravity(
-        //         "Empty quantity",
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.CENTER
-        //     ); return false
-        // }
-        // if (quantity === "") {
-        //     ToastAndroid.showWithGravity(
-        //         "Empty quantity",
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.CENTER
-        //     ); return false
-        // }
+        if (quantity === "") {
+            ToastAndroid.showWithGravity(
+                "Empty quantity",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            ); return false
+        }
+        if (weight === "") {
+            ToastAndroid.showWithGravity(
+                "Empty quantity",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            ); return false
+        }
 
         setLoading(true)
 
+        var varData = {
+            userId: datas?.user?._id,
+            title,
+            description,
+            quantity:JSON.parse(quantity),
+            weight,
+        }
 
-        //upload image to Cloudinary
-        // if(img1){
-        //     let imageFile = setImageFileForCloudinary(img1)
-        //     let data = await uploadImageToCloud(imageFile)
-        //     var { uploading, message, url } = data
-        //     if(uploading){
+        console.log("varData", varData);
+        // upload image to Cloudinary
+        if(img1){
+            let imageFile = setImageFileForCloudinary(img1)
+            let data = await uploadImageToCloud(imageFile)
+            var { uploading, message, url } = data
+            if(uploading){
+                varData.img1 = url
+            }else{
+                Alert.alert(`${message}`)
+                setLoading(false)
+                return false
+            }
+        }
 
-        //     }else{
-        //         Alert.alert(`${message}`)
-        //         return false
-        //     }
-        // }
-
-        // console.log("IMG", url);
+        console.log("IMG", url);
         // console.log("DATA-=>", datas, error);
         _addDATA({
-            variables: {
-                userId: data?.user._id,
-                title,
-                description,
-                quantity: 12,
-                img1,
-            }
+            variables: varData
         }).then(({ data }) => {
             Alert.alert(`${data}`)
+            console.log("Success===",data);
             setLoading(false)
             navigation.navigate("myPosts")
             // you can do something with the response here
         })
-            .catch(e => {
-                // Alert.alert(`${e}`)
-                setLoading(false)
-                // you can do something with the error here
-            })
+        .catch(e => {
+            Alert.alert(`${e}`)
+            setLoading(false)
+            // you can do something with the error here
+        })
         // navigation.navigate("myPosts")
 
-
-        if (error) {
-            Alert.alert(`${error}`)
-        }
     }
 
 
@@ -256,7 +256,7 @@ const AddPost = ({ navigation }) => {
                                 setEmail={setQuantity}
                                 checkEmail={checkQuantity}
                                 setCheckEmail={setCheckQuantity}
-                                type={'text'}
+                                type={'numeric'}
                             />
 
                             <Text style={styles.grayText} >Food Weight</Text>

@@ -49,7 +49,7 @@ const SignUp = ({ navigation }) => {
       return false
     }
 
-  
+
     if (checkEmail && checkPassword && checkName && role !== "") {
       setLoading(true)
       // Alert.alert("Run Login api")
@@ -75,11 +75,12 @@ const SignUp = ({ navigation }) => {
         <Container style={styles.container}>
           <View style={styles.headingView}>
             <Text style={styles.headingTitle}>
-              Create Account
-                      </Text>
-            <Text style={styles.headingText}>
-              SignUp to get starget!
+              Create Account{' '}/
             </Text>
+            <Text style={styles.headingText}>
+              SignUp to get starget with FWR !
+            </Text>
+            {/* <Text style={[styles.headingText,]}>ON FWR</Text> */}
           </View>
 
           <InputText
@@ -121,10 +122,12 @@ const SignUp = ({ navigation }) => {
                         </Text>
           }
 
+
           <DropDownInput
             pickerItems={["Account Type", "USER", "RECEIVER",]}
             onChange={setRole}
           />
+
 
 
 
@@ -165,12 +168,20 @@ const styles = StyleSheet.create({
 
   },
   container: {
-    marginTop: 110,
+    marginTop: 80,
     paddingHorizontal: 40,
   },
   headingView: {
-    // display: "flex",
-    // alignItems: "center"
+    backgroundColor:"#e6e8ff",
+    borderWidth:1,
+    borderColor:"#1e319d",
+    textAlign:"center",
+    padding:30,
+    borderRadius:100,
+    borderLeftWidth:15,
+    borderRightWidth:0,
+    borderTopWidth:0,
+    borderBottomWidth:0,
   },
   headingTitle: {
     fontSize: 30,
@@ -186,6 +197,9 @@ const styles = StyleSheet.create({
     textShadowColor: 'black',
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 1,
+    borderBottomWidth:1,
+    paddingBottom:5,
+    borderColor:"lightgray",
   },
   inputView: {
   },
@@ -230,7 +244,7 @@ const styles = StyleSheet.create({
     color: "black"
   },
   signUpBlue: {
-    color: "#1e319d",
+    color: "#4d61ff",
     fontWeight: "bold",
   },
 

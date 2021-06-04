@@ -8,7 +8,7 @@ import {
    MyPosts,
    AllPosts,
    Map,
-   Camera
+   Camera,
  } from "../screens"
 import {useSelector,useDispatch} from "react-redux"
 
@@ -18,8 +18,8 @@ const MainHome = ({ navigation }) => {
   let stateData = useSelector( state => state);
 
   useEffect( () => {
-    console.log("MainHome====>",stateData.user);
-    if(stateData.user.role){
+    console.log("MainHome====>",stateData?.user);
+    if(stateData?.user?.role){
       navigation.navigate("Home")
     }else{
       navigation.navigate("Login")
@@ -37,11 +37,7 @@ const MainHome = ({ navigation }) => {
       <Drawer.Screen name="addPost" component={AddPost} />
       <Drawer.Screen name="myPosts" component={MyPosts} />
       <Drawer.Screen name="map" component={Map} />
-
       <Drawer.Screen name="allPosts" component={AllPosts} />
-
-      
-
     </Drawer.Navigator>
   );
 }

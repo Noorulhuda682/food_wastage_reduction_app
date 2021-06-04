@@ -45,7 +45,7 @@ const Home = ({ navigation }) => {
     // const { loading, error, data } = useQuery(GET_USERS);
     const { data, loading, error  } = useSubscription(RECEIVER_ADDED);
 
-    if (loading)  console.log('Loading...');
+    // if (loading)  console.log('Loading...');
     if (error)  console.log(`Error! ${error.message}`);
     // console.log("DATA==>",data);
     

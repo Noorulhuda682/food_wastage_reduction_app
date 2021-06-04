@@ -1,5 +1,5 @@
 import React, {
-    useState, useEffect,useContext
+    useState, useEffect
 } from 'react';
 import {
     View,
@@ -27,8 +27,6 @@ import {
     passwordRegex
 } from "../config/Regex"
 import InputText from "../shared/TextInput"
-import PostTextInput from "../shared/PostTextInput"
-import {ChangeTokenHandlerContext} from "../../App"
 
 const LOGIN = gql`
  mutation login($email:String! $password:String!){
@@ -45,8 +43,7 @@ const LOGIN = gql`
 
 `;
 
-const Login = ({ navigation }) => {
-    const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
+const ResetPassword = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [checkEmail, setCheckEmail] = useState(false)
@@ -55,27 +52,12 @@ const Login = ({ navigation }) => {
     const [showPassword, setShowPassword] = useState(true);
     const [loading, setLoading] = useState(false);
     const [change, setChange] = useState(true);
-    // const storeData = useSelector(state => state);
-    // console.log("storeData===>", storeData.user.role);
     const dispatch = useDispatch();
 
     // let userobj ={user:{ role: "USER",name:"noor",email:"noorulhuda@gmail.com" }}
 
 
     const [_login, { data, error }] = useMutation(LOGIN);
-    // console.log("login===", data, error);
-
-    // if (data?.login?.user && change) {
-    //     saveData(data?.login?.token);
-    //     ToastAndroid.showWithGravity(
-    //         "Login Successfull",
-    //         ToastAndroid.SHORT,
-    //         ToastAndroid.CENTER
-    //     );
-    //     dispatch(addUser(data?.login?.user));
-    //     navigation.navigate("Home")
-    //     setChange(false)
-    // }
 
 
 
@@ -99,17 +81,16 @@ const Login = ({ navigation }) => {
         // setLoading(true)
         // if (checkEmail && checkPassword) {
         // Alert.alert("Run Login api")
-        // ChangeTokenHandler()
+
 
         _login({
             variables: {
                 email: "sad@gmail.com",
                 password: "Saad1234"
             }
-        }).then( ({data}) => {
+        }).then(data => {
             console.log("LOGIN=======", data);
             saveData(data?.login?.token);
-            ChangeTokenHandler(data?.login?.token);
             ToastAndroid.showWithGravity(
                 "Login Successfull",
                 ToastAndroid.SHORT,
@@ -137,23 +118,29 @@ const Login = ({ navigation }) => {
             <ScrollView>
                 <Container style={styles.container}>
                     <View style={styles.logoView}>
-                        <Image style={{ width: 170, height: 170,borderWidth:5,
+                        {/* <Image style={{ width: 170, height: 170,borderWidth:2,
                             borderRadius:100,
-                            borderColor:'#d1d8ff',
-                            shadowColor: "#000",
-                            shadowOffset: {
-                                width: 0,
-                                height: 1,
-                            },
-                            shadowOpacity: 0.22,
-                            shadowRadius: 2.22,
-                            elevation: 3,
-                        }} source={require("../assets/images/app-logo.jpeg")} />
+                            borderColor:'#d1d8ff'}} source={require("../assets/images/app-logo.jpeg")} /> */}
                         <Text style={styles.logoTitle}>
-                            Food Wastage Reduction
+                           Reset Password
                         </Text>
                     </View>
-                    
+
+                    <Text
+                    style={{
+                        backgroundColor:'#e6e9ff',
+                        borderRadius:5,
+                        paddingHorizontal:7,
+                        paddingVertical:10,
+                        color:"#4d61ff",
+                        marginTop:50
+                        // borderColor:"#808eff",
+                        // borderWidth:1
+                    }}
+                    >
+                    We sent you the OTP code on your gmail. enter the code below then type new password.     
+                    </Text>
+                
 
                     <InputText
                         email={email}
@@ -161,7 +148,7 @@ const Login = ({ navigation }) => {
                         checkEmail={checkEmail}
                         setCheckEmail={setCheckEmail}
                         type={"email"}
-                        placeholder={"Email..."}
+                        placeholder={"OTP Code"}
                         customStyle={{ marginTop: 50 }}
                     />
 
@@ -171,15 +158,15 @@ const Login = ({ navigation }) => {
                         checkEmail={checkPassword}
                         setCheckEmail={setCheckPassword}
                         type={"password"}
-                        placeholder={"Password..."}
+                        placeholder={"Type new password..."}
                         showPassword={showPassword}
                         setShowPassword={setShowPassword}
                     />
 
 
 
-                    <TouchableOpacity onPress={() => navigation.navigate("forgotPassword")}>
-                        <Text style={styles.forgotPassword}>forgot-password</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.forgotPassword}>back-to-login</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -188,7 +175,7 @@ const Login = ({ navigation }) => {
                         <View style={styles.loginButton} >
                             {loading ? <ActivityIndicator color='white' size="small" />
                                 :
-                                <Text style={{ color: "white", textAlign: "center" }} >LOGIN</Text>
+                                <Text style={{ color: "white", textAlign: "center" }} >Reset</Text>
                             }
                         </View>
                     </TouchableOpacity>
@@ -263,7 +250,7 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 1,
-        fontWeight: "bold",
+        fontWeight: "bold"
     },
     signUp: {
         textAlign: "center",
@@ -276,7 +263,7 @@ const styles = StyleSheet.create({
     forgotPassword: {
         marginTop: 20,
         textAlign: "right",
-        color: "#4d61ff",
+        color:"#4d61ff",
         fontWeight: "bold"
     },
     greyLine: {
@@ -287,4 +274,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Login;
+export default ResetPassword;

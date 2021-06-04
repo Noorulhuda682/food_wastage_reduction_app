@@ -13,5 +13,5 @@ export {
     MyPosts,
     AllPosts,
     Map,
-    Camera
+    Camera,
 }

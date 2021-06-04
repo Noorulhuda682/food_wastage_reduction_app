@@ -2,22 +2,24 @@ import React, { useEffect } from 'react';
 import {
     View, ActivityIndicator,
     Text, Dimensions,
-    StyleSheet, Image, Alert, TextInput
+    StyleSheet, Image, Alert, TextInput,
+    TouchableOpacity
 } from 'react-native'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import {
     Container, Header, Left, Body, Right, Button, Icon, Title, Content,
     Card, CardItem, H2, Footer, Thumbnail,
-    Fab, Spinner, SwipeRow,Input,Item
+    Fab, Spinner, SwipeRow, Input, Item
     // Text
 } from 'native-base';
 const { width, height } = Dimensions.get('window')
 import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
 import { MYPOSTS } from "../typeDefs/Post";
-
+import PostCard from "../shared/PostCard"
 
 const MyPosts = ({ navigation }) => {
     const storeData = useSelector(state => state);
@@ -30,15 +32,15 @@ const MyPosts = ({ navigation }) => {
 
     if (error) Alert.alert(`Error! ${error.message}`);
 
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            console.log("navigation**********************", data);
-        });
-        return unsubscribe;
-    }, [navigation]);
+    // React.useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         console.log("navigation**********************", data);
+    //     });
+    //     return unsubscribe;
+    // }, [navigation]);
 
 
-    console.log("navigation**********************22", data);
+    console.log("navigation**********************22", data, storeData?.user._id );
 
     return (
         <Container>
@@ -58,130 +60,23 @@ const MyPosts = ({ navigation }) => {
                 </Right>
             </Header>
             <Content style={styles.mainContent} padder>
-                <Item style={{marginBottom:10}}>
+
+                <Item style={{ marginBottom: 10,marginTop:-10 }}>
                     <Icon name="ios-search" />
                     <Input placeholder="Search" />
                     <Icon name="ios-people" />
                 </Item>
+  
+                {loading &&
+                 <ActivityIndicator color="blue" />
+                }
 
-                <View style={{ borderBottomWidth: 1, paddingBottom: 5, borderColor: "lightgray", flex: 1, flexDirection: "row", marginRight: 10 }}>
-                    <View style={{ width: 140 }}>
-                        <Image source={require('../assets/images/foods.jpeg')}
-                            style={{
-                                height: 120, width: null, flex: 1,
-                                borderRadius: 5,
+                 {data?.userPosts.map( (foodPost,key) =>  <PostCard foodPost={foodPost} key={key} /> )}
 
-                            }} />
-                    </View>
+                {/* <PostCard/>
+                <PostCard/> */}
 
-                    <View style={{ marginLeft: "3%" }}>
-                        <Text style={{ fontWeight: 'bold' }}>Vegetables</Text>
-                        <Text>asd</Text>
-                    </View>
-
-                </View>
-
-                <Content padder style={{ backgroundColor: "" }}>
-                    <Content>
-                        {loading && <ActivityIndicator color='blue' size="large" />}
-
-
-                        <Card style={{ marginTop: 100 }}>
-                            <CardItem>
-                                <Left>
-                                    <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                    <Body>
-                                        <Text >by ajaz</Text>
-                                        <Text style={{ fontWeight: "bold", fontSize: 20 }} note>Biryani</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                    <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                    <Body>
-                                        <Text >by darius</Text>
-                                        <Text style={{ fontWeight: "bold", fontSize: 20 }} note>Biryani</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                    <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                    <Body>
-                                        <Text >by noor</Text>
-                                        <Text style={{ fontWeight: "bold", fontSize: 20 }} note>Biryani</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                    </Content>
-                </Content>
-
+               
             </Content>
         </Container>
 
@@ -191,7 +86,7 @@ const MyPosts = ({ navigation }) => {
 const styles = StyleSheet.create({
     mainContent: {
         //  paddingTop:20
-        textAlign:"center",
+        textAlign: "center",
         // flex:1,
         // alignItems:"center"
     },

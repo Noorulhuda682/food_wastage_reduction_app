@@ -58,12 +58,12 @@ const TextInput = ({
 
 
     return (
-        <Item style={[ styles.item, customStyle]}
+        <Item style={[{ marginTop: 25 }, styles.item, customStyle]}
             success={email !== "" && (checkEmail ? true : false)}
             error={email !== "" && (checkEmail ? false : true)}
         >
             <Input
-                style={styles.input}
+                style={{ fontSize: 15 }}
                 placeholder={placeholder}
                 value={email}
                 onChangeText={(emails) => { setEmail(emails) }}
@@ -72,19 +72,19 @@ const TextInput = ({
             {type === 'password' &&
                 <Entypo
                     onPress={() => setShowPassword(!showPassword)}
-                    name={`${showPassword ? 'eye-with-line': 'eye'}`}
-                    size={20} 
+                    name={`${showPassword ? 'eye-with-line' : 'eye'}`}
+                    size={20}
                     color="gray"
-                    style={{marginRight:10}}
+                    style={{ marginRight: 10 }}
                 />
             }
             {email !== "" && <Icon
-             style={{ fontSize: 20 }} 
-             name={checkEmail ? 'checkmark-circle' : 'close-circle'} 
-             onPress={() => email !== "" && !checkEmail && setEmail("")}
-             />
+                style={{ fontSize: 20 }}
+                name={checkEmail ? 'checkmark-circle' : 'close-circle'}
+                onPress={() => email !== "" && !checkEmail && setEmail("")}
+            />
             }
-            
+
         </Item>
 
     );
@@ -94,13 +94,18 @@ const TextInput = ({
 
 const styles = StyleSheet.create({
     item: {
-        marginTop: -3,
-        borderBottomColor: "lightgray",
+        paddingLeft: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
+        borderRadius: 4,
+        backgroundColor: 'white',
+        height: 40,
     },
-    input: {
-        fontSize:15,
-        marginBottom: -6
-    }
 })
-
 export default TextInput;
