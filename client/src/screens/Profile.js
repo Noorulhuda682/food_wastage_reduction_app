@@ -6,34 +6,24 @@ import {
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useSelector, useDispatch } from "react-redux";
 import {
-  Container, Header, Left, Body, Right, Button, Icon, Title, Content,
+  Container, Left, Body, Right, Button, Icon, Title, Content,
   Card, CardItem, H2, Footer, Badge,
   Fab, Thumbnail, Item, Input
 } from "native-base"
+import Header from "../shared/Header"
 
 const Profile = ({ navigation }) => {
-  const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+  const {user} = useSelector(state => state);
+     
+  console.log("USER",user);
 
+  const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+  
   return (
     <Container>
-      <Header style={{ backgroundColor: "#00203FFF" }}>
-        <Left>
-          <Button transparent onPress={() => navigation.openDrawer()}>
-            <Icon name='menu' />
-          </Button>
-
-        </Left>
-        <Body>
-          <Title>My Profile</Title>
-        </Body>
-        <Right>
-          <Button transparent>
-            <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
-          </Button>
-        </Right>
-      </Header>
+      <Header navigation={navigation} title={"Profile"}/>
       <Content >
         <View style={{
           alignItems: "center", borderBottomWidth: 1,
@@ -49,7 +39,11 @@ const Profile = ({ navigation }) => {
             <Badge success style={styles.badge}></Badge>
           </View>
 
-          <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Noorul Huda</Text>
+          <Text style={{ fontWeight: 'bold', marginTop: 10 }}>{user.name}</Text>
+
+          <Text style={{color:"#4d61ff",
+          padding:5,paddingHorizontal:30,marginTop:20,backgroundColor:'#e6e9ff',marginBottom:-10}}>
+            ROLE :  {user.role}</Text>
         </View>
 
         <Content style={{ paddingHorizontal: "5%" }} padder>
@@ -70,7 +64,7 @@ const Profile = ({ navigation }) => {
           <Text style={styles.grayText} >Email</Text>
           <Item style={styles.item}>
             <Input
-              value={"noorulhuda682@gmail.com"}
+              value={user.email}
               style={styles.input}
             //  onChangeText={(emails) => { console.log("emails", emails);
             //   setEmail(emails) }}
@@ -129,7 +123,7 @@ const styles = StyleSheet.create({
     height: 130,
     width: 130,
     borderWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: 'gray',
     marginTop: 25
   },
   letftText: {

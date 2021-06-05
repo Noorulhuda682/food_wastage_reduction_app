@@ -1,5 +1,5 @@
 import React, {
-  useState
+  useState, useContext
 } from 'react';
 import {
   View,
@@ -11,14 +11,23 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  ToastAndroid
+  ToastAndroid, Alert
 } from 'react-native'
 import { Container, Header, Content, Item, Input, Icon, Spinner, Button, } from 'native-base';
 import { Picker } from '@react-native-picker/picker';
 import DropDownInput from "../shared/DropDown"
 import InputText from "../shared/TextInput"
+import { useMutation } from "@apollo/client";
+import { ADDUSER, ADDRECEIVER } from "../typeDefs/Auth"
+import { ChangeTokenHandlerContext } from "../../App"
+import { saveData } from "../config/setToken";
+import {useDispatch} from "react-redux"
+import { addUser } from "../redux/actions/user"
+  
 
 const SignUp = ({ navigation }) => {
+  const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [checkName, setCheckName] = useState(false);
@@ -28,42 +37,55 @@ const SignUp = ({ navigation }) => {
   const [checkPassword, setCheckPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false)
-  const [role, setRole] = useState("")
+  const [role, setRole] = useState("");
+
+  const [addingUser, { }] = useMutation(ADDUSER);
+  const [addingReceiver, { }] = useMutation(ADDRECEIVER);
 
   const signUp = () => {
 
-    if (name === "") {
+    if (name === "" || name === undefined || name === " " || name === null) {
       ToastAndroid.showWithGravity("Enter username", ToastAndroid.SHORT, ToastAndroid.CENTER);
       return false
     }
-    if (email === "") {
+    if (email === "" || email === undefined || email === " " || email === null) {
       ToastAndroid.showWithGravity("Enter email", ToastAndroid.SHORT, ToastAndroid.CENTER);
       return false
     }
-    if (password === "") {
+    if (password === "" || password === undefined || password === " " || password === null) {
       ToastAndroid.showWithGravity("Enter password", ToastAndroid.SHORT, ToastAndroid.CENTER);
       return false
     }
-    if (role === "") {
+    if (role === "" || role === undefined || role === " " || role === null) {
       ToastAndroid.showWithGravity("Select Account Type", ToastAndroid.SHORT, ToastAndroid.CENTER);
       return false
     }
 
 
-    if (checkEmail && checkPassword && checkName && role !== "") {
-      setLoading(true)
-      // Alert.alert("Run Login api")
-      // dispatch(addUser({ role: "USER" }));
-      // navigation.navigate("Home")
-      // _login({
-      //     variables: {
-      //         email: email,
-      //         password: password
-      //     }
-      // })
+    setLoading(true)
+    if (checkEmail && checkPassword && checkName && role) {
+      let register = role === "USER" ? addingUser : addingReceiver;
+      register({
+        variables: {
+          name,
+          email,
+          password
+        }
+      })
+        .then(({ data }) => {
+          var {token,user} = role === "USER" ?  data.addUser : data.addReceiver; 
+          console.log("REGISTER=======",data,"***************",);
+          saveData(token);
+          ChangeTokenHandler(token);
+          Alert.alert("Registration Successfull");
+          dispatch(addUser(user));
+          navigation.navigate("Home")
+          setLoading(false);
 
-      // setLoading(false)
-
+        }).catch(err => {
+          Alert.alert("Error", JSON.stringify(err.message));
+          setLoading(false)
+        })
     }
 
   }
@@ -172,16 +194,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
   headingView: {
-    backgroundColor:"#e6e8ff",
-    borderWidth:1,
-    borderColor:"#1e319d",
-    textAlign:"center",
-    padding:30,
-    borderRadius:100,
-    borderLeftWidth:15,
-    borderRightWidth:0,
-    borderTopWidth:0,
-    borderBottomWidth:0,
+    backgroundColor: "#e6e8ff",
+    borderWidth: 1,
+    borderColor: "#1e319d",
+    textAlign: "center",
+    padding: 30,
+    borderRadius: 100,
+    borderLeftWidth: 15,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
   },
   headingTitle: {
     fontSize: 30,
@@ -197,9 +219,9 @@ const styles = StyleSheet.create({
     textShadowColor: 'black',
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 1,
-    borderBottomWidth:1,
-    paddingBottom:5,
-    borderColor:"lightgray",
+    borderBottomWidth: 1,
+    paddingBottom: 5,
+    borderColor: "lightgray",
   },
   inputView: {
   },

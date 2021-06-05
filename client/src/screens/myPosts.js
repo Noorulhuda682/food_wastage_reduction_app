@@ -73,8 +73,11 @@ const MyPosts = ({ navigation }) => {
 
                  {data?.userPosts.map( (foodPost,key) =>  <PostCard foodPost={foodPost} key={key} /> )}
 
-                {/* <PostCard/>
-                <PostCard/> */}
+                 {!loading && !data.userPosts.length &&
+                 <Text style={{color:"gray",textAlign:"ce"}}>No data found!</Text>
+                }
+
+           
 
                
             </Content>

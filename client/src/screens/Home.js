@@ -10,7 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
 import {
-    Container, Header, Left, Body, Right, Button, Icon, Title, Content,
+    Container, Left, Body, Right, Button, Icon, Title, Content,
     Card, CardItem, H2, Footer, Thumbnail,
     Fab
 } from 'native-base';
@@ -19,6 +19,8 @@ const { width, height } = Dimensions.get('window')
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 import {gql,useQuery,useSubscription} from "@apollo/client"
+import Header from "../shared/Header"
+
 
 // const GET_USERS = gql`
 //   query users{
@@ -83,22 +85,7 @@ const Home = ({ navigation }) => {
     // console.log("netInfo", netInfo);
     return (
         <Container>
-            <Header style={{ backgroundColor: "#1e319d" }}>
-                <Left>
-                    <Button transparent onPress={() => navigation.openDrawer()}>
-                        <Icon name='menu' />
-                    </Button>
-
-                </Left>
-                <Body>
-                    <Title>Home</Title>
-                </Body>
-                <Right>
-                    <Button transparent>
-                        <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
-                    </Button>
-                </Right>
-            </Header>
+            <Header navigation={navigation} title={'Home'}/>
             <Content style={styles.mainContent} padder>
                 <Content padder style={{ backgroundColor: "" }}>
                     <Text style={styles.heading}>Safe Wasting Food</Text>

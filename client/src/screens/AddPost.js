@@ -14,7 +14,7 @@ import {
     Alert
 } from 'react-native'
 import {
-    Container, Header, Content, Item, Input, Icon, Spinner,
+    Container, Content, Item, Input, Icon, Spinner,
     Body, Right, Title, Left, Button,
     Card, CardItem, H2, Footer,
 } from 'native-base';
@@ -31,6 +31,7 @@ import { useMutation } from "@apollo/client";
 import { useSelector, useDispatch } from "react-redux"
 import { ADDPOST } from "../typeDefs/Post"
 import PostTextInput from "../shared/PostTextInput"
+import Header from "../shared/Header";;
 
 const options = {
     storageOptions: {
@@ -116,7 +117,7 @@ const AddPost = ({ navigation }) => {
         _addDATA({
             variables: varData
         }).then(({ data }) => {
-            Alert.alert(`${data}`)
+            Alert.alert(`Uploading Successfull`)
             console.log("Success===",data);
             setLoading(false)
             navigation.navigate("myPosts")
@@ -175,17 +176,7 @@ const AddPost = ({ navigation }) => {
             <KeyboardAvoidingView >
                 <ScrollView>
                     <Container >
-                        <Header style={{ backgroundColor: "#00203FFF" }}>
-                            <Left >
-                                <Icon onPress={() => navigation.openDrawer()} name='menu' style={{ color: "white" }} />
-                            </Left>
-                            <Body>
-                                <Title>Upload Food</Title>
-                            </Body>
-                            <Right>
-                                <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
-                            </Right>
-                        </Header>
+                        <Header navigation={navigation} title={'Upload Food'}/>
                         <Content padder>
                             <Text style={styles.grayText} >Food Image</Text>
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }} >
@@ -276,7 +267,7 @@ const AddPost = ({ navigation }) => {
                                 <View style={styles.loginButton} >
                                     {loading ? <ActivityIndicator color='white' size="small" />
                                         :
-                                        <Text style={{ color: "white", textAlign: "center" }} >LOGIN</Text>
+                                        <Text style={{ color: "white", textAlign: "center" }} >Upload</Text>
                                     }
                                 </View>
                             </TouchableOpacity>

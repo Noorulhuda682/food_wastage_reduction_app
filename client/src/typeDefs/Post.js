@@ -25,6 +25,7 @@ query posts($userId:ID){
     title
     description
     quantity
+    weight
     img1
     img2
     img3

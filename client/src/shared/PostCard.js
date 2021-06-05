@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View, ActivityIndicator,
     Text, Dimensions,
@@ -23,7 +23,8 @@ import { MYPOSTS } from "../typeDefs/Post";
 
 
 const PostCard = ({ navigation, foodPost, key }) => {
-
+    
+    const [focusKey, setFocusKey] = useState(null)
     console.log("PostCard=====", foodPost);
 
     return (
@@ -31,9 +32,10 @@ const PostCard = ({ navigation, foodPost, key }) => {
             <View style={{ width: "30%" }}>
 
                 {foodPost.img1 ?
-                    <Image source={{ uri: foodPost.img1 }} style={{ height: 120, width: null, flex: 1, borderRadius: 5,
+                    <Image source={{ uri: foodPost.img1 }} style={{
+                        height: 120, width: null, flex: 1, borderRadius: 5,
                     }} />
-                        :
+                    :
                     <Image source={require('../assets/images/foods.jpeg')} style={{
                         height: 120, width: null, flex: 1, borderRadius: 5,
                     }} />
@@ -44,35 +46,11 @@ const PostCard = ({ navigation, foodPost, key }) => {
 
             <View style={{ marginLeft: "4%", backgroundColor: "white", width: "66%" }}>
                 <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 18, width: "45%" }}>{foodPost.title}</Text>
-                    <View style={{ flex: 1, flexDirection: "row", width: "65%" }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: "#00203FFF", marginHorizontal: 2, borderRadius: 3,
-                            paddingHorizontal: 15,
-                            paddingVertical: 5,
+                    <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{foodPost.title}</Text>
+                    <TouchableOpacity onPress={() => setFocusKey(focusKey === null ? key : null)}>
+                        <MaterialCommunityIcons name="dots-vertical" size={22} color="blue" />
+                    </TouchableOpacity>
 
-
-                        }}>
-                            <Text style={{ color: "white" }}>
-                                <Feather name="edit" size={15} color="white" />
-                                {` `}Edit
-                                    </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            backgroundColor: "#ea1715", marginHorizontal: 2, borderRadius: 3,
-                            paddingHorizontal: 15,
-                            paddingVertical: 5,
-
-
-                        }}>
-                            <Text style={{ color: "white" }}>
-
-                                <AntDesign name="delete" size={15} color="white" />
-                                {` `}Delete
-                                    </Text>
-                        </TouchableOpacity>
-
-                    </View>
                 </View>
                 <Text style={{ color: "gray", fontSize: 14 }}>
                     Quantity: {foodPost.quantity}
@@ -89,7 +67,7 @@ const PostCard = ({ navigation, foodPost, key }) => {
                     width: "100%"
                 }}>
                     <Button transparent>
-                        <Text style={{ fontSize: 15, fontWeight: "bold" }} >Receiver : </Text>
+                        <Text style={{ fontSize: 15, fontWeight: "bold", color: "gray" }} >Receiver : </Text>
                         <Thumbnail style={{ height: 22, width: 22 }} source={require('../assets/images/profile.jpg')} />
                         <Text style={{ marginLeft: 5, fontSize: 11 }}>Noorul Huda</Text>
 
@@ -100,6 +78,35 @@ const PostCard = ({ navigation, foodPost, key }) => {
                         <Text style={{ marginLeft: 5, fontSize: 11 }}>Map</Text>
                     </Button>
                 </Button>
+
+                {focusKey === key &&  <View style={{ flex: 1, flexDirection: "row", width: "60%" }}>
+                    <TouchableOpacity style={{
+                        backgroundColor: "#00203FFF", marginHorizontal: 2, borderRadius: 3,
+                        paddingHorizontal: 15,
+                        paddingVertical: 5,
+
+
+                    }}>
+                        <Text style={{ color: "white" }}>
+                            <Feather name="edit" size={15} color="white" />
+                            {`  `}Edit{`  `}
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{
+                        backgroundColor: "#ea1715", marginHorizontal: 2, borderRadius: 3,
+                        paddingHorizontal: 15,
+                        paddingVertical: 5,
+
+
+                    }}>
+                        <Text style={{ color: "white" }}>
+
+                            <AntDesign name="delete" size={15} color="white" />
+                            {` `}Delete
+                                    </Text>
+                    </TouchableOpacity>
+
+                </View>}
 
             </View>
 

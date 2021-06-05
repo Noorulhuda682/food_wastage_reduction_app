@@ -20,30 +20,12 @@ import { gql, useMutation } from "@apollo/client"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
     saveData,
-    readData
 } from "../config/setToken"
-import {
-    emailRegex,
-    passwordRegex
-} from "../config/Regex"
+
 import InputText from "../shared/TextInput"
-import PostTextInput from "../shared/PostTextInput"
 import {ChangeTokenHandlerContext} from "../../App"
+import {LOGIN} from "../typeDefs/Auth"
 
-const LOGIN = gql`
- mutation login($email:String! $password:String!){
-  login(email:$email password:$password){
-    token
-    user {
-      _id
-      name
-      email
-      role
-    }
-  }
-}
-
-`;
 
 const Login = ({ navigation }) => {
     const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
@@ -82,29 +64,29 @@ const Login = ({ navigation }) => {
 
     const login = async () => {
 
-        // if (email === "") {
-        //     ToastAndroid.showWithGravity(
-        //         `Enter ${password === "" ? "email and password" : "email"}`,
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.CENTER
-        //     );
-        //     return false
-        // }
+        if (email === "") {
+            ToastAndroid.showWithGravity(
+                `Enter ${password === "" ? "email and password" : "email"}`,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            return false
+        }
 
-        // if (password === "") ToastAndroid.showWithGravity(
-        //     "Enter password",
-        //     ToastAndroid.SHORT,
-        //     ToastAndroid.CENTER
-        // );
-        // setLoading(true)
+        if (password === "") ToastAndroid.showWithGravity(
+            "Enter password",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoading(true)
         // if (checkEmail && checkPassword) {
         // Alert.alert("Run Login api")
         // ChangeTokenHandler()
 
         _login({
             variables: {
-                email: "sad@gmail.com",
-                password: "Saad1234"
+                email,
+                password
             }
         }).then( ({data}) => {
             console.log("LOGIN=======", data);
@@ -119,6 +101,7 @@ const Login = ({ navigation }) => {
             navigation.navigate("Home")
             setChange(false)
         }).catch(err => {
+            setLoading(false)
             Alert.alert(`Error : ${err}`);
         })
 
@@ -218,7 +201,7 @@ const styles = StyleSheet.create({
 
     },
     container: {
-        marginTop: 160,
+        marginTop: 100,
         paddingHorizontal: 40,
     },
     logoView: {

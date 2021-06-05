@@ -25,7 +25,7 @@ export const readData = async () => {
 export const clearStorage = async () => {
     try {
       await AsyncStorage.clear()
-      Alert.alert('Storage successfully cleared!')
+      // Alert.alert('Storage successfully cleared!')
     } catch (e) {
       Alert.alert('Failed to clear the async storage.')
     }
