@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server');
-const user = gql`
+const receiver = gql`
  extend type Query {
     receivers: [Receiver]
  }
@@ -8,18 +8,32 @@ const user = gql`
     receiverAdded:[Receiver]
  }
 
+
+
  extend type Mutation {
-
   addReceiver(name:String,email:String!,password:String!):LoginRes
-
+  deleteReceiver(receiverId:ID):String
+  updateReceiver(
+     receiverId:ID!
+     name:String
+     email:String
+     profileImage:String
+     pushToken:String
+     latitude:Float
+     longitude:Float
+   ):String
  }
 
 
  type Receiver {
+   _id:String
    name:String
    email:String
-   _id:String
+   profileImage:String
+   pushToken:String
+   latitude:Float
+   longitude:Float
  }
 
 ` 
-module.exports = user
+module.exports = receiver

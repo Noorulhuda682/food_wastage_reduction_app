@@ -1,5 +1,9 @@
 const bscrypt = require("bcryptjs");
 const User = require("../../../models/User");
+<<<<<<< Updated upstream
+=======
+const Receiver = require("../../../models/Receiver");
+>>>>>>> Stashed changes
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -7,10 +11,12 @@ const bcrypt = require("bcryptjs");
 const login = async (root, { email, password }, { SECRET }) => {
     // The secret is coming from the context that will pass to Apollo Server
     // the next lines basically check if the user exist or not
-    const user = await User.findOne({ email })
-    console.log("USER",user,user.password);
+    var user = await User.findOne({ email })
+    console.log("USER",user,);
     if (!user) {
-      throw new Error('No user found ')
+      user = await Receiver.findOne({ email })
+      console.log("RECEIVER",user,);
+      if (!user) throw new Error('No user found ')
     }
     
     // we use bcrypt again to compare with the password from the args

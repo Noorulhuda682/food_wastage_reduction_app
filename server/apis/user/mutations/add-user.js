@@ -43,7 +43,7 @@ const addUser = async (_, { name , email , password},{ pubsub,SECRET }) => {
           { expiresIn: '1h' }
         )
         user = await User.findOne({email})
-        console.log("USER===",user);
+        console.log("USERADDED===",user);
         if(added){
           return {
             token,

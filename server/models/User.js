@@ -16,7 +16,12 @@ const USER = new Schema({
          type:String,
          default:"USER"
      },
-     token:String
+     pushToken:String,
+     country:String,
+     city:String,
+     address:String,
+     contactNumber:String,
+     dateOfBirth:String,
 }) 
 
 const Users =  mongoose.models.User || mongoose.model('User', USER)

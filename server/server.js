@@ -11,9 +11,14 @@ const db = require('./models/db');
   
 db.connection.once('open', () => {
     console.log('db connected')
-  }).on('error', error =>{
+  }).on('error', error => {
       console.log('Error =>' , error)
 });
+
+
+
+
+
 const checkToken = require("./apis/utils/checkToken");
 
 const server = new ApolloServer({ 
@@ -35,6 +40,6 @@ const server = new ApolloServer({
 })
 
 
-server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+server.listen(process.env.PORT || 4000).then(({ url }) => {
     console.log(`🚀 Server ready at ${url}`);
 });  

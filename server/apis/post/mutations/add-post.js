@@ -2,6 +2,7 @@ const Post = require("../../../models/Post");
 const {RECEIVER_ADDED } = require("../../subscription-keys");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
+const uploadImageToCloud = require("../../utils/uploadImageToCloud");
 
 const addPost = async (
     _,
@@ -10,6 +11,7 @@ const addPost = async (
     title,
     description,
     quantity,
+    weight,
     img1,
     img2,
     img3,
@@ -29,9 +31,9 @@ const addPost = async (
           title,
           description,
           quantity,
-          img1,
+          weight,
         }
-
+        if(img1) post.img1 = img1
         if(img2) post.img2 = img2
         if(img3) post.img3 = img3
 
@@ -43,8 +45,8 @@ const addPost = async (
             throw new Error("Error : ", e)
         })
         console.log("added",added);
-       return added;
 
+       return added;
 }
 
 module.exports = addPost

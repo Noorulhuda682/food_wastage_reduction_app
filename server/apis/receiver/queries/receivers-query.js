@@ -1,13 +1,11 @@
-const receivers =  (_, __, { dataSources }) =>  [
-    {
-    name:"Noor",
-    email:"noor@",
-   },
-   {
-    name:"Noor",
-    email:"noor@",
-   },
-]
+const Receiver = require("../../../models/Receiver");
+
+const receivers = async  (_, __, { dataSources }) => {
+
+    let recei = await  Receiver.find() 
+      
+    return recei;
+} 
 
 module.exports = receivers;
 

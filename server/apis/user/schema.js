@@ -21,6 +21,18 @@ const user = gql`
    userId:ID
    token:String
   ):String
+
+  deleteUser(userId:ID):String
+  updateUser(
+     userId:ID!
+     name:String
+     email:String
+     profileImage:String
+     token:String
+     latitude:Float
+     longitude:Float
+   ):String
+   
  }
 
  type LoginRes {
@@ -33,6 +45,11 @@ const user = gql`
    name:String
    email:String
    _id:String
+   role:String
+   profileImage:String
+   token:String
+   latitude:Float
+   longitude:Float
  }
 
 ` 

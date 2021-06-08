@@ -25,7 +25,13 @@ const RECEIVER = new Schema({
      role:{
          type:String,
          default:"RECEIVER"
-     }
+     },
+     pushToken:String,
+     country:String,
+     city:String,
+     address:String,
+     contactNumber:String,
+     dateOfBirth:String,
 }) 
 
 
