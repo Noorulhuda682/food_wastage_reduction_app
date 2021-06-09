@@ -2,8 +2,8 @@ const userRoutes = [
     {
         routeName: "profile",
         label: "Profile",
-        iconCompnay: "AntDesign",
-        iconName: "profile",
+        iconCompnay: "Feather",
+        iconName: "user",
         iconSize: 24,
     },
     {
@@ -31,24 +31,31 @@ const userRoutes = [
 
 const receiverRoutes = [
     {
-        routeName: "allPosts",
-        label: "All Posts",
-        iconCompnay: "MaterialCommunityIcons",
-        iconName: "post-outline",
+        routeName: "profile",
+        label: "Profile",
+        iconCompnay: "Feather",
+        iconName: "user",
         iconSize: 24,
     },
     {
-        routeName: "newOrder",
-        label: "New Order",
+        routeName: "newOrders",
+        label: "New Orders",
         iconCompnay: "MaterialCommunityIcons",
-        iconName: "post-outline",
+        iconName: "new-box",
+        iconSize: 24,
+    },
+    {
+        routeName: "progressOrders",
+        label: "Progress Orders",
+        iconCompnay: "MaterialCommunityIcons",
+        iconName: "progress-check",
         iconSize: 24,
     },
     {
         routeName: "completedOrders",
-        label: "My Completed Orders",
-        iconCompnay: "MaterialCommunityIcons",
-        iconName: "post-outline",
+        label: "My Completed Orderss",
+        iconCompnay: "Feather",
+        iconName: "check-square",
         iconSize: 24,
     },
 ]

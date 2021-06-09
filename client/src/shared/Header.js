@@ -45,10 +45,10 @@ const CustomeHeader = ({ navigation, title }) => {
             <Left >
                 <Icon onPress={() => navigation.openDrawer()} name='menu' style={{ color: "white" }} />
             </Left>
-            <Body>
+            <Body style={{flex:2}}>
                 <Title>{title}</Title>
             </Body>
-            <Right>
+            <Right >
                 {showBtn &&
                     <TouchableOpacity
                         onPress={async () => {

@@ -5,7 +5,9 @@ import MyPosts from "./myPosts";
 import AllPosts from "./AllPosts";
 import Map from "./Map";
 import Camera from "./Camera";
-
+import NewOrders from "./NewOrders";
+import CompletedOrders from "./CompletedOrders";
+import ProgressOrders from "./ProgressOrders"
 export {
     Home,
     Profile,
@@ -14,4 +16,7 @@ export {
     AllPosts,
     Map,
     Camera,
+    NewOrders,
+    CompletedOrders,
+    ProgressOrders
 }

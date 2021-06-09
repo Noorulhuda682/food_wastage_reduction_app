@@ -1,12 +1,12 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     View,
     Text, Dimensions,
-    StyleSheet, Image,PermissionsAndroid,Platform,
+    StyleSheet, Image, PermissionsAndroid, Platform,
 
 } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Callout } from 'react-native-maps';
 import {
     Container, Header, Left, Body, Right, Button, Icon, Title, Content,
     Card, CardItem, H2, Footer, Thumbnail, List, ListItem,
@@ -19,12 +19,20 @@ const SCREEN_WIDTH = width
 
 const Map = ({ navigation }) => {
     const [currentLongitude, setCurrentLongitude] = useState(null);
-    const [currentLatitude,setCurrentLatitude ] = useState(null);
-    const [locationStatus,setLocationStatus  ] = useState('');
+    const [currentLatitude, setCurrentLatitude] = useState(null);
+    const [locationStatus, setLocationStatus] = useState('');
+
+    const markerRef = useRef(null);
+
+    const onRegionChangeComplete = () => {
+        if (markerRef && markerRef.current && markerRef.current.showCallout) {
+            markerRef.current.showCallout();
+        }
+    };
 
 
     useEffect(() => {
-      
+
         // getOneTimeLocation();
         const requestLocationPermission = async () => {
             if (Platform.OS === 'ios') {
@@ -63,56 +71,56 @@ const Map = ({ navigation }) => {
         console.log("LATLONG===>1");
         setLocationStatus('Getting Location ...');
         Geolocation.getCurrentPosition(
-          //Will give you the current location
-          (position) => {
-            setLocationStatus('You are Here');
-            console.log("LATLONG===>",position);
-    
-            //Setting Longitude state
-            setCurrentLongitude(position.coords.longitude);
-            
-            //Setting Longitude state
-            setCurrentLatitude(position.coords.latitude);
-          },
-          (error) => {
-            setLocationStatus(error.message);
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 30000,
-            maximumAge: 0
-          },
+            //Will give you the current location
+            (position) => {
+                setLocationStatus('You are Here');
+                console.log("LATLONG===>", position);
+
+                //Setting Longitude state
+                setCurrentLongitude(position.coords.longitude);
+
+                //Setting Longitude state
+                setCurrentLatitude(position.coords.latitude);
+            },
+            (error) => {
+                setLocationStatus(error.message);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 30000,
+                maximumAge: 0
+            },
         );
-      };
+    };
 
 
-      const subscribeLocationLocation = () => {
-          console.log("Working");
-         Geolocation.watchPosition(
-          (position) => {
-            //Will give you the location on location change
-            console.log("Workingposition",position);
-            setLocationStatus('You are Here');
-            console.log(position);
-    
-            setCurrentLongitude(position.coords.longitude);
-            
-            //Setting Longitude state
-            setCurrentLatitude(position.coords.latitude);
-          },
-          (error) => {
-            setLocationStatus(error.message);
-          },
-          {
-            enableHighAccuracy: true,
-            maximumAge: 1000
-          },
+    const subscribeLocationLocation = () => {
+        console.log("Working");
+        Geolocation.watchPosition(
+            (position) => {
+                //Will give you the location on location change
+                console.log("Workingposition", position);
+                setLocationStatus('You are Here');
+                console.log(position);
+
+                setCurrentLongitude(position.coords.longitude);
+
+                //Setting Longitude state
+                setCurrentLatitude(position.coords.latitude);
+            },
+            (error) => {
+                setLocationStatus(error.message);
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 1000
+            },
         );
-      };
+    };
 
-      
 
-console.log("currentLatitude=======",currentLatitude,currentLongitude);
+
+    console.log("currentLatitude=======", currentLatitude, currentLongitude);
     return (
         <Container>
             <Header style={{ backgroundColor: "#00203FFF" }}>
@@ -131,7 +139,8 @@ console.log("currentLatitude=======",currentLatitude,currentLongitude);
                 </Right>
             </Header>
             <Content>
-             <MapView
+                <MapView
+                    onRegionChangeComplete={onRegionChangeComplete}
                     provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                     style={{
                         flex: 1,
@@ -139,19 +148,47 @@ console.log("currentLatitude=======",currentLatitude,currentLongitude);
                     }}
                     showsUserLocation
                     initialRegion={{
-                        latitude:  currentLatitude ? currentLatitude : 24.8607,
-                        longitude:currentLatitude?currentLatitude:67.0011,
+                        latitude: currentLatitude ? currentLatitude : 24.8607,
+                        longitude: currentLatitude ? currentLatitude : 67.0011,
                         latitudeDelta: 0.015,
                         longitudeDelta: 0.0121,
                     }}
-
                 >
+
+
                     <Marker
-                        coordinate={{ latitude:currentLatitude ? currentLatitude :  24.8607
-                            ,longitude: currentLongitude ? currentLongitude:67.0011,}}
+                        coordinate={{
+                            latitude: currentLatitude ? currentLatitude : 24.8607
+                            , longitude: currentLongitude ? currentLongitude : 67.0011,
+                        }}
+                        ref={markerRef}
                     >
                         <MaterialCommunityIcons name="map-marker" size={50} color="#00238b" />
+                        <Callout tooltip={false} >
+                            <Text>Reciver</Text>
+                        </Callout>
                     </Marker>
+
+
+                    
+
+                     <Polyline
+                        coordinates={[
+                            { latitude: 24.813625000000002, longitude: 67.04830333333332 },
+                            { latitude: 24.8607, longitude: 67.0011, },
+                        ]}
+                        strokeColor="navy" // fallback for when `strokeColors` is not supported by the map-provider
+                        // strokeColors={[
+                        //     '#7F0000',
+                        //     '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+                        //     '#B24112',
+                        //     '#E5845C',
+                        //     '#238C23',
+                        //     '#7F0000'
+                        // ]}
+                        strokeWidth={4}
+                    />
+
                 </MapView>
                 <List>
                     <ListItem thumbnail onPress={subscribeLocationLocation}>
@@ -159,7 +196,7 @@ console.log("currentLatitude=======",currentLatitude,currentLongitude);
                             <Thumbnail square source={require('../assets/images/foods.jpeg')} />
                         </Left>
                         <Body>
-                            <Text>Sankhadeep { `${currentLongitude}`}</Text>
+                            <Text>Sankhadeep {`${currentLongitude}`}</Text>
                             <Text note numberOfLines={1}>Its time to help poorty . .</Text>
                         </Body>
                         <Right>

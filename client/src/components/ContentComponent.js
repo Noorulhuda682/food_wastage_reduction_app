@@ -8,8 +8,11 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from "@react-navigation/drawer"
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -20,7 +23,7 @@ import { removeUser } from "../redux/actions/user"
 import { toggleTheme } from "../redux/actions/theming";
 import { useNetInfo } from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {clearStorage} from "../config/setToken";
+import { clearStorage } from "../config/setToken";
 
 // AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY
 import {
@@ -37,11 +40,11 @@ const DrawerContent = (props) => {
     const [switchValue, setSwitchValue] = useState(false)
     const { title, background, card, text, border, notification, icon } = colors;
 
-    const data= useSelector(state => state);
-    // console.log("DrawerContentData===>saad", data);
+    const data = useSelector(state => state);
+    console.log("DrawerContentData===>saad", data);
     const dispatch = useDispatch();
-    
-    switch (data?.user?.role){
+
+    switch (data?.user?.role) {
         case "USER": displayRoutes = userRoutes
             break;
         case "RECEIVER": displayRoutes = receiverRoutes
@@ -51,7 +54,7 @@ const DrawerContent = (props) => {
     }
 
     useEffect(() => {
-        switch (data?.user?.role){
+        switch (data?.user?.role) {
             case "USER": displayRoutes = userRoutes
                 break;
             case "RECEIVER": displayRoutes = receiverRoutes
@@ -67,15 +70,26 @@ const DrawerContent = (props) => {
                 <Content style={styles.mainView}>
                     <View style={styles.profileView}>
                         <View>
-                            <Thumbnail
-                                size={50}
-                                style={styles.profileImage}
-                                large source={require('../assets/images/profile.jpg')}
-                            />
+                            {data?.user?.profileImage ?
+                                <Thumbnail
+                                    size={50}
+                                    style={styles.profileImage}
+                                    large source={require('../assets/images/profile.jpg')}
+                                /> :
+                                <Text style={{
+                                    color: icon,
+                                    height: 80, width: 80, backgroundColor: "white",
+                                    borderRadius: 50, textAlign: "center", fontSize: 30,
+                                    paddingTop: 20, borderWidth: 1, borderColor: "lightgray",
+                                    fontWeight: "bold",
+                                }}>
+                                    {data?.user?.name && data?.user?.name[0]}
+                                </Text>
+                            }
                             <Badge success={netInfo.type === 'wifi' && netInfo.isConnected ? true : false} style={styles.badge}></Badge>
                         </View>
-                        <Text style={[styles.profileName, { color: title }]} >Ajaz uddinaa</Text>
-                        <Text style={styles.profileEmail}>@gmail.com</Text>
+                        <Text style={[styles.profileName, { color: title }]} >{data?.user?.name}</Text>
+                        <Text style={styles.profileEmail}>{data?.user?.email}</Text>
                     </View>
                     <DrawerItem style={styles.drawerItem}
                         icon={({ color, size }) => {
@@ -87,7 +101,7 @@ const DrawerContent = (props) => {
                     />
 
                     {
-                        displayRoutes.map((route ,index) => {
+                        displayRoutes.map((route, index) => {
                             return (
                                 <DrawerItem key={index} style={styles.drawerItem}
                                     icon={({ color, size }) => {
@@ -102,6 +116,12 @@ const DrawerContent = (props) => {
                                                 return <MaterialIcons name={route.iconName} size={route.iconSize} color={icon} />
                                             case "FontAwesome5":
                                                 return <FontAwesome5 name={route.iconName} size={route.iconSize} color={icon} />
+                                            case "Foundation":
+                                                return <Foundation name={route.iconName} size={route.iconSize} color={icon} />
+                                            case "Feather":
+                                                return <Feather name={route.iconName} size={route.iconSize} color={icon} />
+                                            case "EvilIcons":
+                                                return <EvilIcons name={route.iconName} size={route.iconSize} color={icon} />
                                         }
                                     }}
                                     label={route.label}
@@ -136,7 +156,7 @@ const DrawerContent = (props) => {
                         }}
                         label="Logout"
                         inactiveTintColor='gray'
-                        onPress={ async () => { 
+                        onPress={async () => {
                             dispatch(removeUser());
                             clearStorage()
                             navigation.navigate('Login')
@@ -166,10 +186,12 @@ const styles = StyleSheet.create({
         borderColor: 'lightgray',
     },
     profileName: {
+        marginTop: 8,
         fontWeight: "bold",
         fontSize: 18
     },
     profileEmail: {
+        marginTop:-5,
         color: 'gray',
     },
     drawerItem: {

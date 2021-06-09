@@ -16,14 +16,14 @@ import React, {
   import { Container, Header, Content, Item, Input, Icon, Spinner, Button, } from 'native-base';
   import { Picker } from '@react-native-picker/picker';
   
-  const DropDownInput = ({ pickerItems,onChange }) => {
+  const DropDownInput = ({ pickerItems,onChange,customeStyle,pickerStyle   }) => {
   
     const [value, setValue] = useState(pickerItems[0]);
     
   
     return (
       
-            <View style={styles.pickerView}>
+            <View style={[styles.pickerView,customeStyle]}>
               <Picker
                 style={styles.picker}
                 mode="dropdown"
@@ -33,7 +33,10 @@ import React, {
                 onValueChange={(newVal) => onChange(newVal)}
               >
                   {
-                      pickerItems.map( (item,i) =>   <Picker.Item key={i} label={item} value={item} /> )
+                      pickerItems.map( (item,i) =>   <Picker.Item key={i} style={
+                        pickerStyle ? pickerStyle : {}
+                      }
+                        label={item} value={item} /> )
                   }
               </Picker>
             </View>
@@ -44,6 +47,7 @@ import React, {
   const styles = StyleSheet.create({
    pickerView:{
     marginTop: 20, borderRadius: 5,
+    backgroundColor:'#e6e9ff',
     shadowColor: "gray",
     shadowOffset: {
       width: 0,

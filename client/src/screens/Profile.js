@@ -2,9 +2,11 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  Alert, Image
 } from 'react-native'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,118 +15,214 @@ import {
   Fab, Thumbnail, Item, Input
 } from "native-base"
 import Header from "../shared/Header"
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useState } from 'react';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import DropDownInput from "../shared/DropDown";
+import Divider from "../shared/Divider";
+
+const options = {
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 
 const Profile = ({ navigation }) => {
-  const {user} = useSelector(state => state);
-     
-  console.log("USER",user);
+  const { user } = useSelector(state => state);
+
+  const [name, setName] = useState(user?.name)
+  const [email, setEmail] = useState(user?.email)
+  const [gender, setGender] = useState("")
+  const [dateOfBirth, setDateOfBirth] = useState()
+  const [address, setAddress] = useState()
+  const [country, setCountry] = useState()
+  const [city, setCity] = useState()
+  const [contact, setContact] = useState(null)
+
+
+  const [profile, setProfile] = useState(null)
+
+  console.log("USER", user);
+  const launchCameraHandler = () => {
+    launchCamera(options, (response) => {
+      console.log('Response = ', response);
+      checkPhotoValidation(response)
+    });
+  }
+
+  const checkPhotoValidation = async (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    } else if (response.customButton) {
+      console.log('User tapped custom button: ', response.customButton);
+      Alert.alert(`${response.customButton}`);
+    } else {
+      setProfile(response.uri)
+    }
+  }
+
+  const updateUserHandler = () => {
+      let updateObj = {
+         name,
+         email,
+         gender,
+         dateOfBirth,
+         address,
+         country,
+         city,
+         contact
+      }
+      console.log("OBJ=======",updateObj);
+  }
+
 
   const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
-  
+
   return (
-    <Container>
-      <Header navigation={navigation} title={"Profile"}/>
-      <Content >
+    <Container style={{ paddingBottom: 50 }}>
+      <Header navigation={navigation} title={"Profile"} />
+      <Content>
         <View style={{
           alignItems: "center", borderBottomWidth: 1,
-          borderBottomColor: "lightgray", paddingBottom: 20,
-          marginBottom: 10
+          borderBottomColor: "#e6e6ff", paddingBottom: 20,
         }}>
-          <View>
-            <Thumbnail
-              size={50}
-              style={styles.profileImage}
-              large source={require('../assets/images/profile.jpg')}
-            />
-            <Badge success style={styles.badge}></Badge>
+          <View style={{ borderColor: "lightgray", justifyContent: "center", alignItems: "center" }}>
+
+
+            <TouchableOpacity onPress={launchCameraHandler}
+              style={{ marginBottom: -10, marginLeft: 140, marginTop: 50 }}
+            >
+              <Text style={{ color: "blue" }}>
+                <MaterialIcons name="edit" style={{ marginTop: 15, fontSize: 17 }} color="blue" />
+                edit profile
+              </Text>
+            </TouchableOpacity>
+
+            {profile || user?.profileImage ?
+              <Image
+                size={50}
+                style={styles.profileImage}
+                large source={{ uri: profile }}
+              />
+              :
+              <Text style={styles.profileCircle}>
+                {name && name[0]}
+              </Text>
+            }
+
+            <Text style={{ fontWeight: 'bold', marginTop: 10, color: "black" }}>{user.name}</Text>
+
+            <Text style={{
+              color: "#4d61ff",borderRadius:3,justifyContent:"center",alignItems:"center",
+              padding: 10, paddingHorizontal: 15, marginTop: 20, backgroundColor: '#e6e9ff', marginBottom: -10
+            }}>
+              <FontAwesome5 name="critical-role"  size={20} color="blue" />
+              {"    "}ROLE :  {user.role}</Text>
+
           </View>
-
-          <Text style={{ fontWeight: 'bold', marginTop: 10 }}>{user.name}</Text>
-
-          <Text style={{color:"#4d61ff",
-          padding:5,paddingHorizontal:30,marginTop:20,backgroundColor:'#e6e9ff',marginBottom:-10}}>
-            ROLE :  {user.role}</Text>
         </View>
 
         <Content style={{ paddingHorizontal: "5%" }} padder>
           <Text style={{ color: "lightgray", fontWeight: "bold", textAlign: "center", }} >Edit Profile</Text>
+
           <Text style={styles.grayText} >Username</Text>
           <Item
-            // success
             style={styles.item}
           >
             <Input
-              value={"Noorul Huda"}
+              value={name}
               style={styles.input}
-            //  onChangeText={(emails) => { console.log("emails", emails);
-            //   setEmail(emails) }}
+              onChangeText={(emails) => setName(emails)}
             />
-            {/* <Icon name='checkmark-circle' /> */}
           </Item>
+
           <Text style={styles.grayText} >Email</Text>
           <Item style={styles.item}>
             <Input
-              value={user.email}
+              value={email}
               style={styles.input}
-            //  onChangeText={(emails) => { console.log("emails", emails);
-            //   setEmail(emails) }}
+              onChangeText={(emails) => setEmail(emails)}
             />
-            {/* <Icon name='checkmark-circle' /> */}
           </Item>
-          <Text style={styles.grayText} >Gender</Text>
-          <Item style={styles.item}>
-            <Input
-              value={"Male"}
-              style={styles.input}
-            //  onChangeText={(emails) => { console.log("emails", emails);
-            //   setEmail(emails) }}
-            />
-            {/* <Icon name='checkmark-circle' /> */}
-          </Item>
+
+          <DropDownInput
+            pickerItems={["Select gender", "male", "female"]}
+            onChange={setGender}
+            customeStyle={{ elevation: 0, height: 45, borderBottomWidth: 1, borderColor: "lightgray" }}
+            pickerStyle={{ fontSize: 14 }}
+          />
+          <Divider />
+          <DropDownInput
+            pickerItems={["Select Country", "India", "Pakistan", "Canada",]}
+            onChange={setCountry}
+            customeStyle={{ elevation: 0, height: 45, borderBottomWidth: 1, borderColor: "lightgray" }}
+            pickerStyle={{ fontSize: 14 }}
+          />
+          <Divider />
+          <DropDownInput
+            pickerItems={["Select City", "Karachi", "Islamabad", "Peshawar", "Dehli", "Mumbai", "Vancouver"]}
+            onChange={setCity}
+            customeStyle={{ elevation: 0, height: 45, borderBottomWidth: 1, borderColor: "lightgray" }}
+            pickerStyle={{ fontSize: 14 }}
+          />
+          <Divider />
+
           <Text style={styles.grayText} >Date of Birth</Text>
           <Item style={styles.item}>
             <Input
-              value={"03/07/1996"}
+              value={dateOfBirth}
               style={styles.input}
-            //  onChangeText={(emails) => { console.log("emails", emails);
-            //   setEmail(emails) }}
+              onChangeText={(emails) => setDateOfBirth(emails)}
             />
-            {/* <Icon name='checkmark-circle' /> */}
           </Item>
+
           <Text style={styles.grayText} >Address</Text>
           <Item style={styles.item}>
             <Input
-              value={"gulshan sikandar abad keamari karachi"}
+              value={address}
               style={styles.input}
-            //  onChangeText={(emails) => { console.log("emails", emails);
-            //   setEmail(emails) }}
+              onChangeText={(emails) => setAddress(emails)}
             />
-            {/* <Icon name='checkmark-circle' /> */}
+          </Item>
+
+          <Text style={styles.grayText} >Contact#</Text>
+          <Item style={styles.item}>
+            <Input
+              value={contact}
+              style={styles.input}
+              keyboardType="numeric"
+              onChangeText={(emails) => setContact(emails)}
+            />
           </Item>
         </Content>
         <View style={styles.btnsView} padder>
-          <Button style={styles.button}>
+          <TouchableOpacity style={styles.button}>
             <Text style={styles.btnText}>Cancel</Text>
-          </Button>
-          <Button
+          </TouchableOpacity>
+          <TouchableOpacity
+          onPress={updateUserHandler}
             style={[styles.button, styles.activeBtn]}
           >
             <Text style={[styles.btnText, styles.activeBtnText]}>Save</Text>
-          </Button>
+          </TouchableOpacity>
         </View>
       </Content>
-
     </Container>
   );
 }
 
+
+
+
 const styles = StyleSheet.create({
   profileImage: {
-    height: 130,
-    width: 130,
+    height: 100,
+    width: 100,
+    borderRadius: 50,
     borderWidth: 1,
-    borderColor: 'gray',
-    marginTop: 25
   },
   letftText: {
     fontWeight: 'bold',
@@ -141,13 +239,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     paddingHorizontal: "10%",
-    marginTop: 20
+    marginTop: 25
   },
   button: {
     borderColor: "#00203FFF",
     borderWidth: 1,
+    borderRadius: 5,
     backgroundColor: "white",
-    paddingHorizontal: 25,
+    paddingHorizontal: 50,
+    paddingVertical: 10,
   },
   btnText: {
     color: "#00203FFF",
@@ -167,22 +267,22 @@ const styles = StyleSheet.create({
   },
   item: {
     marginTop: -10,
-    borderBottomColor: "gray"
+    borderBottomColor: "#e6e6ff",
+    borderWidth: 1
   },
   input: {
     fontSize: 15,
     fontWeight: "bold",
     marginBottom: -5
   },
-  badge: {
-    width: 23,
-    height: 23,
-    borderWidth: 1,
-    borderColor: "lightgray",
-    marginTop: -25,
-    alignSelf: "flex-end"
+  profileCircle: {
+    color: "gray",
+    height: 100, width: 100, backgroundColor: "white",
+    borderRadius: 50, textAlign: "center", fontSize: 30,
+    paddingTop: 30, borderWidth: 1, borderColor: "lightgray",
+    fontWeight: "bold",
   }
-
 })
 
 export default Profile;
+

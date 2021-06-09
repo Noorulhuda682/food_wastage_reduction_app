@@ -17,9 +17,32 @@ mutation addPost($userId:String! $title:String $description:String $quantity:Int
 }
 `
 
+const TEST = gql`
+mutation test($data:String){
+  test(data:$data)
+}
+`
+
+
 const MYPOSTS = gql`
 query posts($userId:ID){
   userPosts(userId:$userId){
+    _id
+    userId
+    title
+    description
+    quantity
+    weight
+    img1
+    img2
+    img3
+  }
+}
+`
+
+const POSTS = gql`
+  query posts{
+  posts{
     _id
     userId
     title
@@ -37,5 +60,7 @@ query posts($userId:ID){
 
 export {
   ADDPOST,
-  MYPOSTS
+  MYPOSTS,
+  TEST,
+  POSTS
 }

@@ -9,6 +9,9 @@ import {
    AllPosts,
    Map,
    Camera,
+   NewOrders,
+   CompletedOrders,
+   ProgressOrders
  } from "../screens"
 import {useSelector,useDispatch} from "react-redux"
 
@@ -38,6 +41,12 @@ const MainHome = ({ navigation }) => {
       <Drawer.Screen name="myPosts" component={MyPosts} />
       <Drawer.Screen name="map" component={Map} />
       <Drawer.Screen name="allPosts" component={AllPosts} />
+
+      {/* RECEIVER ROUTES  */}
+      <Drawer.Screen name="newOrders" component={NewOrders} />
+      <Drawer.Screen name="completedOrders" component={CompletedOrders} />
+      <Drawer.Screen name="progressOrders" component={ProgressOrders} />
+
     </Drawer.Navigator>
   );
 }

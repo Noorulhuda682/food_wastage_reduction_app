@@ -68,7 +68,7 @@ const PostTextInput = ({
             <Input
                 style={{ fontSize: 15 }}
                 placeholder={placeholder}
-                keyboardType={type === 'numeric' ? type : ""}
+                keyboardType={type === 'numeric' ? type : "text"}
                 value={type === 'numeric' && email !== null ?  email.toString() : email }
                 onChangeText={(emails) => { setEmail(emails) }}
                 secureTextEntry={type === 'password' && showPassword ? true : false}

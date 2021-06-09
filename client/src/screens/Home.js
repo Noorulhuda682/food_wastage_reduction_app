@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text, Dimensions,
@@ -18,7 +18,8 @@ import messaging from '@react-native-firebase/messaging';
 const { width, height } = Dimensions.get('window')
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
-import {gql,useQuery,useSubscription} from "@apollo/client"
+import { useSelector } from "react-redux"
+import { gql, useQuery, useSubscription } from "@apollo/client"
 import Header from "../shared/Header"
 
 
@@ -43,22 +44,23 @@ const RECEIVER_ADDED = gql`
 `;
 
 const Home = ({ navigation }) => {
+    const storeData = useSelector(state => state);
 
     // const { loading, error, data } = useQuery(GET_USERS);
-    const { data, loading, error  } = useSubscription(RECEIVER_ADDED);
+    const { data, loading, error } = useSubscription(RECEIVER_ADDED);
 
     // if (loading)  console.log('Loading...');
-    if (error)  console.log(`Error! ${error.message}`);
-    // console.log("DATA==>",data);
-    
+    if (error) console.log(`Error! ${error.message}`);
+    console.log("DATA==>", storeData);
+
 
     const getTokens = async () => {
         let token = await messaging().getToken();
-        console.log("token",token);
+        console.log("token", token);
     }
- 
-    useEffect( ()  =>  {
-       
+
+    useEffect(() => {
+
         getTokens();
         messaging().onMessage(async remoteMessage => {
             Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
@@ -70,22 +72,22 @@ const Home = ({ navigation }) => {
         })
 
         messaging()
-        .getInitialNotification()
-        .then(remoteMessage => {
-          if (remoteMessage) {
-            console.log(
-              'Notification caused app to open from quit state:',
-              JSON.stringify(remoteMessage),
-            );
-          }
-        });
+            .getInitialNotification()
+            .then(remoteMessage => {
+                if (remoteMessage) {
+                    console.log(
+                        'Notification caused app to open from quit state:',
+                        JSON.stringify(remoteMessage),
+                    );
+                }
+            });
 
     }, []);
 
     // console.log("netInfo", netInfo);
     return (
         <Container>
-            <Header navigation={navigation} title={'Home'}/>
+            <Header navigation={navigation} title={'Home'} />
             <Content style={styles.mainContent} padder>
                 <Content padder style={{ backgroundColor: "" }}>
                     <Text style={styles.heading}>Safe Wasting Food</Text>
@@ -202,16 +204,19 @@ const Home = ({ navigation }) => {
 
 
             </Content>
+            {storeData?.user?.role === "USER" &&
                 <Fab
                     active={true}
                     direction="up"
                     containerStyle={{}}
-                    style={{ backgroundColor: "#1e319d"}}
+                    style={{ backgroundColor: "#1e319d" }}
                     position="bottomRight"
-                    onPress={() => navigation.navigate("addPost") }
+                    onPress={() => navigation.navigate("addPost")}
                 >
                     <Icon name="add" />
                 </Fab>
+            }
+
         </Container>
 
     );

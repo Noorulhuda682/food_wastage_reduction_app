@@ -161,7 +161,7 @@ const AddPost = ({ navigation }) => {
             setImg1(response.uri)
             setUsingCamera(false)
             setUploadImg(false)
-        }
+        }z
     }
 
 
