@@ -7,14 +7,7 @@ const updateReceiver = async (_, { receiverId, name,email,profileImage,pushToken
 
     if(name)  updateReceiver.name = name;
     if(email)  updateReceiver.email = email;
-    if(profileImage){
-        let {uploading,message,url} = await uploadImageToCloud(profileImage);
-        if(uploading){
-            updateReceiver.profileImage = url
-        }else{
-           throw new Error(`Error: ${message}`);
-        }
-    }
+    if(profileImage)   updateReceiver.profileImage = profileImage;
     if(pushToken)  updateReceiver.pushToken = pushToken;
     if(latitude)  updateReceiver.latitude = latitude;
     if(longitude)  updateReceiver.longitude = longitude;

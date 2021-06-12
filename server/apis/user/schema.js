@@ -28,7 +28,7 @@ const user = gql`
      name:String
      email:String
      profileImage:String
-     token:String
+     pushToken:String
      latitude:Float
      longitude:Float
    ):String
@@ -47,7 +47,7 @@ const user = gql`
    _id:String
    role:String
    profileImage:String
-   token:String
+   pushToken:String
    latitude:Float
    longitude:Float
  }
