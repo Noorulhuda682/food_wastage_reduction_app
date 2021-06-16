@@ -1,9 +1,8 @@
 const Post = require("../../../models/Post");
-const Receiver = require("../../../models/Receiver");
-const {POST_ADDED } = require("../../subscription-keys");
+const {RECEIVER_ADDED } = require("../../subscription-keys");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const sendNotification = require("../../utils/sendNotification")
+const uploadImageToCloud = require("../../utils/uploadImageToCloud");
 
 const addPost = async (
     _,
@@ -38,7 +37,6 @@ const addPost = async (
         if(img2) post.img2 = img2
         if(img3) post.img3 = img3
 
-
         const newPost = new Post(post);
         const added = await newPost.save()
         .then( res => {
@@ -48,36 +46,7 @@ const addPost = async (
         })
         console.log("added",added);
 
-
-      let posts = await Post.aggregate([
-        {
-          $lookup:
-            {
-              from: "users",
-              localField: "userId",
-              foreignField: "_id",
-              as: "user"
-            }
-       },
-       {
-           $lookup:
-           {
-            from: "receivers",
-            localField: "receiverId",
-            foreignField: "_id",
-            as:"receiver"
-           }
-       }
-     ])
-     posts = posts.reverse()
-      pubsub.publish(POST_ADDED,{
-        postAdded : posts
-      })
-
-     
-     await sendNotification(post)
-
-     return added;
+       return added;
 }
 
 module.exports = addPost

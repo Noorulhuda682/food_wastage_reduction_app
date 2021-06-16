@@ -1,7 +1,7 @@
-const postAdded = require("./post-added");
+// const receiverAdded = require("./receivers-added");
 
 const Subscription = {
-    postAdded,
+    // receiverAdded,
 }
 
 module.exports = Subscription;

@@ -1,5 +1,5 @@
 const Post = require("../../../models/Post");
-const {POST_ADDED } = require("../../subscription-keys");
+const {RECEIVER_ADDED } = require("../../subscription-keys");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 
@@ -46,33 +46,8 @@ const updatePost = async (
             {_id:postId,userId},
             { $set: post }
         );
-        console.log("updatedPost===>",updatedPost);
 
-        // subscribing postAdded  
-        let posts = await Post.aggregate([
-            {
-              $lookup:
-                {
-                  from: "users",
-                  localField: "userId",
-                  foreignField: "_id",
-                  as: "user"
-                }
-          },
-          {
-              $lookup:
-              {
-                from: "receivers",
-                localField: "receiverId",
-                foreignField: "_id",
-                as:"receiver"
-              }
-          }
-        ])
-        posts = posts.reverse()
-        pubsub.publish(POST_ADDED,{
-            postAdded : posts
-        })
+        console.log("updatedPost===>",updatedPost);
 
         let checkUpdation = await Post.findOne({_id:postId})
         console.log("checkUpdation===>",checkUpdation);

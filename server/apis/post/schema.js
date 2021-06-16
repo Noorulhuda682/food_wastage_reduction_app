@@ -6,9 +6,6 @@ const post = gql`
     userPosts(userId:ID):[Post]
  }
 
- extend type Subscription {
-    postAdded:[Post]
- }
 
 
  extend type Mutation {
