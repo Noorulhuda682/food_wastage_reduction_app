@@ -41,7 +41,8 @@ query posts($userId:ID){
 `
 
 const POSTS = gql`
-  query posts{
+  
+query posts{
   posts{
     _id
     userId
@@ -52,6 +53,28 @@ const POSTS = gql`
     img1
     img2
     img3
+    status
+    receiverId
+    user{
+      name
+      email
+      _id
+      role
+      profileImage
+      pushToken
+      latitude
+      longitude
+    }
+    receiver{
+        _id
+        name
+      email
+     profileImage
+    pushToken
+    latitude
+    longitude
+    }
+    
   }
 }
 `

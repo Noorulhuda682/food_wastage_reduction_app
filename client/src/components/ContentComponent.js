@@ -74,7 +74,7 @@ const DrawerContent = (props) => {
                                 <Thumbnail
                                     size={50}
                                     style={styles.profileImage}
-                                    large source={require('../assets/images/profile.jpg')}
+                                    large source={{uri:data?.user?.profileImage}}
                                 /> :
                                 <Text style={{
                                     color: icon,

@@ -1,139 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text, Dimensions,
-    StyleSheet,Image
+    StyleSheet, Image, ActivityIndicator
 } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import {
-    Container, Header, Left, Body, Right, Button, Icon, Title, Content,
-    Card, CardItem, H2, Footer,Thumbnail,
-    Fab
-    // Text
+    Container, Left, Body, Right, Button, Icon, Title, Content, Item, Input
 } from 'native-base';
-const { width, height } = Dimensions.get('window')
-const SCREEN_HEIGHT = height
-const SCREEN_WIDTH = width
+import { useQuery } from "@apollo/client";
+import Header from "../shared/Header"
+import { POSTS } from "../typeDefs/Post"
+import PostCard from "../shared/PostCard"
+import { SearchBar } from '../shared/index';
 
 const AllPosts = ({ navigation }) => {
+    const [searchValue, setSearchValue] = useState("")
+    const { loading, error, data } = useQuery(POSTS);
+
+
+    console.log("navigation**********************ALlposts", data);
     return (
         <Container>
-            <Header style={{ backgroundColor: "#00203FFF" }}>
-                <Left>
-                    <Button transparent onPress={() => navigation.openDrawer()}>
-                        <Icon name='menu' />
-                    </Button>
-
-                </Left>
-                <Body>
-                    <Title>All Posts</Title>
-                </Body>
-                <Right>
-                    <Button transparent>
-                        <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
-                    </Button>
-                </Right>
-            </Header>
+            <Header navigation={navigation} title="All Posts" />
+            <View style={{ padding: 12 }}>
+                <SearchBar
+                    type="receivers"
+                    value={searchValue}
+                    onChange={setSearchValue}
+                />
+            </View>
             <Content style={styles.mainContent} padder>
-                <Content padder style={{ backgroundColor: "" }}>
-                    <Content>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                    <Body>
-                                        <Text >by ajaz</Text>
-                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                    <Body>
-                                        <Text >by darius</Text>
-                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                    <Body>
-                                        <Text >by noor</Text>
-                                        <Text style={{fontWeight:"bold",fontSize:20}} note>Biryani</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 130, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                    </Content>
-                </Content>
+
+
+
+                {loading &&
+                    <ActivityIndicator color="blue" />
+                }
+
+                {data?.posts.map((foodPost, key) => <PostCard foodPost={foodPost} key={key} />
+                )}
+
+                {!loading && !data.posts.length &&
+                    <Text style={{ color: "gray", textAlign: "center" }}>No data found!</Text>
+                }
+
 
             </Content>
         </Container>
@@ -143,7 +56,7 @@ const AllPosts = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     mainContent: {
-        //  paddingTop:20
+        marginTop:-15,
     },
     heading: {
         fontWeight: "bold",

@@ -11,7 +11,9 @@ import {
    Camera,
    NewOrders,
    CompletedOrders,
-   ProgressOrders
+   ProgressOrders,
+   Users,
+   Receivers
  } from "../screens"
 import {useSelector,useDispatch} from "react-redux"
 
@@ -46,6 +48,9 @@ const MainHome = ({ navigation }) => {
       <Drawer.Screen name="newOrders" component={NewOrders} />
       <Drawer.Screen name="completedOrders" component={CompletedOrders} />
       <Drawer.Screen name="progressOrders" component={ProgressOrders} />
+      {/* ADMIN ROUTES */}
+      <Drawer.Screen name="users" component={Users} />
+      <Drawer.Screen name="receivers" component={Receivers} />
 
     </Drawer.Navigator>
   );

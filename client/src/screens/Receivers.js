@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View, ActivityIndicator,
     Text, Dimensions,
@@ -18,17 +18,17 @@ import {
 const { width, height } = Dimensions.get('window')
 import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
-import { POSTS} from "../typeDefs/Post";
-import PostCard from "../shared/PostCard"
+import { RECEIVERS } from "../typeDefs/User";
 import Header from "../shared/Header"
+import UserList from "../shared/UserList"
 import { SearchBar } from '../shared/index';
 
-const CompletedOrders = ({ navigation }) => {
-    const storeData = useSelector(state => state);
+const AllReceivers = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
-    // console.log("MyPosts===>", storeData?.user._id);
+    const storeData = useSelector(state => state);
+    // console.log("AllReceivers===>", storeData);
 
-    const { loading, error, data } = useQuery(POSTS);
+    const { loading, error, data } = useQuery(RECEIVERS);
 
 
     if (error) Alert.alert(`Error! ${error.message}`);
@@ -40,12 +40,11 @@ const CompletedOrders = ({ navigation }) => {
     //     return unsubscribe;
     // }, [navigation]);
 
-
-    // console.log("navigation**********************22", data, storeData?.user._id );
+    // console.log("navigation**********************23", data);
 
     return (
         <Container>
-            <Header navigation={navigation} title="Completed Orders"/>
+            <Header navigation={navigation} title="FWR Receivers" />
             <View style={{ padding: 12 }}>
                 <SearchBar
                     type="receivers"
@@ -55,20 +54,25 @@ const CompletedOrders = ({ navigation }) => {
             </View>
             <Content style={styles.mainContent} padder>
 
-              
+
                 {loading &&
-                 <ActivityIndicator color="blue" />
+                    <ActivityIndicator color="blue" />
                 }
 
-                 {data?.posts?.map( (foodPost,key) =>  <PostCard navigation={navigation} foodPost={foodPost} key={key} /> )}
 
-                 {!loading && !data?.posts?.length &&
-                 <Text style={{color:"gray",textAlign:"center"}}>No data found!</Text>
+                {!loading && !data.receivers.length &&
+                    <Text style={{ color: "gray", textAlign: "ce" }}>No data found!</Text>
                 }
 
-           
+                {data?.receivers?.map((receiver, index) => {
+                    return (
+                        <UserList navigation={navigation} user={receiver} key={index} />
+                    )
+                })}
 
-               
+
+
+
             </Content>
         </Container>
 
@@ -77,8 +81,10 @@ const CompletedOrders = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     mainContent: {
-        marginTop:-15,
+        marginTop:-25,
         textAlign: "center",
+        // flex:1,
+        // alignItems:"center"
     },
     heading: {
         fontWeight: "bold",
@@ -110,4 +116,4 @@ const styles = StyleSheet.create({
     }
 
 })
-export default CompletedOrders;
+export default AllReceivers;

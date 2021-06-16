@@ -11,7 +11,7 @@ mutation addUser($name:String $email:String! $password:String!){
       _id
       role
       profileImage
-      token
+      pushToken
       latitude
       longitude
     }
@@ -28,7 +28,7 @@ mutation addReceiver($name:String $email:String! $password:String!){
       _id
       role
       profileImage
-      token
+      pushToken
       latitude
       longitude
     }
@@ -45,6 +45,10 @@ const LOGIN = gql`
       name
       email
       role
+      profileImage
+      pushToken
+      latitude
+      longitude
     }
   }
 }

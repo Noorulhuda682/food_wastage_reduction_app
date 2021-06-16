@@ -7,7 +7,10 @@ import Map from "./Map";
 import Camera from "./Camera";
 import NewOrders from "./NewOrders";
 import CompletedOrders from "./CompletedOrders";
-import ProgressOrders from "./ProgressOrders"
+import ProgressOrders from "./ProgressOrders";
+import Users from "./Users";
+import Receivers from "./Receivers";
+
 export {
     Home,
     Profile,
@@ -18,5 +21,7 @@ export {
     Camera,
     NewOrders,
     CompletedOrders,
-    ProgressOrders
+    ProgressOrders,
+    Users,
+    Receivers
 }

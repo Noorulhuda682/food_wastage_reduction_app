@@ -39,6 +39,8 @@ import { clearStorage } from "../config/setToken";
 const CustomeHeader = ({ navigation, title }) => {
     const dispatch = useDispatch();
     const [showBtn, setShowBtn] = useState(false)
+    
+    // "#00203FFF" this is older blue
 
     return (
         <Header style={styles.Header}>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
     View, ActivityIndicator,
     Text, Dimensions,
@@ -21,9 +21,11 @@ import { useQuery } from "@apollo/client";
 import { POSTS} from "../typeDefs/Post";
 import PostCard from "../shared/PostCard"
 import Header from "../shared/Header"
+import { SearchBar } from '../shared/index';
 
 const NewOrders = ({ navigation }) => {
     const storeData = useSelector(state => state);
+    const [searchValue, setSearchValue] = useState("")
     // console.log("MyPosts===>", storeData?.user._id);
 
     const { loading, error, data } = useQuery(POSTS);
@@ -44,22 +46,24 @@ const NewOrders = ({ navigation }) => {
     return (
         <Container>
             <Header navigation={navigation} title="New Orders"/>
+            <View style={{ padding: 12 }}>
+                <SearchBar
+                    type="receivers"
+                    value={searchValue}
+                    onChange={setSearchValue}
+                />
+            </View>
             <Content style={styles.mainContent} padder>
 
-                <Item style={{ marginBottom: 10,marginTop:-10 }}>
-                    <Icon name="ios-search" />
-                    <Input placeholder="Search" />
-                    <Icon name="ios-people" />
-                </Item>
-  
+              
                 {loading &&
                  <ActivityIndicator color="blue" />
                 }
 
-                 {data?.posts.map( (foodPost,key) =>  <PostCard navigation={navigation} foodPost={foodPost} key={key} /> )}
+                 {data?.posts?.map( (foodPost,key) =>  <PostCard navigation={navigation} foodPost={foodPost} key={key} /> )}
 
-                 {!loading && !data.posts.length &&
-                 <Text style={{color:"gray",textAlign:"ce"}}>No data found!</Text>
+                 {!loading && !data?.posts?.length &&
+                 <Text style={{color:"gray",textAlign:"center"}}>No data found!</Text>
                 }
 
            
@@ -73,10 +77,8 @@ const NewOrders = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     mainContent: {
-        //  paddingTop:20
+        marginTop:-15,
         textAlign: "center",
-        // flex:1,
-        // alignItems:"center"
     },
     heading: {
         fontWeight: "bold",

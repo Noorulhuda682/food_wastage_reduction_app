@@ -12,23 +12,25 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import {
     Container, Left, Body, Right, Button, Icon, Title, Content,
     Card, CardItem, H2, Footer, Thumbnail,
-    Fab, Spinner, SwipeRow, Input, Item
+    Fab, Spinner, SwipeRow, Input, Item, List, ListItem
     // Text
 } from 'native-base';
 const { width, height } = Dimensions.get('window')
 import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
-import { POSTS} from "../typeDefs/Post";
+import { MYPOSTS } from "../typeDefs/Post";
 import PostCard from "../shared/PostCard"
 import Header from "../shared/Header"
+import UserList from "../shared/UserList"
+import {USERS} from "../typeDefs/User"
 import { SearchBar } from '../shared/index';
 
-const CompletedOrders = ({ navigation }) => {
-    const storeData = useSelector(state => state);
+const AllUsers = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
-    // console.log("MyPosts===>", storeData?.user._id);
+    const storeData = useSelector(state => state);
+    console.log("AllUsers===>", storeData);
 
-    const { loading, error, data } = useQuery(POSTS);
+    const { loading, error, data } = useQuery(USERS);
 
 
     if (error) Alert.alert(`Error! ${error.message}`);
@@ -41,11 +43,11 @@ const CompletedOrders = ({ navigation }) => {
     // }, [navigation]);
 
 
-    // console.log("navigation**********************22", data, storeData?.user._id );
+    // console.log("navigation**********************22", data);
 
     return (
         <Container>
-            <Header navigation={navigation} title="Completed Orders"/>
+            <Header navigation={navigation} title="FWR Users" />
             <View style={{ padding: 12 }}>
                 <SearchBar
                     type="receivers"
@@ -55,20 +57,27 @@ const CompletedOrders = ({ navigation }) => {
             </View>
             <Content style={styles.mainContent} padder>
 
-              
+        
+
                 {loading &&
                  <ActivityIndicator color="blue" />
                 }
 
-                 {data?.posts?.map( (foodPost,key) =>  <PostCard navigation={navigation} foodPost={foodPost} key={key} /> )}
-
-                 {!loading && !data?.posts?.length &&
+                 {!loading && !data?.users?.length &&
                  <Text style={{color:"gray",textAlign:"center"}}>No data found!</Text>
                 }
 
-           
 
-               
+                {data?.users?.map( (user,index) => {
+                    return(
+                        <UserList navigation={navigation} user={user} key={index}  />
+                    )
+                })}
+
+                
+
+
+
             </Content>
         </Container>
 
@@ -77,8 +86,10 @@ const CompletedOrders = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     mainContent: {
-        marginTop:-15,
+        marginTop:-25,
         textAlign: "center",
+        // flex:1,
+        // alignItems:"center"
     },
     heading: {
         fontWeight: "bold",
@@ -110,4 +121,4 @@ const styles = StyleSheet.create({
     }
 
 })
-export default CompletedOrders;
+export default AllUsers;

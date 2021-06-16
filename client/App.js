@@ -32,14 +32,14 @@ const App = () => {
 
   // Initialize Apollo Client
   const httpLink = new HttpLink({
-    uri: "https://aaa-aaaa.herokuapp.com/graphql",
+    uri: "https://hhh-hhh.herokuapp.com/graphql",
     headers: {
       authorization: authTokenStorage,
     },
   });
 
   const wsLink = new WebSocketLink({
-    uri: "ws://aaa-aaaa.herokuapp.com/graphql",
+    uri: "ws://hhh-hhh.herokuapp.com/graphql",
     options: {
       reconnect: true,
       connectionParams: {

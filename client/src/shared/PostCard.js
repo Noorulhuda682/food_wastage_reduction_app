@@ -26,13 +26,15 @@ import { MYPOSTS } from "../typeDefs/Post";
 const PostCard = ({ navigation, foodPost, key }) => {
     const storeData = useSelector(state => state);
     const [focusKey, setFocusKey] = useState(null)
-    console.log("PostCard=====", foodPost);
+    // console.log("PostCard=====", foodPost);
+    var user = foodPost?.user?.length ? foodPost?.user[0] : [];
+    var receiver = foodPost?.receiver?.length ? foodPost?.receiver[0] : [];
 
     return (
         <TouchableOpacity key={key} style={{ marginTop: 20, borderBottomWidth: 1, paddingBottom: 5, borderColor: "lightgray", flex: 1, flexDirection: "row", marginRight: 10 }}>
             <View style={{ width: "30%" }}>
 
-                {foodPost.img1 ?
+                {foodPost.img1 !== null ?
                     <Image source={{ uri: foodPost.img1 }} style={{
                         height: 120, width: null, flex: 1, borderRadius: 5,
                     }} />
@@ -41,7 +43,6 @@ const PostCard = ({ navigation, foodPost, key }) => {
                         height: 120, width: null, flex: 1, borderRadius: 5,
                     }} />
                 }
-
 
             </View>
 
@@ -69,7 +70,7 @@ const PostCard = ({ navigation, foodPost, key }) => {
                 }}>
                     <Button transparent>
                         <Text style={{ fontSize: 15, fontWeight: "bold", color: "gray", marginRight: 3 }} >
-                            {storeData?.user?.role === "USER" ? 'Receiver' : 'Uploader'} :
+                            {storeData?.user?.role === "USER" ? 'Receiver' : 'Uploader'} 
                         </Text>
                         <Thumbnail style={{ height: 22, width: 22 }} source={require('../assets/images/profile.jpg')} />
                         <Text style={{ marginLeft: 5, fontSize: 11 }}>Noorul Huda</Text>
@@ -114,35 +115,35 @@ const PostCard = ({ navigation, foodPost, key }) => {
                         </TouchableOpacity>
                     }
                     {storeData?.user?.role === "RECEIVER" &&
+                        <TouchableOpacity style={{
+                            backgroundColor: "#00203FFF", marginHorizontal: 2, borderRadius: 3,
+                            paddingHorizontal: 15,
+                            height:35,
+                            width:200,
+                            flexDirection:"row",
+                            justifyContent:"center",
+                            alignItems:"center"
+                        }}>
+                            <MaterialIcons name="delivery-dining" size={20} color="white" />
+                            <Text style={{ color: "white", }}>
+                                {`   `}Accept Delivering
+                            </Text>
+                        </TouchableOpacity>
                         // <TouchableOpacity style={{
-                        //     backgroundColor: "#00203FFF", marginHorizontal: 2, borderRadius: 3,
+                        //     backgroundColor: "white", marginHorizontal: 2, borderRadius: 3,
                         //     paddingHorizontal: 15,
+                        //     // borderWidth:1,
                         //     height:45,
                         //     justifyContent:"center",
                         //     alignItems:"center",
                         //     width:200
                         // }}>
-                        //     <Text style={{ color: "white", }}>
+                        //     <Text style={{ color:"#00203FFF", }}>
 
-                        //         <MaterialIcons name="approval" size={20} color="white" />
-                        //         {` `}Accept Receiving
+                        //         <MaterialIcons name="approval" size={20} color="#00203FFF" />
+                        //         {` `}Accepted Receiving
                         //             </Text>
                         // </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            backgroundColor: "white", marginHorizontal: 2, borderRadius: 3,
-                            paddingHorizontal: 15,
-                            // borderWidth:1,
-                            height:45,
-                            justifyContent:"center",
-                            alignItems:"center",
-                            width:200
-                        }}>
-                            <Text style={{ color:"#00203FFF", }}>
-
-                                <MaterialIcons name="approval" size={20} color="#00203FFF" />
-                                {` `}Accepted Receiving
-                                    </Text>
-                        </TouchableOpacity>
                         
                     }
                 </View>}

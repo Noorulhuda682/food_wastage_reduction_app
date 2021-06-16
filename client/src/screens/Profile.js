@@ -41,7 +41,7 @@ const Profile = ({ navigation }) => {
   const [contact, setContact] = useState(null)
 
 
-  const [profile, setProfile] = useState(null)
+  const [profile, setProfile] = useState(user?.profileImage)
 
   console.log("USER", user);
   const launchCameraHandler = () => {
@@ -101,7 +101,7 @@ const Profile = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            {profile || user?.profileImage ?
+            {profile  ?
               <Image
                 size={50}
                 style={styles.profileImage}
