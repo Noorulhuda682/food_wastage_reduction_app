@@ -2,7 +2,7 @@ const { gql } = require('apollo-server');
 
 const post = gql`
  extend type Query {
-    posts: [Post]
+    posts(status:String): [Post]
     userPosts(userId:ID):[Post]
  }
 

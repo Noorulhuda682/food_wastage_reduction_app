@@ -1,9 +1,6 @@
 const bscrypt = require("bcryptjs");
 const User = require("../../../models/User");
-<<<<<<< Updated upstream
-=======
 const Receiver = require("../../../models/Receiver");
->>>>>>> Stashed changes
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 

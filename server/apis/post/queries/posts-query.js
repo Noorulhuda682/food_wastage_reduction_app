@@ -1,33 +1,35 @@
 const Post = require("../../../models/Post");
 
-const posts = async (_, __, { dataSources }) =>  {
- 
+const posts = async (_,{status} , { dataSources }) => {
 
-    let joinPosts = await Post.aggregate([
-        {
-          $lookup:
-            {
-              from: "users",
-              localField: "userId",
-              foreignField: "_id",
-              as: "user"
-            }
-       },
-       {
-           $lookup:
-           {
-            from: "receivers",
-            localField: "receiverId",
-            foreignField: "_id",
-            as:"receiver"
-           }
-       }
-     ])
+  var aggregat = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $lookup: {
+        from: "receivers",
+        localField: "receiverId",
+        foreignField: "_id",
+        as: "receiver",
+      },
+    },
+  ]
+  
+  if(status){
+    aggregat.push({ $match:{status} })
+  }
 
-     console.log("joinPosts",JSON.stringify(joinPosts),joinPosts);
+  let joinPosts = await Post.aggregate(aggregat);
 
-    return joinPosts.reverse();
-}
+  console.log("joinPosts", JSON.stringify(joinPosts), joinPosts);
+
+  return joinPosts.reverse();
+};
 
 module.exports = posts;
-
