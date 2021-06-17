@@ -1,27 +1,40 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
-    View,
-    Text, Dimensions,
-    StyleSheet, Image,
-    Alert
-} from 'react-native'
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  Image,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 import {
-    Container, Left, Body, Right, Button, Icon, Title, Content,
-    Card, CardItem, H2, Footer, Thumbnail,
-    Fab
+  Container,
+  Left,
+  Body,
+  Right,
+  Button,
+  Icon,
+  Title,
+  Content,
+  Card,
+  CardItem,
+  H2,
+  Footer,
+  Thumbnail,
+  Fab,
 } from 'native-base';
 import messaging from '@react-native-firebase/messaging';
-const { width, height } = Dimensions.get('window')
-const SCREEN_HEIGHT = height
-const SCREEN_WIDTH = width
-import { useSelector } from "react-redux"
-import { gql, useQuery, useSubscription } from "@apollo/client"
-import Header from "../shared/Header"
-
+const {width, height} = Dimensions.get('window');
+const SCREEN_HEIGHT = height;
+const SCREEN_WIDTH = width;
+import {useSelector} from 'react-redux';
+import {gql, useQuery, useSubscription} from '@apollo/client';
+import Header from '../shared/Header';
 
 // const GET_USERS = gql`
 //   query users{
@@ -34,226 +47,201 @@ import Header from "../shared/Header"
 // `;
 
 const RECEIVER_ADDED = gql`
-  subscription  receiverAdded {
-  receiverAdded{
-    _id
-    name
-    email
-  }
+  subscription receiverAdded {
+    receiverAdded {
+      _id
+      name
+      email
+    }
   }
 `;
 
-const Home = ({ navigation }) => {
-    const storeData = useSelector(state => state);
+const Home = ({navigation}) => {
+  const storeData = useSelector(state => state);
 
-    // const { loading, error, data } = useQuery(GET_USERS);
-    const { data, loading, error } = useSubscription(RECEIVER_ADDED);
+  // const { loading, error, data } = useQuery(GET_USERS);
+  const {data, loading, error} = useSubscription(RECEIVER_ADDED);
 
-    // if (loading)  console.log('Loading...');
-    if (error) console.log(`Error! ${error.message}`);
-    console.log("DATA==>", storeData);
+  // if (loading)  console.log('Loading...');
+  if (error) console.log(`Error! ${error.message}`);
+  console.log('DATA==>', storeData);
 
+  const getTokens = async () => {
+    let token = await messaging().getToken();
+    console.log('token', token);
+  };
 
-    const getTokens = async () => {
-        let token = await messaging().getToken();
-        console.log("token", token);
-    }
+  useEffect(() => {
+    getTokens();
+    messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
 
-    useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('onNotificationOpenedApp: ', JSON.stringify(remoteMessage));
+    });
 
-        getTokens();
-        messaging().onMessage(async remoteMessage => {
-            Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-            console.log("A new FCM message arrived!", JSON.stringify(remoteMessage));
-        });
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            JSON.stringify(remoteMessage),
+          );
+        }
+      });
+  }, []);
 
-        messaging().onNotificationOpenedApp(remoteMessage => {
-            console.log("onNotificationOpenedApp: ", JSON.stringify(remoteMessage));
-        })
+  // console.log("netInfo", netInfo);
+  return (
+    <Container>
+      <Header navigation={navigation} title={'Home'} />
+      <View style={styles.homeTitleView}>
+        <View style={{flex: 1, paddingHorizontal: 10, height: 130}}>
+          <Text style={styles.heading}>Food Wastage Reduction</Text>
+          <Text style={styles.para}>
+            Reducing the wastage of food can boot the economy of a country
+          </Text>
+        </View>
+        <Image
+          style={styles.homeTitleImg}
+          source={require('../assets/images/home-icon.jpg')}
+        />
+      </View>
 
-        messaging()
-            .getInitialNotification()
-            .then(remoteMessage => {
-                if (remoteMessage) {
-                    console.log(
-                        'Notification caused app to open from quit state:',
-                        JSON.stringify(remoteMessage),
-                    );
-                }
-            });
-
-    }, []);
-
-    // console.log("netInfo", netInfo);
-    return (
-        <Container>
-            <Header navigation={navigation} title={'Home'} />
-            <Content style={styles.mainContent} padder>
-                <Content padder style={{ backgroundColor: "" }}>
-                    <Text style={styles.heading}>Safe Wasting Food</Text>
-                    <Text style={styles.para}>
-                        Reducing the wastage of food can boot economy of a country
-                     </Text>
-                    <Content>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                    {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                 */}
-                                    <Body>
-                                        {/* <Text>NativeBase</Text>
-                                        <Text note>GeekyAnts</Text> */}
-                                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Food Items </Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/foods.jpeg')} style={{ height: 150, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                    {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                 */}
-                                    <Body>
-                                        {/* <Text>NativeBase</Text>
-                                        <Text note>GeekyAnts</Text> */}
-                                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Distribution Locations</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/location.jpg')} style={{ height: 150, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-                        <Card>
-                            <CardItem>
-                                <Left>
-                                    {/* <Thumbnail source={require('../assets/images/profile.jpg')} />
-                                 */}
-                                    <Body>
-                                        {/* <Text>NativeBase</Text>
-                                        <Text note>GeekyAnts</Text> */}
-                                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Distribution Per Family</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                            <CardItem cardBody>
-                                <Image source={require('../assets/images/distribution.jpg')} style={{ height: 150, width: null, flex: 1 }} />
-                            </CardItem>
-                            <CardItem>
-                                <Left>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Button transparent>
-                                        <Icon active name="chatbubbles" />
-                                        <Text>4 Comments</Text>
-                                    </Button>
-                                </Body>
-                                <Right>
-                                    <Text>11h ago</Text>
-                                </Right>
-                            </CardItem>
-                        </Card>
-
-
-
-
-
-                    </Content>
-                </Content>
-
-
+      <Content padder style={{marginTop: -60}}>
+        <View style={styles.cardContainer}>
+          <Card style={styles.card}>
+            <Content style={styles.cardContent}>
+              <Image
+                style={styles.cardContentImg}
+                source={require('../assets/images/foods.jpeg')}
+              />
+              <Text style={styles.cardContentText}>Food Items</Text>
             </Content>
-            {storeData?.user?.role === "USER" &&
-                <Fab
-                    active={true}
-                    direction="up"
-                    containerStyle={{}}
-                    style={{ backgroundColor: "#1e319d" }}
-                    position="bottomRight"
-                    onPress={() => navigation.navigate("addPost")}
-                >
-                    <Icon name="add" />
-                </Fab>
-            }
+          </Card>
+          <Card style={styles.card}>
+            <Content style={styles.cardContent}>
+              <Image
+                style={styles.cardContentImg}
+                source={require('../assets/images/location.jpg')}
+              />
+              <Text style={styles.cardContentText}>
+                {' '}
+                Distribution Locations
+              </Text>
+            </Content>
+          </Card>
+        </View>
 
-        </Container>
+        <View style={styles.cardContainer}>
+          <Card style={styles.card}>
+            <Content style={styles.cardContent}>
+              <Image
+                style={styles.cardContentImg}
+                source={require('../assets/images/distribution.jpg')}
+              />
+              <Text style={styles.cardContentText}>
+                Per Family Distribution
+              </Text>
+            </Content>
+          </Card>
+          <Card style={styles.card}>
+            <Content style={styles.cardContent}>
+              <Image
+                style={styles.cardContentImg}
+                source={require('../assets/images/location.jpg')}
+              />
+              <Text style={styles.cardContentText}>
+                {' '}
+                Distribution Locations
+              </Text>
+            </Content>
+          </Card>
+        </View>
+      </Content>
 
-    );
-}
+      {storeData?.user?.role === 'USER' && (
+        <Fab
+          active={true}
+          direction="up"
+          containerStyle={{}}
+          style={{backgroundColor: '#1e319d'}}
+          position="bottomRight"
+          onPress={() => navigation.navigate('addPost')}>
+          <Icon name="add" />
+        </Fab>
+      )}
+    </Container>
+  );
+};
 
 const styles = StyleSheet.create({
-    mainContent: {
-        //  paddingTop:20
-    },
-    heading: {
-        fontWeight: "bold",
-        fontSize: 20,
-        color: "#00203FFF",
-        // textAlign:"center"
-    },
-    para: {
-        fontSize: 13,
-        paddingLeft: 5,
-        color: "#00203FFF",
-        paddingBottom: 20
-    },
-    headContent: {
-        paddingTop: 20,
-        height: 100,
-        backgroundColor: '#adcfe6',
-    },
-    card: {
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.55,
-        shadowRadius: 3.84,
-
-        elevation: 7,
-    }
-
-})
+  mainContent: {},
+  heading: {
+    fontSize: 20,
+    color: 'gray',
+    textShadowColor: 'blue',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 3,
+  },
+  para: {
+    fontSize: 11,
+    color: 'lightgray',
+  },
+  homeTitleView: {
+    borderColor: 'white',
+    paddingTop: 20,
+    height: 150,
+    paddingHorizontal: 10,
+    borderBottomWidth: 0,
+    borderWidth: 1,
+    height: 230,
+    flexDirection: 'row',
+  },
+  homeTitleImg: {
+    flex: 1,
+    height: 130,
+    width: 120,
+    borderRadius: 50,
+    borderBottomLeftRadius: 0,
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  card: {
+    borderRadius: 5,
+    flexBasis: '47.5%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 6,
+    borderWidth: 3,
+  },
+  cardContent: {
+    paddingHorizontal: 18,
+    paddingVertical: 20,
+  },
+  cardContentImg: {
+    height: 120,
+    width: null,
+    borderRadius: 50,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 10,
+  },
+  cardContentText: {
+    fontSize: 12,
+    marginTop: 5,
+    textShadowColor: 'blue',
+    textShadowRadius: 1,
+  },
+});
 export default Home;
