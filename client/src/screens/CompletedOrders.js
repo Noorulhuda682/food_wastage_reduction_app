@@ -28,7 +28,11 @@ const CompletedOrders = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
     // console.log("MyPosts===>", storeData?.user._id);
 
-    const { loading, error, data } = useQuery(POSTS);
+    const { loading, error, data } = useQuery(POSTS,{
+        variables:{
+            status:"COMPLETED"
+        }
+    });
 
 
     if (error) Alert.alert(`Error! ${error.message}`);

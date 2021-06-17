@@ -10,6 +10,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from "react-native-vector-icons/Entypo"
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import {
     Container, Header, Left, Body, Right, Button, Icon, Title, Content,
@@ -70,15 +71,15 @@ const PostCard = ({ navigation, foodPost, key }) => {
                 }}>
                     <Button transparent>
                         <Text style={{ fontSize: 15, fontWeight: "bold", color: "gray", marginRight: 3 }} >
-                            {storeData?.user?.role === "USER" ? 'Receiver' : 'Uploader'} 
+                            {storeData?.user?.role === "USER" ? 'Receiver' : 'Uploader'}
                         </Text>
                         <Thumbnail style={{ height: 22, width: 22 }} source={require('../assets/images/profile.jpg')} />
                         <Text style={{ marginLeft: 5, fontSize: 11 }}>Noorul Huda</Text>
 
                     </Button>
 
-                    <TouchableOpacity transparent style={{ marginTop:10 }}
-                    onPress={() => navigation.navigate("map") }
+                    <TouchableOpacity transparent style={{ marginTop: 10 }}
+                        onPress={() => navigation.navigate("map")}
                     >
                         <Text style={{ marginLeft: 5, fontSize: 11 }}><MaterialCommunityIcons name="map-marker" size={20} color="#00238b" />Map</Text>
                     </TouchableOpacity>
@@ -100,51 +101,42 @@ const PostCard = ({ navigation, foodPost, key }) => {
                         </TouchableOpacity>
                     }
                     {storeData?.user?.role === "USER" &&
+
                         <TouchableOpacity style={{
-                            backgroundColor: "#ea1715", marginHorizontal: 2, borderRadius: 3,
+                            backgroundColor: "#ea1715",
+                            marginHorizontal: 2,
+                            borderRadius: 3,
                             paddingHorizontal: 15,
                             paddingVertical: 5,
-
-
                         }}>
                             <Text style={{ color: "white" }}>
-
                                 <AntDesign name="delete" size={15} color="white" />
                                 {` `}Delete
-                                    </Text>
+                            </Text>
                         </TouchableOpacity>
                     }
                     {storeData?.user?.role === "RECEIVER" &&
-                        <TouchableOpacity style={{
-                            backgroundColor: "#00203FFF", marginHorizontal: 2, borderRadius: 3,
-                            paddingHorizontal: 15,
-                            height:35,
-                            width:200,
-                            flexDirection:"row",
-                            justifyContent:"center",
-                            alignItems:"center"
-                        }}>
+                        foodPost.status === "NEW" ?
+                        <TouchableOpacity style={[styles.updateBtn, { backgroundColor: "#00203FFF", }]}>
                             <MaterialIcons name="delivery-dining" size={20} color="white" />
                             <Text style={{ color: "white", }}>
                                 {`   `}Accept Delivering
                             </Text>
                         </TouchableOpacity>
-                        // <TouchableOpacity style={{
-                        //     backgroundColor: "white", marginHorizontal: 2, borderRadius: 3,
-                        //     paddingHorizontal: 15,
-                        //     // borderWidth:1,
-                        //     height:45,
-                        //     justifyContent:"center",
-                        //     alignItems:"center",
-                        //     width:200
-                        // }}>
-                        //     <Text style={{ color:"#00203FFF", }}>
-
-                        //         <MaterialIcons name="approval" size={20} color="#00203FFF" />
-                        //         {` `}Accepted Receiving
-                        //             </Text>
-                        // </TouchableOpacity>
-                        
+                        : foodPost.status === "PROGRESS" ?
+                            <TouchableOpacity style={[styles.updateBtn, {backgroundColor:"#b4006b", }]}>
+                                <MaterialCommunityIcons name="cursor-pointer" size={19} color="white" />
+                                <Text style={{ color: "white", }}>
+                                    {` `} Received Food
+                                </Text>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={[styles.updateBtn, { backgroundColor: "green", }]}>
+                                    <Entypo name="check" size={20} color="white" />
+                                <Text style={{ color: "white", }}>
+                                    {` `}Delivered
+                                </Text>
+                            </TouchableOpacity>
                     }
                 </View>}
 
@@ -156,40 +148,15 @@ const PostCard = ({ navigation, foodPost, key }) => {
 }
 
 const styles = StyleSheet.create({
-    mainContent: {
-        //  paddingTop:20
-        textAlign: "center",
-        // flex:1,
-        // alignItems:"center"
-    },
-    heading: {
-        fontWeight: "bold",
-        fontSize: 35,
-        color: "#00203FFF"
-        // textAlign:"center"
-    },
-    para: {
-        fontSize: 16,
-        paddingLeft: 5,
-        color: "#00203FFF",
-        paddingBottom: 20
-    },
-    headContent: {
-        paddingTop: 20,
-        height: 100,
-        backgroundColor: '#adcfe6',
-    },
-    card: {
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.55,
-        shadowRadius: 3.84,
-
-        elevation: 7,
+    updateBtn: {
+        marginHorizontal: 2,
+        borderRadius: 3,
+        paddingHorizontal: 15,
+        height: 37,
+        width: 200,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
     }
-
 })
 export default PostCard;

@@ -113,7 +113,7 @@ const Home = ({navigation}) => {
 
       <Content padder style={{marginTop: -60}}>
         <View style={styles.cardContainer}>
-          <Card style={styles.card}>
+          <TouchableOpacity style={styles.card}>
             <Content style={styles.cardContent}>
               <Image
                 style={styles.cardContentImg}
@@ -121,8 +121,8 @@ const Home = ({navigation}) => {
               />
               <Text style={styles.cardContentText}>Food Items</Text>
             </Content>
-          </Card>
-          <Card style={styles.card}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.card}>
             <Content style={styles.cardContent}>
               <Image
                 style={styles.cardContentImg}
@@ -133,11 +133,11 @@ const Home = ({navigation}) => {
                 Distribution Locations
               </Text>
             </Content>
-          </Card>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.cardContainer}>
-          <Card style={styles.card}>
+          <TouchableOpacity style={styles.card}>
             <Content style={styles.cardContent}>
               <Image
                 style={styles.cardContentImg}
@@ -147,19 +147,19 @@ const Home = ({navigation}) => {
                 Per Family Distribution
               </Text>
             </Content>
-          </Card>
-          <Card style={styles.card}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.card}>
             <Content style={styles.cardContent}>
               <Image
                 style={styles.cardContentImg}
-                source={require('../assets/images/location.jpg')}
+                source={require('../assets/images/karachi.jpg')}
               />
               <Text style={styles.cardContentText}>
                 {' '}
-                Distribution Locations
+                Distribution Origin Karachi
               </Text>
             </Content>
-          </Card>
+          </TouchableOpacity>
         </View>
       </Content>
 
@@ -181,19 +181,20 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
   mainContent: {},
   heading: {
-    fontSize: 20,
-    color: 'gray',
-    textShadowColor: 'blue',
+    fontSize: 22,
+    color: "#1e319d",
+    textShadowColor: 'gray',
     textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 3,
+    textShadowRadius: 1,
   },
   para: {
-    fontSize: 11,
-    color: 'lightgray',
+      marginTop:5,
+    fontSize: 12,
+    color: 'gray',
   },
   homeTitleView: {
     borderColor: 'white',
-    paddingTop: 20,
+    paddingTop: 25,
     height: 150,
     paddingHorizontal: 10,
     borderBottomWidth: 0,
@@ -212,6 +213,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingHorizontal:7,
   },
   card: {
     borderRadius: 5,
@@ -221,15 +223,17 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 6,
-    borderWidth: 3,
+    elevation: 7,
+    borderColor:"white",
+    marginTop:10,
+    // borderWidth: 1,
   },
   cardContent: {
     paddingHorizontal: 18,
     paddingVertical: 20,
   },
   cardContentImg: {
-    height: 120,
+    height: 150,
     width: null,
     borderRadius: 50,
     borderTopRightRadius: 10,

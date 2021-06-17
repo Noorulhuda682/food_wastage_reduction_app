@@ -61,7 +61,7 @@ const AllReceivers = ({ navigation }) => {
 
 
                 {!loading && !data.receivers.length &&
-                    <Text style={{ color: "gray", textAlign: "ce" }}>No data found!</Text>
+                    <Text style={{ color: "gray", textAlign: "center" }}>No data found!</Text>
                 }
 
                 {data?.receivers?.map((receiver, index) => {

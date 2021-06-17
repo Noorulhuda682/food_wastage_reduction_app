@@ -41,9 +41,8 @@ query posts($userId:ID){
 `
 
 const POSTS = gql`
-  
-query posts{
-  posts{
+query posts($status:String){
+  posts(status:$status){
     _id
     userId
     title

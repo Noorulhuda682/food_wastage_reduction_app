@@ -69,6 +69,9 @@ const DrawerContent = (props) => {
             <DrawerContentScrollView {...props}>
                 <Content style={styles.mainView}>
                     <View style={styles.profileView}>
+
+                  
+
                         <View>
                             {data?.user?.profileImage ?
                                 <Thumbnail
@@ -90,6 +93,7 @@ const DrawerContent = (props) => {
                         </View>
                         <Text style={[styles.profileName, { color: title }]} >{data?.user?.name}</Text>
                         <Text style={styles.profileEmail}>{data?.user?.email}</Text>
+                        <Text style={{marginTop:40,color:"navy",fontSize:11}}>ROLE : {data?.user?.role}</Text>
                     </View>
                     <DrawerItem style={styles.drawerItem}
                         icon={({ color, size }) => {
