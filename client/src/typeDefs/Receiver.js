@@ -1,25 +1,22 @@
 import { gql } from "@apollo/client";
 
-
-const USERS = gql`
- query users{
-    users{
+const RECEIVERS = gql`
+query receivers{
+    receivers{
+      _id
       name
       email
-      _id
-      role
       profileImage
       pushToken
       latitude
       longitude
     }
-  }
+}
 `
 
-
-const USER_ADDED = gql`
-  subscription userAdded {
-    userAdded {
+const RECEIVER_ADDED = gql`
+  subscription receiverAdded {
+    receiverAdded {
       _id
       name
       email
@@ -33,9 +30,7 @@ const USER_ADDED = gql`
 `;
 
 
-
-
 export {
-    USERS,
-    USER_ADDED
+    RECEIVERS,
+    RECEIVER_ADDED
 }

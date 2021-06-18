@@ -30,11 +30,10 @@ import {
 } from 'native-base';
 import messaging from '@react-native-firebase/messaging';
 const {width, height} = Dimensions.get('window');
-const SCREEN_HEIGHT = height;
-const SCREEN_WIDTH = width;
 import {useSelector} from 'react-redux';
 import {gql, useQuery, useSubscription} from '@apollo/client';
 import Header from '../shared/Header';
+import {RECEIVER_ADDED} from "../typeDefs/Receiver"
 
 // const GET_USERS = gql`
 //   query users{
@@ -46,25 +45,18 @@ import Header from '../shared/Header';
 // }
 // `;
 
-const RECEIVER_ADDED = gql`
-  subscription receiverAdded {
-    receiverAdded {
-      _id
-      name
-      email
-    }
-  }
-`;
+
 
 const Home = ({navigation}) => {
   const storeData = useSelector(state => state);
 
   // const { loading, error, data } = useQuery(GET_USERS);
-  const {data, loading, error} = useSubscription(RECEIVER_ADDED);
+  // const {data, error, loading } = useSubscription(RECEIVER_ADDED);
 
   // if (loading)  console.log('Loading...');
-  if (error) console.log(`Error! ${error.message}`);
-  console.log('DATA==>', storeData);
+  // if (error) console.log(`Error! ${error.message}`);
+  // console.log('DATA****==>', data);
+  // console.log('2DATA****==>', error);
 
   const getTokens = async () => {
     let token = await messaging().getToken();

@@ -82,7 +82,7 @@ const UserList = ({ navigation, user, index }) => {
                                 flex: 1, justifyContent: "center",
                                 alignItems: "flex-end"
                             }}>
-                                <Text style={{ color: "blue" }}>View</Text>
+                                <Text style={styles.detailsText}>details</Text>
                             </View>
                         </View>
                     </View>
@@ -133,6 +133,11 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
 
         elevation: 7,
+    },
+    detailsText: {
+        fontSize: 13,
+        color: "#1e319d",
+        textDecorationLine: "underline",
     }
 
 })

@@ -20,8 +20,6 @@ const AllPosts = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
     const { loading, error, data } = useQuery(POSTS);
 
-
-    console.log("navigation**********************ALlposts", data);
     return (
         <Container>
             <Header navigation={navigation} title="All Posts" />
@@ -44,7 +42,7 @@ const AllPosts = ({ navigation }) => {
                 )}
 
                 {!loading && !data.posts.length &&
-                    <Text style={{ color: "gray", textAlign: "center" }}>No data found!</Text>
+                    <Text style={styles.noDataText}>No data found!</Text>
                 }
 
 
@@ -85,6 +83,9 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
 
         elevation: 7,
+    },
+    noDataText:{
+        
     }
 
 })

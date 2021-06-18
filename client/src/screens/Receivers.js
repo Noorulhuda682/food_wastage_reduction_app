@@ -17,21 +17,38 @@ import {
 } from 'native-base';
 const { width, height } = Dimensions.get('window')
 import { useSelector } from "react-redux";
-import { useQuery } from "@apollo/client";
-import { RECEIVERS } from "../typeDefs/User";
+import { useQuery, useSubscription } from "@apollo/client";
 import Header from "../shared/Header"
 import UserList from "../shared/UserList"
 import { SearchBar } from '../shared/index';
+import { RECEIVERS,RECEIVER_ADDED } from "../typeDefs/Receiver";
 
 const AllReceivers = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
     const storeData = useSelector(state => state);
     // console.log("AllReceivers===>", storeData);
 
-    const { loading, error, data } = useQuery(RECEIVERS);
+    var { loading, error, data } = useQuery(RECEIVERS);
+    const [receivers, setReceivers] = useState(null)
+
+    const subscriptionReceivers = useSubscription(RECEIVER_ADDED);
 
 
     if (error) Alert.alert(`Error! ${error.message}`);
+
+    //  FOR QUERY DATA
+    useEffect(() => {
+        if (data && data.receivers) {
+            setReceivers(data.receivers)
+        }
+    }, [data]);
+
+    //  FOR SUBSCRIPTION DATA
+    useEffect(() => {
+        if (subscriptionReceivers.data && subscriptionReceivers.data.receiverAdded) {
+            setReceivers(subscriptionReceivers.data.receiverAdded)
+        }
+    }, [subscriptionReceivers.data]);
 
     // React.useEffect(() => {
     //     const unsubscribe = navigation.addListener('focus', () => {
@@ -40,7 +57,7 @@ const AllReceivers = ({ navigation }) => {
     //     return unsubscribe;
     // }, [navigation]);
 
-    // console.log("navigation**********************23", data);
+    console.log("navigation**********************23", data);
 
     return (
         <Container>
@@ -56,15 +73,15 @@ const AllReceivers = ({ navigation }) => {
 
 
                 {loading &&
-                    <ActivityIndicator color="blue" />
+                    <ActivityIndicator style={{marginTop:30}} color="blue" />
                 }
 
 
-                {!loading && !data.receivers.length &&
-                    <Text style={{ color: "gray", textAlign: "center" }}>No data found!</Text>
+                {!loading && receivers?.length === 0 &&
+                    <Text style={styles.noDataText}>No data found!</Text>
                 }
 
-                {data?.receivers?.map((receiver, index) => {
+                {receivers && receivers.map((receiver, index) => {
                     return (
                         <UserList navigation={navigation} user={receiver} key={index} />
                     )
@@ -81,8 +98,9 @@ const AllReceivers = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     mainContent: {
-        marginTop:-25,
+        marginTop: -25,
         textAlign: "center",
+        paddingBottom: 50,
         // flex:1,
         // alignItems:"center"
     },
@@ -113,6 +131,11 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
 
         elevation: 7,
+    },
+    noDataText: {
+        marginTop: 10,
+        color: "gray",
+        textAlign: "center"
     }
 
 })

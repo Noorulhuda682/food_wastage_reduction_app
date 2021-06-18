@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View, ActivityIndicator,
     Text, Dimensions,
@@ -17,20 +17,34 @@ import {
 } from 'native-base';
 const { width, height } = Dimensions.get('window')
 import { useSelector } from "react-redux";
-import { useQuery } from "@apollo/client";
+import { useQuery, useSubscription } from "@apollo/client";
 import { MYPOSTS } from "../typeDefs/Post";
 import PostCard from "../shared/PostCard"
 import Header from "../shared/Header"
 import UserList from "../shared/UserList"
-import {USERS} from "../typeDefs/User"
+import { USERS, USER_ADDED } from "../typeDefs/User"
 import { SearchBar } from '../shared/index';
 
 const AllUsers = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
+    const [users, setUsers] = useState(null)
     const storeData = useSelector(state => state);
-    console.log("AllUsers===>", storeData);
-
     const { loading, error, data } = useQuery(USERS);
+    const subscriptionUsers = useSubscription(USER_ADDED);
+
+
+    //  FOR QUERY DATA
+    useEffect(() => {
+        if (data && data.users) {
+            setUsers(data.users)
+        }
+    }, [data]);
+    //  FOR SUBSCRIPTION DATA
+    useEffect(() => {
+        if (subscriptionUsers.data && subscriptionUsers.data.userAdded) {
+            setUsers(subscriptionUsers.data.userAdded)
+        }
+    }, [subscriptionUsers.data]);
 
 
     if (error) Alert.alert(`Error! ${error.message}`);
@@ -57,24 +71,24 @@ const AllUsers = ({ navigation }) => {
             </View>
             <Content style={styles.mainContent} padder>
 
-        
+
 
                 {loading &&
-                 <ActivityIndicator color="blue" />
+                    <ActivityIndicator style={{ marginTop: 30 }} color="blue" />
                 }
 
-                 {!loading && !data?.users?.length &&
-                 <Text style={{color:"gray",textAlign:"center"}}>No data found!</Text>
+                {!loading && users?.length === 0 &&
+                    <Text style={styles.noDataText}>No data found!</Text>
                 }
 
 
-                {data?.users?.map( (user,index) => {
-                    return(
-                        <UserList navigation={navigation} user={user} key={index}  />
+                {users?.map((user, index) => {
+                    return (
+                        <UserList navigation={navigation} user={user} key={index} />
                     )
                 })}
 
-                
+
 
 
 
@@ -86,7 +100,7 @@ const AllUsers = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     mainContent: {
-        marginTop:-25,
+        marginTop: -25,
         textAlign: "center",
         // flex:1,
         // alignItems:"center"
@@ -116,8 +130,12 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.55,
         shadowRadius: 3.84,
-
         elevation: 7,
+    },
+    noDataText: {
+        marginTop: 10,
+        color: "gray",
+        textAlign: "center"
     }
 
 })
