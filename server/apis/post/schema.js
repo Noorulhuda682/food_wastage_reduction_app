@@ -4,8 +4,12 @@ const post = gql`
  extend type Query {
     posts(status:String): [Post]
     userPosts(userId:ID):[Post]
+    searchPost(text:String userId:String):[Post]
  }
 
+ extend type Subscription {
+   postAdded:[Post]
+ }
 
 
  extend type Mutation {
@@ -36,7 +40,7 @@ const post = gql`
       receiverId:String
    ):Post
 
-
+   deletePost(postId:String!):String
  }
 
   type Post {

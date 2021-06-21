@@ -5,7 +5,8 @@ const POST = Schema({
     userId:{ type: mongoose.Schema.ObjectId},
     title:{
        type:String,
-       require:true
+       require:true,
+    //    index: "text"   
     },
     description:String,
     quantity:Number,
@@ -18,7 +19,6 @@ const POST = Schema({
      default:"NEW"
     },
     receiverId:{type: mongoose.Schema.ObjectId},
-
 })
 
 const Post = mongoose.model("Post",POST);

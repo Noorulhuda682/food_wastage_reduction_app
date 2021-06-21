@@ -1,56 +1,60 @@
-const { gql } = require('apollo-server');
+const { gql } = require("apollo-server");
 const user = gql`
- type Query {
+  type Query {
     users: [User]
-    validate:String
- }
+    validating: String
+  }
 
- type Subscription {
-      userAdded:[User]
- }
+  type Subscription {
+    userAdded: [User]
+  }
 
- type Mutation {
+  type Mutation {
+    addUser(name: String, email: String!, password: String!): LoginRes
+    login(email: String, password: String): LoginRes
 
-  addUser(name:String,email:String!,password:String!):LoginRes
-  login(
-    email:String
-    password:String
-  ):LoginRes
-  
-  addToken(
-   userId:ID
-   token:String
-  ):String
+    addToken(userId: ID, token: String): String
 
-  deleteUser(userId:ID):String
-  updateUser(
-     userId:ID!
-     name:String
-     email:String
-     profileImage:String
-     pushToken:String
-     latitude:Float
-     longitude:Float
-   ):String
-   
- }
+    deleteUser(userId: ID): String
+    updateUser(
+      userId: ID!
+      name: String
+      email: String
+      profileImage: String
+      pushToken: String
+      latitude: Float
+      longitude: Float
+      verification: String
+      verificationCode: Int
+      country: String
+      city: String
+      address: String
+      contactNumber: Float
+      dateOfBirth: String
+    ): String
+  }
 
- type LoginRes {
-    token:String
-    user:User
- }
+  type LoginRes {
+    token: String
+    user: User
+  }
 
-
- type User {
-   name:String
-   email:String
-   _id:String
-   role:String
-   profileImage:String
-   pushToken:String
-   latitude:Float
-   longitude:Float
- }
-
-` 
-module.exports = user
+  type User {
+    _id: String
+    name: String
+    email: String
+    role: String
+    profileImage: String
+    pushToken: String
+    latitude: Float
+    longitude: Float
+    verification: String
+    verificationCode: Int
+    country: String
+    city: String
+    address: String
+    contactNumber: Float
+    dateOfBirth: String
+  }
+`;
+module.exports = user;

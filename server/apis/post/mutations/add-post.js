@@ -25,7 +25,7 @@ const addPost = async (
    }
    ) => {
 
-    await checkToken(req,SECRET);
+    // await checkToken(req,SECRET);
        
         var post = {
           userId,

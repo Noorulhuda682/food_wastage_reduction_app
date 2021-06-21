@@ -2,18 +2,23 @@ const Receiver = require("../../../models/Receiver");
 const {RECEIVER_ADDED } = require("../../subscription-keys");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
+const {sendEmail} = require("../../utils/sendEmail");
 
 const addReceiver = async (_, { name , email , password},{ pubsub,SECRET }) => {
     
         let checkUser = await Receiver.findOne({email})
         if(checkUser) throw new Error("receiver already exists with this email") 
+
+        var verificationCode = await sendEmail({name,email})
+
         // hash password 
         let passwordHashed = await  bcrypt.hash(password,12);
 
         var user = {
             name,
             email,
-            password:passwordHashed
+            password:passwordHashed,
+            verificationCode
         }
         const newUser = new Receiver(user);
         const added = await newUser.save()
@@ -25,15 +30,8 @@ const addReceiver = async (_, { name , email , password},{ pubsub,SECRET }) => {
         })
         
         const receivers = await Receiver.find()
-        .then( (allReceivers) => {
-          return allReceivers.map( obj => { return {name:obj.name,email:obj.email,password:obj.password}})
-        })
-        .catch( e => {
-          console.log({message : e.message}) 
-        })
-        
         pubsub.publish(RECEIVER_ADDED,{
-          receiverAdded : receivers
+          receiverAdded : receivers.reverse()
         })
 
         const token = await jwt.sign(

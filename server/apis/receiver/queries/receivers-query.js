@@ -4,7 +4,7 @@ const receivers = async  (_, __, { dataSources }) => {
 
     let recei = await  Receiver.find() 
       
-    return recei;
+    return recei.reverse();
 } 
 
 module.exports = receivers;
