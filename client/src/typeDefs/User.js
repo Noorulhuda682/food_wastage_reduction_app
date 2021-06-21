@@ -32,10 +32,37 @@ const USER_ADDED = gql`
   }
 `;
 
+const UPDATE_USER = gql`
+mutation updateUser(
+  $userId:ID! $name:String $email:String $profileImage:String $pushToken:String
+  $latitude:Float $longitude:Float $verification:String $verificationCode:Int $country:String 
+  $city:String $address:String $contactNumber:Float $dateOfBirth:String
+  ){
+  updateUser(
+    userId:$userId
+    name:$name
+    email:$email
+    profileImage:$profileImage
+    pushToken:$pushToken
+    latitude:$latitude
+    longitude:$longitude
+    verification:$verification
+    verificationCode:$verificationCode
+    country:$country
+    city:$city
+    address:$address
+    contactNumber:$contactNumber
+    dateOfBirth:$dateOfBirth
+  )
+}
+`
+
+
 
 
 
 export {
     USERS,
-    USER_ADDED
+    USER_ADDED,
+    UPDATE_USER
 }

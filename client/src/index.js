@@ -2,15 +2,23 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
-import { MainHome, SignUp, Login,ForgotPassword,ResetPassword } from "./components/index"
-import {useSelector} from "react-redux";
-import {light,dark} from "./assets/themingColors"
+import {
+    MainHome,
+    SignUp,
+    Login,
+    ForgotPassword,
+    ResetPassword,
+    VerifyAccount,
+    SetProfile
+} from "./components/index"
+import { useSelector } from "react-redux";
+import { light, dark } from "./assets/themingColors"
 
 const Stack = createStackNavigator()
 
 const StackNavigation = () => {
-    const {changeLightTheme} = useSelector(state => state)
-    console.log("chnageLightTheme",changeLightTheme);
+    const { changeLightTheme } = useSelector(state => state)
+    console.log("chnageLightTheme", changeLightTheme);
 
     return (
         <NavigationContainer theme={!changeLightTheme ? light : dark}>
@@ -25,6 +33,8 @@ const StackNavigation = () => {
                 <Stack.Screen name="SignUp" component={SignUp} />
                 <Stack.Screen name="forgotPassword" component={ForgotPassword} />
                 <Stack.Screen name="resetPassword" component={ResetPassword} />
+                <Stack.Screen name="verifyAccount" component={VerifyAccount} />
+                <Stack.Screen name="setProfile" component={SetProfile} />
             </Stack.Navigator>
         </NavigationContainer>
     )

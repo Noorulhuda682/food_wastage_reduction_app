@@ -15,16 +15,11 @@ import {
   Fab, Thumbnail, Item, Input
 } from "native-base"
 import Header from "../shared/Header"
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DropDownInput from "../shared/DropDown";
 import Divider from "../shared/Divider";
-import { UPDATE_USER } from "../typeDefs/User"
-import { useQuery, useMutation } from "@apollo/client";
-import { LOGIN } from '../typeDefs/Auth';
-import uploadImageToCloud from "../config/uploadImageToCloudinary";
-import setImageFileForCloudinary from "../config/setImageForCloudinary";
 
 const options = {
   storageOptions: {
@@ -33,24 +28,25 @@ const options = {
   },
 };
 
-const Profile = ({ navigation }) => {
+const SetProfile = ({ navigation }) => {
   const { user } = useSelector(state => state);
-  const [loading, setLoading] = useState(false);
+
   const [name, setName] = useState(user?.name)
+  const [email, setEmail] = useState(user?.email)
   const [gender, setGender] = useState("")
   const [dateOfBirth, setDateOfBirth] = useState()
   const [address, setAddress] = useState()
   const [country, setCountry] = useState()
   const [city, setCity] = useState()
   const [contact, setContact] = useState(null)
+
+
   const [profile, setProfile] = useState(user?.profileImage)
 
-  // const [_login, { data, error }] = useMutation(LOGIN);
-  const [updateUser, { data }] = useMutation(UPDATE_USER)
-
-  // console.log("USER**", user);
+  console.log("USER", user);
   const launchCameraHandler = () => {
     launchCamera(options, (response) => {
+      console.log('Response = ', response);
       checkPhotoValidation(response)
     });
   }
@@ -68,56 +64,27 @@ const Profile = ({ navigation }) => {
     }
   }
 
-  const updateUserHandler = async () => {
-    setLoading(true)
-    var updateObj = {
-      userId: user._id,
-      name,
-      // gender,
-      dateOfBirth,
-      address,
-      country,
-      city,
-      contactNumber:JSON.parse(contact),
-    }
-
-    // IMAGE UPLOADING TO CLOUDINARY 
-    if (profile !== user?.profileImage) {
-      Alert.alert(`running`)
-      let imageFile = setImageFileForCloudinary(profile)
-      let data = await uploadImageToCloud(imageFile)
-      var { uploading, message, url } = data
-      console.log("URL=======", url);
-      if (uploading) {
-        updateObj.profileImage = url
-      } else {
-        Alert.alert(`${message}`)
-        setLoading(false)
-        return false
+  const updateUserHandler = () => {
+      let updateObj = {
+         name,
+         email,
+         gender,
+         dateOfBirth,
+         address,
+         country,
+         city,
+         contact
       }
-    }
-
-
-    // mutation
-    updateUser({
-      variables: updateObj
-    }).then(res => {
-      Alert.alert(`Success : ${res.data.updateUser}`);
-      console.log("Success",res);
-      setLoading(false)
-    }).catch(error => {
-      setLoading(false)
-      console.log("GEtting Err:",error);
-      Alert.alert(`Error! : ${error}`);
-    })
-    // console.log("OBJ=======", updateObj);
+      console.log("OBJ=======",updateObj);
   }
 
-console.log("profile====",user);
+
+  const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 
   return (
     <Container style={{ paddingBottom: 50 }}>
-      <Header navigation={navigation} title={"Profile"} />
+      {/* <Header navigation={navigation} title={"Set Profile Info"} /> */}
+      <Text style={{color:"gray",fontSize:18,fontWeight:"bold",textAlign:"center",paddingTop:20}}>Set Profile Inormation</Text>
       <Content>
         <View style={{
           alignItems: "center", borderBottomWidth: 1,
@@ -135,7 +102,7 @@ console.log("profile====",user);
               </Text>
             </TouchableOpacity>
 
-            {profile ?
+            {profile  ?
               <Image
                 size={50}
                 style={styles.profileImage}
@@ -146,22 +113,11 @@ console.log("profile====",user);
                 {name && name[0]}
               </Text>
             }
-
-            <Text style={{ fontWeight: 'bold', marginTop: 10, color: "black" }}>{user.name}</Text>
-
-            <Text style={{
-              color: "#4d61ff", borderRadius: 3, justifyContent: "center", alignItems: "center",
-              padding: 10, paddingHorizontal: 15, marginTop: 20, backgroundColor: '#e6e9ff', marginBottom: -10
-            }}>
-              <FontAwesome5 name="critical-role" size={20} color="blue" />
-              {"    "}ROLE :  {user.role}</Text>
-
           </View>
         </View>
 
         <Content style={{ paddingHorizontal: "5%" }} padder>
-          <Text style={{ color: "lightgray", fontWeight: "bold", textAlign: "center", }} >Edit Profile</Text>
-
+      
           <Text style={styles.grayText} >Username</Text>
           <Item
             style={styles.item}
@@ -170,12 +126,8 @@ console.log("profile====",user);
               value={name}
               style={styles.input}
               onChangeText={(emails) => setName(emails)}
-              placeholder="example Aijaz Khan"
-              placeholderTextColor="lightgray"
-              
             />
           </Item>
-
 
           <DropDownInput
             pickerItems={["Select gender", "male", "female"]}
@@ -204,8 +156,6 @@ console.log("profile====",user);
             <Input
               value={dateOfBirth}
               style={styles.input}
-              placeholder="3rd july 1996"
-              placeholderTextColor="lightgray"
               onChangeText={(emails) => setDateOfBirth(emails)}
             />
           </Item>
@@ -225,8 +175,6 @@ console.log("profile====",user);
               value={contact}
               style={styles.input}
               keyboardType="numeric"
-              placeholder="example 03341828064"
-              placeholderTextColor="lightgray"
               onChangeText={(emails) => setContact(emails)}
             />
           </Item>
@@ -236,13 +184,10 @@ console.log("profile====",user);
             <Text style={styles.btnText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={updateUserHandler}
+          onPress={updateUserHandler}
             style={[styles.button, styles.activeBtn]}
           >
-            <Text style={[styles.btnText, styles.activeBtnText]}>
-             {!loading ? "Save Changes" : "Saving..." } 
-            </Text>
-
+            <Text style={[styles.btnText, styles.activeBtnText]}>Save</Text>
           </TouchableOpacity>
         </View>
       </Content>
@@ -287,7 +232,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: "#00203FFF",
-    // fontWeight: 'bold',
+    fontWeight: 'bold',
   },
   activeBtn: {
     backgroundColor: "#00203FFF",
@@ -308,7 +253,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 15,
-    // fontWeight: "bold",
+    fontWeight: "bold",
     marginBottom: -5
   },
   profileCircle: {
@@ -320,5 +265,5 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Profile;
+export default SetProfile;
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import {
     View, ActivityIndicator,
     Text, Dimensions,
@@ -22,6 +22,7 @@ import { MYPOSTS } from "../typeDefs/Post";
 import PostCard from "../shared/PostCard"
 
 const MyPosts = ({ navigation }) => {
+    const [searchValue, setSearchValue] = useState("")
     const storeData = useSelector(state => state);
     console.log("MyPosts===>", storeData?.user._id);
 
@@ -44,21 +45,14 @@ const MyPosts = ({ navigation }) => {
 
     return (
         <Container>
-            <Header style={{ backgroundColor: "#00203FFF" }}>
-                <Left>
-                    <Button transparent onPress={() => navigation.openDrawer()}>
-                        <Icon name='menu' />
-                    </Button>
-                </Left>
-                <Body>
-                    <Title>MyPosts</Title>
-                </Body>
-                <Right>
-                    <Button transparent>
-                        <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
-                    </Button>
-                </Right>
-            </Header>
+             <Header navigation={navigation} title="My Posts" />
+             <View style={{ padding: 12 }}>
+                <SearchBar
+                    type="receivers"
+                    value={searchValue}
+                    onChange={setSearchValue}
+                />
+            </View>
             <Content style={styles.mainContent} padder>
 
                 <Item style={{ marginBottom: 10,marginTop:-10 }}>
@@ -74,7 +68,7 @@ const MyPosts = ({ navigation }) => {
                  {data?.userPosts.map( (foodPost,key) =>  <PostCard foodPost={foodPost} key={key} /> )}
 
                  {!loading && !data.userPosts.length &&
-                 <Text style={{color:"gray",textAlign:"ce"}}>No data found!</Text>
+                 <Text style={{color:"gray",textAlign:"center"}}>No data found!</Text>
                 }
 
            

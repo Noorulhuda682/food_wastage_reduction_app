@@ -49,6 +49,13 @@ const LOGIN = gql`
       pushToken
       latitude
       longitude
+      verification
+      verificationCode
+      country
+      city
+      address
+      contactNumber
+      dateOfBirth
     }
   }
 }

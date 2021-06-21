@@ -71,8 +71,6 @@ const AllUsers = ({ navigation }) => {
             </View>
             <Content style={styles.mainContent} padder>
 
-
-
                 {loading &&
                     <ActivityIndicator style={{ marginTop: 30 }} color="blue" />
                 }
