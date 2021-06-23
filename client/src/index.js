@@ -18,7 +18,7 @@ const Stack = createStackNavigator()
 
 const StackNavigation = () => {
     const { changeLightTheme } = useSelector(state => state)
-    console.log("chnageLightTheme", changeLightTheme);
+    // console.log("chnageLightTheme", changeLightTheme);
 
     return (
         <NavigationContainer theme={!changeLightTheme ? light : dark}>

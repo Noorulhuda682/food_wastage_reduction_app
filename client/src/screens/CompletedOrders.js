@@ -45,7 +45,7 @@ const CompletedOrders = ({ navigation }) => {
     // }, [navigation]);
 
 
-    // console.log("navigation**********************22", data, storeData?.user._id );
+    console.log("navigation**********************22", data );
 
     return (
         <Container>

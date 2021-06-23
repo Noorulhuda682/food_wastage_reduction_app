@@ -10,9 +10,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector, useDispatch } from "react-redux";
 import {
-  Container, Left, Body, Right, Button, Icon, Title, Content,
-  Card, CardItem, H2, Footer, Badge,
-  Fab, Thumbnail, Item, Input
+  Container, Content,Fab, Thumbnail, Item, Input
 } from "native-base"
 import Header from "../shared/Header"
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
@@ -23,8 +21,10 @@ import Divider from "../shared/Divider";
 import { UPDATE_USER } from "../typeDefs/User"
 import { useQuery, useMutation } from "@apollo/client";
 import { LOGIN } from '../typeDefs/Auth';
+import {GET_USER} from "../typeDefs/User"
 import uploadImageToCloud from "../config/uploadImageToCloudinary";
 import setImageFileForCloudinary from "../config/setImageForCloudinary";
+import {addUser} from  "../redux/actions/user"
 
 const options = {
   storageOptions: {
@@ -35,7 +35,7 @@ const options = {
 
 const Profile = ({ navigation }) => {
   const { user } = useSelector(state => state);
-  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [name, setName] = useState(user?.name)
   const [gender, setGender] = useState("")
   const [dateOfBirth, setDateOfBirth] = useState()
@@ -45,14 +45,14 @@ const Profile = ({ navigation }) => {
   const [contact, setContact] = useState(null)
   const [profile, setProfile] = useState(user?.profileImage)
 
-  // const [_login, { data, error }] = useMutation(LOGIN);
+  const dispatch = useDispatch();
   const [updateUser, { data }] = useMutation(UPDATE_USER)
-
+  const {refetch } = useQuery(GET_USER,{ variables:{ userId:user?._id }});
   // console.log("USER**", user);
   const launchCameraHandler = () => {
-    launchCamera(options, (response) => {
+    launchImageLibrary(options, (response) => {
       checkPhotoValidation(response)
-    });
+  });
   }
 
   const checkPhotoValidation = async (response) => {
@@ -69,12 +69,12 @@ const Profile = ({ navigation }) => {
   }
 
   const updateUserHandler = async () => {
-    setLoading(true)
+    setLoader(true)
     var updateObj = {
       userId: user._id,
       name,
       // gender,
-      dateOfBirth,
+       dateOfBirth,
       address,
       country,
       city,
@@ -92,21 +92,28 @@ const Profile = ({ navigation }) => {
         updateObj.profileImage = url
       } else {
         Alert.alert(`${message}`)
-        setLoading(false)
+        setLoader(false)
         return false
       }
     }
-
-
     // mutation
     updateUser({
       variables: updateObj
     }).then(res => {
       Alert.alert(`Success : ${res.data.updateUser}`);
+      refetch()
+      .then( userRes => {
+        Alert.alert(`UserRes-Success : sucessfull`);
+        console.log("UserRes-Success",userRes.data.getUser);
+        dispatch(addUser(userRes.data.getUser));
+      }).catch( error =>{
+        Alert.alert(`Error! : ${error}`);
+      })
+
       console.log("Success",res);
-      setLoading(false)
+      setLoader(false)
     }).catch(error => {
-      setLoading(false)
+      setLoader(false)
       console.log("GEtting Err:",error);
       Alert.alert(`Error! : ${error}`);
     })
@@ -116,9 +123,9 @@ const Profile = ({ navigation }) => {
 console.log("profile====",user);
 
   return (
-    <Container style={{ paddingBottom: 50 }}>
+    <Container >
       <Header navigation={navigation} title={"Profile"} />
-      <Content>
+      <Content >
         <View style={{
           alignItems: "center", borderBottomWidth: 1,
           borderBottomColor: "#e6e6ff", paddingBottom: 20,
@@ -237,10 +244,10 @@ console.log("profile====",user);
           </TouchableOpacity>
           <TouchableOpacity
             onPress={updateUserHandler}
-            style={[styles.button, styles.activeBtn]}
+            style={[styles.button, styles.activeBtn,{marginLeft:10}]}
           >
             <Text style={[styles.btnText, styles.activeBtnText]}>
-             {!loading ? "Save Changes" : "Saving..." } 
+             {!loader ? "Save Changes" : "Saving..." } 
             </Text>
 
           </TouchableOpacity>
@@ -273,16 +280,18 @@ const styles = StyleSheet.create({
   btnsView: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    paddingHorizontal: "10%",
+    justifyContent: "space-between",
+    padding:30,
+    paddingBottom:150,
     marginTop: 25
   },
   button: {
     borderColor: "#00203FFF",
+    flexBasis:"35%",
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: "white",
-    paddingHorizontal: 50,
+    paddingHorizontal: 40,
     paddingVertical: 10,
   },
   btnText: {

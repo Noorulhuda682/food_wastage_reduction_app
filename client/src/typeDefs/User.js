@@ -56,7 +56,27 @@ mutation updateUser(
   )
 }
 `
-
+const GET_USER = gql`
+query getUser($userId:String!){
+  getUser(userId:$userId){
+    _id
+    name
+    email
+    role
+    profileImage
+    pushToken
+    latitude
+    longitude
+    verification
+    verificationCode
+    country
+    city
+    address
+    contactNumber
+    dateOfBirth
+  }
+}
+`
 
 
 
@@ -64,5 +84,6 @@ mutation updateUser(
 export {
     USERS,
     USER_ADDED,
-    UPDATE_USER
+    UPDATE_USER,
+    GET_USER
 }

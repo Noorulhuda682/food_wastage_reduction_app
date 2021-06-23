@@ -3,6 +3,7 @@ const user = gql`
   type Query {
     users: [User]
     validating: String
+    getUser(userId:String!):User
   }
 
   type Subscription {
@@ -32,6 +33,8 @@ const user = gql`
       contactNumber: Float
       dateOfBirth: String
     ): String
+
+    verifyEmail(email:String!):String
   }
 
   type LoginRes {

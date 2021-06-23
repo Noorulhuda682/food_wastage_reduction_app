@@ -5,6 +5,7 @@ const post = gql`
     posts(status:String): [Post]
     userPosts(userId:ID):[Post]
     searchPost(text:String userId:String):[Post]
+    getPost(postId:String!):Post
  }
 
  extend type Subscription {

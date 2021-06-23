@@ -2,6 +2,7 @@ const { gql } = require("apollo-server");
 const receiver = gql`
   extend type Query {
     receivers: [Receiver]
+    getReceiver(receiverId:String!):Receiver
   }
 
   extend type Subscription {

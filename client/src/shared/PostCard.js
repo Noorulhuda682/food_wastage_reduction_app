@@ -115,7 +115,7 @@ const PostCard = ({ navigation, foodPost, key }) => {
                             </Text>
                         </TouchableOpacity>
                     }
-                    {storeData?.user?.role === "RECEIVER" &&
+                    {storeData?.user?.role === "RECEIVER" && (
                         foodPost.status === "NEW" ?
                         <TouchableOpacity style={[styles.updateBtn, { backgroundColor: "#00203FFF", }]}>
                             <MaterialIcons name="delivery-dining" size={20} color="white" />
@@ -137,6 +137,7 @@ const PostCard = ({ navigation, foodPost, key }) => {
                                     {` `}Delivered
                                 </Text>
                             </TouchableOpacity>
+                    )
                     }
                 </View>}
 

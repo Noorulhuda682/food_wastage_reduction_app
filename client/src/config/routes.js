@@ -7,17 +7,31 @@ const userRoutes = [
         iconSize: 24,
     },
     {
-        routeName: "myPosts",
-        label: "My Posts",
-        iconCompnay: "MaterialCommunityIcons",
-        iconName: "post-outline",
-        iconSize: 24,
-    },
-    {
         routeName: "addPost",
         label: "Add Post",
         iconCompnay: "MaterialIcons",
         iconName: "post-add",
+        iconSize: 24,
+    },
+    {
+        routeName: "newOrders",
+        label: "My New Orders",
+        iconCompnay: "MaterialCommunityIcons",
+        iconName: "new-box",
+        iconSize: 24,
+    },
+    {
+        routeName: "progressOrders",
+        label: "My Progress Orders",
+        iconCompnay: "MaterialCommunityIcons",
+        iconName: "progress-check",
+        iconSize: 24,
+    },
+    {
+        routeName: "completedOrders",
+        label: "My Completed Orderss",
+        iconCompnay: "Feather",
+        iconName: "check-square",
         iconSize: 24,
     },
     {

@@ -120,7 +120,7 @@ const Login = ({ navigation }) => {
             <ScrollView>
                 <Container style={styles.container}>
                     <View style={styles.logoView}>
-                        <Image style={{ width: 170, height: 170,borderWidth:5,
+                        <Image style={{ width: 150, height: 150,borderWidth:5,
                             borderRadius:100,
                             borderColor:'#d1d8ff',
                             shadowColor: "#000",
@@ -157,6 +157,7 @@ const Login = ({ navigation }) => {
                         placeholder={"Password..."}
                         showPassword={showPassword}
                         setShowPassword={setShowPassword}
+                        customStyle={{marginTop:12}}
                     />
 
 
@@ -167,7 +168,7 @@ const Login = ({ navigation }) => {
 
                     <TouchableOpacity
                         onPress={login}
-                        style={{ marginTop: 50 }}>
+                        style={{ marginTop: 20 }}>
                         <View style={styles.loginButton} >
                             {loading ? <ActivityIndicator color='white' size="small" />
                                 :
@@ -198,11 +199,12 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     scrollView: {
-
+      paddingBottom:400,
     },
     container: {
         marginTop: 100,
         paddingHorizontal: 40,
+        
     },
     logoView: {
         display: "flex",
@@ -264,7 +266,7 @@ const styles = StyleSheet.create({
     },
     greyLine: {
         textAlign: "center",
-        marginTop: 50,
+        marginTop: 30,
         color: "lightgray"
     }
 

@@ -41,7 +41,7 @@ const DrawerContent = (props) => {
     const { title, background, card, text, border, notification, icon } = colors;
 
     const data = useSelector(state => state);
-    console.log("DrawerContentData===>saad", data);
+    // console.log("DrawerContentData===>saad", data);
     const dispatch = useDispatch();
 
     switch (data?.user?.role) {
