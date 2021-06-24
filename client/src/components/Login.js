@@ -45,23 +45,8 @@ const Login = ({ navigation }) => {
 
 
     const [_login, { data, error }] = useMutation(LOGIN);
-    // console.log("login===", data, error);
 
-    // if (data?.login?.user && change) {
-    //     saveData(data?.login?.token);
-    //     ToastAndroid.showWithGravity(
-    //         "Login Successfull",
-    //         ToastAndroid.SHORT,
-    //         ToastAndroid.CENTER
-    //     );
-    //     dispatch(addUser(data?.login?.user));
-    //     navigation.navigate("Home")
-    //     setChange(false)
-    // }
-
-
-
-
+    
     const login = async () => {
 
         if (email === "") {

@@ -22,6 +22,7 @@ const receiver = gql`
       longitude: Float
       verification: String
       verificationCode: Int
+      gender:String
       country: String
       city: String
       address: String
@@ -41,6 +42,7 @@ const receiver = gql`
     longitude: Float
     verification: String
     verificationCode: Int
+    gender:String
     country: String
     city: String
     address: String

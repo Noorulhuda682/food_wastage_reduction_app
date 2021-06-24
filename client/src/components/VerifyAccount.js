@@ -27,87 +27,55 @@ import {
     passwordRegex
 } from "../config/Regex"
 import InputText from "../shared/TextInput"
+import {CHECK_CODE} from "../typeDefs/Auth"
 
-const LOGIN = gql`
- mutation login($email:String! $password:String!){
-  login(email:$email password:$password){
-    token
-    user {
-      _id
-      name
-      email
-      role
-    }
-  }
-}
-
-`;
 
 const VerifyAccount = ({ navigation }) => {
 
-    const [email, setEmail] = useState("");
-    const [checkEmail, setCheckEmail] = useState(false)
-    const [password, setPassword] = useState("");
-    const [checkPassword, setCheckPassword] = useState(false)
-    const [showPassword, setShowPassword] = useState(true);
+    const [code, setCode] = useState("");
+    const [checkCode, setCheckCode] = useState(false)
     const [loading, setLoading] = useState(false);
-    const [change, setChange] = useState(true);
     const dispatch = useDispatch();
+    const [_code, { data, error }] = useMutation(CHECK_CODE);
 
     // let userobj ={user:{ role: "USER",name:"noor",email:"noorulhuda@gmail.com" }}
 
 
-    const [_login, { data, error }] = useMutation(LOGIN);
+    const _verifyCode = async () => {
 
-
-
-
-    const login = async () => {
-
-        // if (email === "") {
-        //     ToastAndroid.showWithGravity(
-        //         `Enter ${password === "" ? "email and password" : "email"}`,
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.CENTER
-        //     );
-        //     return false
-        // }
-
-        // if (password === "") ToastAndroid.showWithGravity(
-        //     "Enter password",
-        //     ToastAndroid.SHORT,
-        //     ToastAndroid.CENTER
-        // );
-        // setLoading(true)
-        // if (checkEmail && checkPassword) {
-        // Alert.alert("Run Login api")
-
-
-        _login({
-            variables: {
-                email: "sad@gmail.com",
-                password: "Saad1234"
-            }
-        }).then(data => {
-            console.log("LOGIN=======", data);
-            saveData(data?.login?.token);
-            ToastAndroid.showWithGravity(
-                "Login Successfull",
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER
-            );
-            dispatch(addUser(data?.login?.user));
-            navigation.navigate("Home")
-            setChange(false)
-        }).catch(err => {
-            Alert.alert(`Error : ${err}`);
-        })
-
-        // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
-        // navigation.navigate("Home")
-        // setLoading(false)
-
-        // }
+        if(checkCode){
+            setLoading(true)
+            console.log("che=======", code);
+            _code({
+                variables: {
+                   code:JSON.parse(code),
+                }
+            }).then(data => {
+                // console.log("Sucess=======", data);
+                Alert.alert(`Verification is succussfull`);
+                navigation.navigate("Login")
+                setLoading(false)
+            }).catch(err => {
+                Alert.alert(`Error : ${err}`);
+                console.log("Sucess=======", err);
+                setLoading(false)
+            })
+            // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
+            // navigation.navigate("Home")
+            // setLoading(false)
+    
+            // }
+        }else{
+            if(code === "") ToastAndroid.showWithGravity(
+               "Empty verification code",
+                ToastAndroid.SHORT,ToastAndroid.CENTER
+            )
+            else ToastAndroid.showWithGravity(
+                "Invalid verification code",
+                 ToastAndroid.SHORT,ToastAndroid.CENTER
+             );
+        }
+      
 
     }
 
@@ -134,34 +102,22 @@ const VerifyAccount = ({ navigation }) => {
                         paddingVertical:10,
                         color:"#4d61ff",
                         marginTop:50
-                        // borderColor:"#808eff",
-                        // borderWidth:1
                     }}
                     >
-                    We sent you the verification code on your gmail. enter the code below then type new password.     
-                    </Text>
+                    We sent you 6 digits  verification code on your email.
+                    Enter that to verify in order to get access to fwr app.
+                      </Text> 
                 
 
                     <InputText
-                        email={email}
-                        setEmail={setEmail}
-                        checkEmail={checkEmail}
-                        setCheckEmail={setCheckEmail}
-                        type={"email"}
+                        email={code}
+                        setEmail={setCode}
+                        checkEmail={checkCode}
+                        setCheckEmail={setCheckCode}
+                        type={"code"}
                         placeholder={"Verification Code"}
                         customStyle={{ marginTop: 50 }}
                     />
-
-                    <InputText
-                        email={email}
-                        setEmail={setEmail}
-                        checkEmail={checkEmail}
-                        setCheckEmail={setCheckEmail}
-                        type={"email"}
-                        placeholder={"Retype email"}
-                        setShowPassword={setShowPassword}
-                    />
-
 
 
                     <TouchableOpacity onPress={() => navigation.navigate("Login")}>
@@ -169,12 +125,12 @@ const VerifyAccount = ({ navigation }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={login}
+                        onPress={_verifyCode}
                         style={{ marginTop: 50 }}>
                         <View style={styles.loginButton} >
                             {loading ? <ActivityIndicator color='white' size="small" />
                                 :
-                                <Text style={{ color: "white", textAlign: "center" }} >Reset</Text>
+                                <Text style={{ color: "white", textAlign: "center" }} >Verify</Text>
                             }
                         </View>
                     </TouchableOpacity>
@@ -204,8 +160,8 @@ const styles = StyleSheet.create({
 
     },
     container: {
-        marginTop: 160,
-        paddingHorizontal: 40,
+        marginTop: 90,
+        paddingHorizontal: 30,
     },
     logoView: {
         display: "flex",

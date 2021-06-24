@@ -5,7 +5,7 @@ const { USER_ADDED } = require("../../subscription-keys");
 const updateUser = async (
   _,
   { userId, name, email, profileImage, pushToken, latitude, longitude,
-    verification,verificationCode,country,city,address,contactNumber,dateOfBirth
+    verification,verificationCode,gender,country,city,address,contactNumber,dateOfBirth
  },
   { pubsub, SECRET }
 ) => {
@@ -20,6 +20,7 @@ const updateUser = async (
 
   if (verification) updateUser.verification = verification;
   if (verificationCode) updateUser.verificationCode = verificationCode;
+  if (gender) updateUser.gender = gender;
   if (country) updateUser.country = country;
   if (city) updateUser.city = city;
   if (address) updateUser.address = address;

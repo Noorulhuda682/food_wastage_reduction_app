@@ -1,6 +1,4 @@
-import React, {
-  useState, useContext
-} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -11,193 +9,210 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  ToastAndroid, Alert
-} from 'react-native'
-import { Container, Header, Content, Item, Input, Icon, Spinner, Button, } from 'native-base';
-import { Picker } from '@react-native-picker/picker';
-import DropDownInput from "../shared/DropDown"
-import InputText from "../shared/TextInput"
-import { useMutation } from "@apollo/client";
-import { ADDUSER, ADDRECEIVER } from "../typeDefs/Auth"
-import { ChangeTokenHandlerContext } from "../../App"
-import { saveData } from "../config/setToken";
-import {useDispatch} from "react-redux"
-import { addUser } from "../redux/actions/user"
-  
+  ToastAndroid,
+  Alert,
+} from 'react-native';
+import {
+  Container,
+  Header,
+  Content,
+  Item,
+  Input,
+  Icon,
+  Spinner,
+  Button,
+} from 'native-base';
+import {Picker} from '@react-native-picker/picker';
+import DropDownInput from '../shared/DropDown';
+import InputText from '../shared/TextInput';
+import {useMutation} from '@apollo/client';
+import {ADDUSER, ADDRECEIVER} from '../typeDefs/Auth';
+import {ChangeTokenHandlerContext} from '../../App';
+import {saveData} from '../config/setToken';
+import {useDispatch} from 'react-redux';
+import {addUser} from '../redux/actions/user';
 
-const SignUp = ({ navigation }) => {
+const SignUp = ({navigation}) => {
   const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
   const dispatch = useDispatch();
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [checkName, setCheckName] = useState(false);
-  const [email, setEmail] = useState("");
-  const [checkEmail, setCheckEmail] = useState(false)
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [checkEmail, setCheckEmail] = useState(false);
+  const [password, setPassword] = useState('');
   const [checkPassword, setCheckPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
-  const [loading, setLoading] = useState(false)
-  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState('');
 
-  const [addingUser, { }] = useMutation(ADDUSER);
-  const [addingReceiver, { }] = useMutation(ADDRECEIVER);
+  const [addingUser, {}] = useMutation(ADDUSER);
+  const [addingReceiver, {}] = useMutation(ADDRECEIVER);
 
   const signUp = () => {
+    if (name === '' || name === undefined || name === ' ' || name === null) {
+      ToastAndroid.showWithGravity(
+        'Enter username',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return false;
+    }
+    if (
+      email === '' ||
+      email === undefined ||
+      email === ' ' ||
+      email === null
+    ) {
+      ToastAndroid.showWithGravity(
+        'Enter email',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return false;
+    }
+    if (
+      password === '' ||
+      password === undefined ||
+      password === ' ' ||
+      password === null
+    ) {
+      ToastAndroid.showWithGravity(
+        'Enter password',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return false;
+    }
+    if (role === '' || role === undefined || role === ' ' || role === null) {
+      ToastAndroid.showWithGravity(
+        'Select Account Type',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return false;
+    }
 
-    if (name === "" || name === undefined || name === " " || name === null) {
-      ToastAndroid.showWithGravity("Enter username", ToastAndroid.SHORT, ToastAndroid.CENTER);
-      return false
-    }
-    if (email === "" || email === undefined || email === " " || email === null) {
-      ToastAndroid.showWithGravity("Enter email", ToastAndroid.SHORT, ToastAndroid.CENTER);
-      return false
-    }
-    if (password === "" || password === undefined || password === " " || password === null) {
-      ToastAndroid.showWithGravity("Enter password", ToastAndroid.SHORT, ToastAndroid.CENTER);
-      return false
-    }
-    if (role === "" || role === undefined || role === " " || role === null) {
-      ToastAndroid.showWithGravity("Select Account Type", ToastAndroid.SHORT, ToastAndroid.CENTER);
-      return false
-    }
-
-
-    setLoading(true)
+    setLoading(true);
     if (checkEmail && checkPassword && checkName && role) {
-      let register = role === "USER" ? addingUser : addingReceiver;
+      let register = role === 'USER' ? addingUser : addingReceiver;
       register({
         variables: {
           name,
           email,
-          password
-        }
+          password,
+        },
       })
-        .then(({ data }) => {
-          var {token,user} = role === "USER" ?  data.addUser : data.addReceiver; 
-          console.log("REGISTER=======",data,"***************",);
-          saveData(token);
-          ChangeTokenHandler(token);
-          Alert.alert("Registration Successfull");
-          dispatch(addUser(user));
-          navigation.navigate("Home")
+        .then(({data}) => {
+          // var {token, user} = role === 'USER' ? data.addUser : data.addReceiver;
+          console.log('REGISTER=======', data, '***************');
+          // saveData(token);
+          // ChangeTokenHandler(token);
+          Alert.alert('Registration Successfull');
+          // dispatch(addUser(user));
+          navigation.navigate('verifyAccount');
           setLoading(false);
-
-        }).catch(err => {
-          Alert.alert("Error", JSON.stringify(err.message));
-          setLoading(false)
         })
+        .catch(err => {
+          Alert.alert('Error', JSON.stringify(err.message));
+          setLoading(false);
+        });
     }
-
-  }
-
+  };
 
   return (
-    <KeyboardAvoidingView style={styles.keyboradAvoid}>
-      <ScrollView>
-        <Container style={styles.container}>
-          <View style={styles.headingView}>
-            <Text style={styles.headingTitle}>
-              Create Account{' '}/
-            </Text>
-            <Text style={styles.headingText}>
-              SignUp to get starget with FWR !
-            </Text>
-            {/* <Text style={[styles.headingText,]}>ON FWR</Text> */}
-          </View>
-
-          <InputText
-            email={name}
-            setEmail={setName}
-            checkEmail={checkName}
-            setCheckEmail={setCheckName}
-            type={"name"}
-            placeholder={"Name..."}
-            customStyle={{ marginTop: 60 }}
-          />
-          <InputText
-            email={email}
-            setEmail={setEmail}
-            checkEmail={checkEmail}
-            setCheckEmail={setCheckEmail}
-            type={"email"}
-            placeholder={"Email..."}
-          />
-
-          <InputText
-            email={password}
-            setEmail={setPassword}
-            checkEmail={checkPassword}
-            setCheckEmail={setCheckPassword}
-            type={"password"}
-            placeholder={"Password..."}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
-          />
-
-          {password !== "" && !checkPassword &&
-            <Text style={{ color: "red", fontSize: 13 }}>
-              Password should container
-              at least one digit,
-              one lower case,
-              one upper case,
-              8  mentioned characters!
-                        </Text>
-          }
-
-
-          <DropDownInput
-            pickerItems={["Account Type", "USER", "RECEIVER",]}
-            onChange={setRole}
-          />
-
-
-
-
-          <TouchableOpacity
-            onPress={signUp}
-            style={{ marginTop: 50 }}>
-            <View style={styles.loginButton} >
-              {loading ? <ActivityIndicator color='white' size="small" />
-                :
-                <Text style={{ color: "white", textAlign: "center" }} >Sign Up</Text>
-              }
+        <Container>
+          <Content style={styles.content}>
+            <View style={styles.headingView}>
+              <Text style={styles.headingTitle}>Create Account /</Text>
+              <Text style={styles.headingText}>
+                SignUp to get starget with FWR !
+              </Text>
+              {/* <Text style={[styles.headingText,]}>ON FWR</Text> */}
             </View>
-          </TouchableOpacity>
+         
+            <InputText
+              email={name}
+              setEmail={setName}
+              checkEmail={checkName}
+              setCheckEmail={setCheckName}
+              type={'name'}
+              placeholder={'Name...'}
+              customStyle={{marginTop: 50,marginRight:1}}
+            />
+            <InputText
+              email={email}
+              setEmail={setEmail}
+              checkEmail={checkEmail}
+              setCheckEmail={setCheckEmail}
+              type={'email'}
+              placeholder={'Email...'}
+              customStyle={{marginTop: 12,marginRight:1}}
+            />
 
-          <Text style={styles.greyLine}>
-            ------------------------------------------------------------------
-          </Text>
+            <InputText
+              email={password}
+              setEmail={setPassword}
+              checkEmail={checkPassword}
+              setCheckEmail={setCheckPassword}
+              type={'password'}
+              placeholder={'Password...'}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
+              customStyle={{marginTop: 12,marginRight:1}}
+            />
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")} >
-            <Text style={styles.signUp}>
-              Already have an account? <Text style={styles.signUpBlue}>Log In</Text>
+            {password !== '' && !checkPassword && (
+              <Text style={{color: 'red', fontSize: 13}}>
+                Password should container at least one digit, one lower case,
+                one upper case, 8 mentioned characters!
+              </Text>
+            )}
+
+            <DropDownInput
+              pickerItems={['Account Type', 'USER', 'RECEIVER']}
+              onChange={setRole}
+            />
+
+            <TouchableOpacity onPress={signUp} style={{marginTop: 50}}>
+              <View style={styles.loginButton}>
+                {loading ? (
+                  <ActivityIndicator color="white" size="small" />
+                ) : (
+                  <Text style={{color: 'white', textAlign: 'center'}}>
+                    Sign Up
+                  </Text>
+                )}
+              </View>
+            </TouchableOpacity>
+
+            <Text style={styles.greyLine}>
+              ------------------------------------------------------------------
             </Text>
-          </TouchableOpacity>
 
+            <TouchableOpacity
+              style={{marginBottom: 100}}
+              onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.signUp}>
+                Already have an account?{' '}
+                <Text style={styles.signUpBlue}>Log In</Text>
+              </Text>
+            </TouchableOpacity>
+          </Content>
         </Container>
-
-      </ScrollView>
-    </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  keyboradAvoid: {
-    flex: 1,
-    backgroundColor: "white"
-  },
-  scrollView: {
-
-  },
-  container: {
-    marginTop: 80,
-    paddingHorizontal: 40,
+  content: {
+    paddingTop:30,
+    paddingHorizontal: 30,
   },
   headingView: {
-    backgroundColor: "#e6e8ff",
+    backgroundColor: '#e6e8ff',
     borderWidth: 1,
-    borderColor: "#1e319d",
-    textAlign: "center",
+    borderColor: '#1e319d',
+    textAlign: 'center',
     padding: 30,
     borderRadius: 100,
     borderLeftWidth: 15,
@@ -206,10 +221,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   headingTitle: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
     textShadowColor: 'black',
-    textShadowOffset: { width: -2, height: 2 },
+    textShadowOffset: {width: -1, height: 2},
     textShadowRadius: 1,
   },
   headingText: {
@@ -217,16 +232,15 @@ const styles = StyleSheet.create({
     fontSize: 17,
     paddingLeft: 5,
     textShadowColor: 'black',
-    textShadowOffset: { width: -1, height: 1 },
+    textShadowOffset: {width: -1, height: 1},
     textShadowRadius: 1,
     borderBottomWidth: 1,
     paddingBottom: 5,
-    borderColor: "lightgray",
+    borderColor: 'lightgray',
   },
-  inputView: {
-  },
+  inputView: {},
   input: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -240,13 +254,13 @@ const styles = StyleSheet.create({
     height: 40,
   },
   loginButton: {
-    backgroundColor: "#1e319d",
+    backgroundColor: '#1e319d',
     borderRadius: 6,
     color: 'white',
     textAlign: 'center',
     fontSize: 14,
     paddingVertical: 13,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -256,21 +270,19 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   greyLine: {
-    textAlign: "center",
-    marginTop: 50,
-    color: "lightgray"
+    textAlign: 'center',
+    marginTop: 20,
+    color: 'lightgray',
   },
   signUp: {
-    textAlign: "center",
+    textAlign: 'center',
     marginTop: 20,
-    color: "black"
+    color: 'black',
   },
   signUpBlue: {
-    color: "#4d61ff",
-    fontWeight: "bold",
+    color: '#4d61ff',
+    fontWeight: 'bold',
   },
-
-
-})
+});
 
 export default SignUp;

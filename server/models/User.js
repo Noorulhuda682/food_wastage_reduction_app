@@ -24,6 +24,7 @@ const USER = new Schema({
     default: "NOT_VERIFIED",
   },
   verificationCode: Number,
+  gender:String,
   country: String,
   city: String,
   address: String,

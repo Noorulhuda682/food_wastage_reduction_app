@@ -5,7 +5,7 @@ const { RECEIVER_ADDED } = require("../../subscription-keys");
 const updateReceiver = async (
   _,
   { receiverId, name, email, profileImage, pushToken, latitude, longitude,
-    verification,verificationCode,country,city,address,contactNumber,dateOfBirth
+    verification,verificationCode,gender,country,city,address,contactNumber,dateOfBirth
  },
   { pubsub, SECRET }
 ) => {
@@ -19,6 +19,7 @@ const updateReceiver = async (
   if (longitude) updateReceiver.longitude = longitude;
   if (verification) updateReceiver.verification = verification;
   if (verificationCode) updateReceiver.verificationCode = verificationCode;
+  if (gender) updateReceiver.gender = gender;
   if (country) updateReceiver.country = country;
   if (city) updateReceiver.city = city;
   if (address) updateReceiver.address = address;

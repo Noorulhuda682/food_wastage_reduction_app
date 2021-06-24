@@ -33,6 +33,7 @@ const RECEIVER = new Schema({
   },
   verificationCode: Number,
   pushToken: String,
+  gender:String,
   country: String,
   city: String,
   address: String,

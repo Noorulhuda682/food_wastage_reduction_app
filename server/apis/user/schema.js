@@ -27,6 +27,7 @@ const user = gql`
       longitude: Float
       verification: String
       verificationCode: Int
+      gender:String
       country: String
       city: String
       address: String
@@ -35,6 +36,7 @@ const user = gql`
     ): String
 
     verifyEmail(email:String!):String
+    checkCode(code:Int!):User
   }
 
   type LoginRes {
@@ -53,6 +55,7 @@ const user = gql`
     longitude: Float
     verification: String
     verificationCode: Int
+    gender:String
     country: String
     city: String
     address: String

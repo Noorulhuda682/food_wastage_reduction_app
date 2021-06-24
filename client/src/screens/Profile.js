@@ -108,8 +108,8 @@ const Profile = ({ navigation }) => {
         dispatch(addUser(userRes.data.getUser));
       }).catch( error =>{
         Alert.alert(`Error! : ${error}`);
+        setLoader(false)
       })
-
       console.log("Success",res);
       setLoader(false)
     }).catch(error => {

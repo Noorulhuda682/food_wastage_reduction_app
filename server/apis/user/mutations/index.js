@@ -4,6 +4,7 @@ const addToken = require("./add-push-token");
 const deleteUser = require("./delete-user");
 const updateUser = require("./update-user");
 const verifyEmail = require("./verify-email");
+const checkCode = require("./check-otp-code");
 
 const Mutation = {
     addUser,
@@ -11,7 +12,8 @@ const Mutation = {
     addToken,
     deleteUser,
     updateUser,
-    verifyEmail
+    verifyEmail,
+    checkCode
 }
 
 module.exports = Mutation;
