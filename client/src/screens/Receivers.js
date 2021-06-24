@@ -30,9 +30,14 @@ const AllReceivers = ({ navigation }) => {
 
     var { loading, error, data } = useQuery(RECEIVERS);
     const [receivers, setReceivers] = useState(null)
-
+    const [searchList,setSearchList] = useState([]);
+    const [noData,setNoData] = useState(false)
     const subscriptionReceivers = useSubscription(RECEIVER_ADDED);
 
+
+    useEffect( () => {
+        setSearchList( receivers !== null && receivers.filter( item => item.name.includes(searchValue)));
+    },[searchValue])
 
     if (error) Alert.alert(`Error! ${error.message}`);
 
@@ -57,8 +62,9 @@ const AllReceivers = ({ navigation }) => {
     //     return unsubscribe;
     // }, [navigation]);
 
-    console.log("navigation**********************23", data);
-
+    console.log("navigation**********************23", receivers);
+    
+    let list = searchList.length ? searchList : receivers;
     return (
         <Container>
             <Header navigation={navigation} title="FWR Receivers" />
@@ -77,18 +83,15 @@ const AllReceivers = ({ navigation }) => {
                 }
 
 
-                {!loading && receivers?.length === 0 &&
+                {!loading && receivers?.length === 0 && noData &&
                     <Text style={styles.noDataText}>No data found!</Text>
                 }
 
-                {receivers && receivers.map((receiver, index) => {
+                {receivers && list.map((receiver, index) => {
                     return (
                         <UserList navigation={navigation} user={receiver} key={index} />
                     )
                 })}
-
-
-
 
             </Content>
         </Container>

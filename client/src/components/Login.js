@@ -1,5 +1,5 @@
 import React, {
-    useState, useEffect,useContext
+    useState, useEffect, useContext
 } from 'react';
 import {
     View,
@@ -23,8 +23,8 @@ import {
 } from "../config/setToken"
 
 import InputText from "../shared/TextInput"
-import {ChangeTokenHandlerContext} from "../../App"
-import {LOGIN} from "../typeDefs/Auth"
+import { ChangeTokenHandlerContext } from "../../App"
+import { LOGIN } from "../typeDefs/Auth"
 
 
 const Login = ({ navigation }) => {
@@ -46,7 +46,7 @@ const Login = ({ navigation }) => {
 
     const [_login, { data, error }] = useMutation(LOGIN);
 
-    
+
     const login = async () => {
 
         if (email === "") {
@@ -64,17 +64,19 @@ const Login = ({ navigation }) => {
             ToastAndroid.CENTER
         );
         setLoading(true)
-        // if (checkEmail && checkPassword) {
-        // Alert.alert("Run Login api")
-        // ChangeTokenHandler()
 
         _login({
             variables: {
                 email,
                 password
             }
-        }).then( ({data}) => {
+        }).then(({ data }) => {
             console.log("LOGIN=======", data);
+            if (data?.login?.user?.verification !== "VERIFIED") {
+                Alert.alert("Sorry! Your email is not verified")
+                setLoading(false)
+                return false;
+            }
             saveData(data?.login?.token);
             ChangeTokenHandler(data?.login?.token);
             ToastAndroid.showWithGravity(
@@ -85,16 +87,11 @@ const Login = ({ navigation }) => {
             dispatch(addUser(data?.login?.user));
             navigation.navigate("Home")
             setChange(false)
+            setLoading(false)
         }).catch(err => {
             setLoading(false)
             Alert.alert(`Error : ${err}`);
         })
-
-        // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
-        // navigation.navigate("Home")
-        // setLoading(false)
-
-        // }
 
     }
 
@@ -105,9 +102,10 @@ const Login = ({ navigation }) => {
             <ScrollView>
                 <Container style={styles.container}>
                     <View style={styles.logoView}>
-                        <Image style={{ width: 150, height: 150,borderWidth:5,
-                            borderRadius:100,
-                            borderColor:'#d1d8ff',
+                        <Image style={{
+                            width: 150, height: 150, borderWidth: 5,
+                            borderRadius: 100,
+                            borderColor: '#d1d8ff',
                             shadowColor: "#000",
                             shadowOffset: {
                                 width: 0,
@@ -121,7 +119,7 @@ const Login = ({ navigation }) => {
                             Food Wastage Reduction
                         </Text>
                     </View>
-                    
+
 
                     <InputText
                         email={email}
@@ -142,7 +140,7 @@ const Login = ({ navigation }) => {
                         placeholder={"Password..."}
                         showPassword={showPassword}
                         setShowPassword={setShowPassword}
-                        customStyle={{marginTop:12}}
+                        customStyle={{ marginTop: 12 }}
                     />
 
 
@@ -184,12 +182,12 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     scrollView: {
-      paddingBottom:400,
+        paddingBottom: 400,
     },
     container: {
         marginTop: 100,
         paddingHorizontal: 40,
-        
+
     },
     logoView: {
         display: "flex",

@@ -52,7 +52,7 @@ const VerifyAccount = ({ navigation }) => {
                 }
             }).then(data => {
                 // console.log("Sucess=======", data);
-                Alert.alert(`Verification is succussfull`);
+                Alert.alert(`Email Verification is succussfull`);
                 navigation.navigate("Login")
                 setLoading(false)
             }).catch(err => {
