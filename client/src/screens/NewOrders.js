@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View, ActivityIndicator,
     Text, Dimensions,
@@ -17,8 +17,8 @@ import {
 } from 'native-base';
 const { width, height } = Dimensions.get('window')
 import { useSelector } from "react-redux";
-import { useQuery } from "@apollo/client";
-import { POSTS} from "../typeDefs/Post";
+import { useQuery, useSubscription } from "@apollo/client";
+import { POSTS, POST_ADDED } from "../typeDefs/Post";
 import PostCard from "../shared/PostCard"
 import Header from "../shared/Header"
 import { SearchBar } from '../shared/index';
@@ -26,30 +26,42 @@ import { SearchBar } from '../shared/index';
 const NewOrders = ({ navigation }) => {
     const storeData = useSelector(state => state);
     const [searchValue, setSearchValue] = useState("")
-    // console.log("MyPosts===>", storeData?.user._id);
+    const [posts, setPosts] = useState(null)
+    const [searchList, setSearchList] = useState([]);
+    const subscriptionPosts = useSubscription(POST_ADDED)
 
-    const { loading, error, data } = useQuery(POSTS,{
-        variables:{
-            status:"NEW"
-        }
+    let payload = { status: "NEW" }
+    // console.log("USER",storeData);
+    if (storeData.user.role === "USER") payload.userId = storeData.user._id
+    const { loading, error, data } = useQuery(POSTS, {
+        variables: payload
     });
+
+    useEffect(() => {
+        setSearchList(posts !== null && posts.filter(item => item.title.includes(searchValue) ));
+    }, [searchValue])
+
+    //  FOR QUERY DATA
+    useEffect(() => {
+        if (data && data.posts) {
+            setPosts(data.posts)
+        }
+    }, [data]);
+
+    //  FOR SUBSCRIPTION DATA
+    useEffect(() => {
+        if (subscriptionPosts.data && subscriptionPosts.data.postAdded) {
+            setPosts(subscriptionPosts.data.postAdded)
+        }
+    }, [subscriptionPosts]);
 
 
     if (error) Alert.alert(`Error! ${error.message}`);
 
-    // React.useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         console.log("navigation**********************", data);
-    //     });
-    //     return unsubscribe;
-    // }, [navigation]);
-
-
-    // console.log("navigation**********************22", data, storeData?.user._id );
 
     return (
         <Container>
-            <Header navigation={navigation} title="New Orders"/>
+            <Header navigation={navigation} title="New Orders" />
             <View style={{ padding: 12 }}>
                 <SearchBar
                     type="receivers"
@@ -59,20 +71,37 @@ const NewOrders = ({ navigation }) => {
             </View>
             <Content style={styles.mainContent} padder>
 
-              
                 {loading &&
-                 <ActivityIndicator color="blue" />
+                    <ActivityIndicator color="blue" />
                 }
 
-                 {data?.posts?.map( (foodPost,key) =>  <PostCard navigation={navigation} foodPost={foodPost} key={key} /> )}
-
-                 {!loading && !data?.posts?.length &&
-                 <Text style={{color:"gray",textAlign:"center"}}>No data found!</Text>
+                {!loading && posts?.length === 0 &&
+                    <Text style={{ color: "gray", textAlign: "center" }}>No data found!</Text>
                 }
 
-           
 
-               
+                {searchValue === "" && posts?.map((foodPost, key) => {
+
+                    if (storeData.user.role === "USER") {
+                        return(
+                            storeData.user._id === foodPost.userId &&  <PostCard navigation={navigation} foodPost={foodPost} key={key} />
+                        ) 
+                    }
+                    else {
+                        return(
+                        <PostCard navigation={navigation} foodPost={foodPost} key={key} />
+                        )
+                    }
+                })}
+
+
+                {searchList && searchList?.map((foodPost, key) =>
+                    <PostCard navigation={navigation} foodPost={foodPost} key={key} />
+                )}
+
+
+
+
             </Content>
         </Container>
 
@@ -81,7 +110,7 @@ const NewOrders = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     mainContent: {
-        marginTop:-15,
+        marginTop: -15,
         textAlign: "center",
     },
     heading: {

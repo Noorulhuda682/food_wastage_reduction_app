@@ -123,8 +123,6 @@ const AddPost = ({navigation}) => {
       }
     }
 
-    console.log('IMG', url);
-    // console.log("DATA-=>", datas, error);
     _addDATA({
       variables: varData,
     })
@@ -132,7 +130,6 @@ const AddPost = ({navigation}) => {
         Alert.alert(`Uploading Successfull`);
         console.log('Success===', data);
         setLoading(false);
-        // navigation.navigate('myPosts');
         navigation.navigate('newOrders');
         // you can do something with the response here
       })
@@ -141,8 +138,15 @@ const AddPost = ({navigation}) => {
         setLoading(false);
         // you can do something with the error here
       });
-    // navigation.navigate("myPosts")
   };
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+          setTitle('');setDescription('');
+          setWeight('');setQuantity('');
+        });
+        return unsubscribe;
+    }, [navigation]);
 
   const launchImageLibraryHandler = () => {
     launchImageLibrary(options, response => {

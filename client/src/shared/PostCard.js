@@ -51,7 +51,8 @@ const PostCard = ({ navigation, foodPost, key }) => {
                 <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{foodPost.title}</Text>
                     <TouchableOpacity onPress={() => setFocusKey(focusKey === null ? key : null)}>
-                        <MaterialCommunityIcons name="dots-vertical" size={22} color="blue" />
+                        {/* <MaterialCommunityIcons name="dots-vertical" size={22} color="blue" /> */}
+                        <MaterialIcons name={focusKey === key ? "keyboard-arrow-up" : "keyboard-arrow-down" } size={30} color="#1e319d" />
                     </TouchableOpacity>
 
                 </View>
@@ -60,10 +61,11 @@ const PostCard = ({ navigation, foodPost, key }) => {
 
                 </Text>
                 <Text style={{ color: "gray" }}>Weight: {foodPost.weight}</Text>
-                <Text style={{ color: "gray" }}>Status: not Given {` `}
-                    <FontAwesome name="star" size={12} color="#DAA520" />
-                    <FontAwesome name="star" size={12} color="#DAA520" />
-                    <FontAwesome name="star" size={12} color="#DAA520" />
+                <Text style={{ color: "gray" }}>Status: {foodPost.status} {` `}
+                    {foodPost.status === "COMPLETED" && <Entypo name="check" size={20} color="green" />}
+                    <FontAwesome name="star" size={12} color={foodPost.status === "NEW" ? "gray" : "#DAA520"} />
+                    <FontAwesome name="star" size={12} color={foodPost.status === "NEW" ? "gray" : "#DAA520"} />
+                    <FontAwesome name="star" size={12} color={foodPost.status === "COMPLETED" ? "#DAA520" : "gray"} />
                 </Text>
 
                 <Button transparent style={{

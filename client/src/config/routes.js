@@ -76,13 +76,13 @@ const receiverRoutes = [
 
 
 const adminRoutes = [
-    {
-        routeName: "allPosts",
-        label: "Posts",
-        iconCompnay: "MaterialCommunityIcons",
-        iconName: "post-outline",
-        iconSize: 24,
-    },
+    // {
+    //     routeName: "allPosts",
+    //     label: "Posts",
+    //     iconCompnay: "MaterialCommunityIcons",
+    //     iconName: "post-outline",
+    //     iconSize: 24,
+    // },
     {
         routeName: "users",
         label: "Users",
@@ -96,6 +96,27 @@ const adminRoutes = [
         iconCompnay: "FontAwesome",
         iconName: "users",
         iconSize: 22,
+    },
+    {
+        routeName: "newOrders",
+        label: "New Orders",
+        iconCompnay: "MaterialCommunityIcons",
+        iconName: "new-box",
+        iconSize: 24,
+    },
+    {
+        routeName: "progressOrders",
+        label: "Progress Orders",
+        iconCompnay: "MaterialCommunityIcons",
+        iconName: "progress-check",
+        iconSize: 24,
+    },
+    {
+        routeName: "completedOrders",
+        label: "My Completed Orderss",
+        iconCompnay: "Feather",
+        iconName: "check-square",
+        iconSize: 24,
     },
     {
         routeName: "feedbacks",

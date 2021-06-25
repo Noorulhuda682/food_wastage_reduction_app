@@ -1,4 +1,28 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
+
+const USER = `
+user {
+  name
+  email
+  _id
+  role
+  profileImage
+  pushToken
+  latitude
+  longitude
+}
+`
+const RECEIVER = `
+receiver {
+  _id
+  name
+  email
+  profileImage
+  pushToken
+  latitude
+  longitude
+}
+`
 
 const ADDPOST = gql`
   mutation addPost(
@@ -57,8 +81,8 @@ const MYPOSTS = gql`
 `;
 
 const POSTS = gql`
-  query posts($status: String) {
-    posts(status: $status) {
+  query posts($status: String $userId:String) {
+    posts(status: $status userId:$userId) {
       _id
       userId
       title
@@ -70,25 +94,8 @@ const POSTS = gql`
       img3
       status
       receiverId
-      user {
-        name
-        email
-        _id
-        role
-        profileImage
-        pushToken
-        latitude
-        longitude
-      }
-      receiver {
-        _id
-        name
-        email
-        profileImage
-        pushToken
-        latitude
-        longitude
-      }
+      ${USER}
+      ${RECEIVER}
     }
   }
 `;
@@ -107,27 +114,11 @@ const POST_ADDED = gql`
       img3
       status
       receiverId
-      user {
-        name
-        email
-        _id
-        role
-        profileImage
-        pushToken
-        latitude
-        longitude
-      }
-      receiver {
-        _id
-        name
-        email
-        profileImage
-        pushToken
-        latitude
-        longitude
-      }
+      ${USER}
+      ${RECEIVER}
     }
   }
 `;
 
-export {ADDPOST, MYPOSTS, TEST, POSTS, POST_ADDED};
+
+export { ADDPOST, MYPOSTS, TEST, POSTS, POST_ADDED };

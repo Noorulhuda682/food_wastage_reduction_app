@@ -21,7 +21,7 @@ import { useQuery, useSubscription } from "@apollo/client";
 import Header from "../shared/Header"
 import UserList from "../shared/UserList"
 import { SearchBar } from '../shared/index';
-import { RECEIVERS,RECEIVER_ADDED } from "../typeDefs/Receiver";
+import { RECEIVERS, RECEIVER_ADDED } from "../typeDefs/Receiver";
 
 const AllReceivers = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
@@ -30,14 +30,13 @@ const AllReceivers = ({ navigation }) => {
 
     var { loading, error, data } = useQuery(RECEIVERS);
     const [receivers, setReceivers] = useState(null)
-    const [searchList,setSearchList] = useState([]);
-    const [noData,setNoData] = useState(false)
+    const [searchList, setSearchList] = useState([]);
     const subscriptionReceivers = useSubscription(RECEIVER_ADDED);
 
-
-    useEffect( () => {
-        setSearchList( receivers !== null && receivers.filter( item => item.name.includes(searchValue)));
-    },[searchValue])
+    // SEARCHING LIST
+    useEffect(() => {
+        setSearchList(receivers !== null && receivers.filter(item => item.name.includes(searchValue)));
+    }, [searchValue])
 
     if (error) Alert.alert(`Error! ${error.message}`);
 
@@ -62,9 +61,9 @@ const AllReceivers = ({ navigation }) => {
     //     return unsubscribe;
     // }, [navigation]);
 
-    console.log("navigation**********************23", receivers);
-    
-    let list = searchList.length ? searchList : receivers;
+    // console.log("navigation**********************23", receivers);
+
+    // let list = searchList.length ? searchList : receivers;
     return (
         <Container>
             <Header navigation={navigation} title="FWR Receivers" />
@@ -79,7 +78,7 @@ const AllReceivers = ({ navigation }) => {
 
 
                 {loading &&
-                    <ActivityIndicator style={{marginTop:30}} color="blue" />
+                    <ActivityIndicator style={{ marginTop: 30 }} color="blue" />
                 }
 
 
@@ -87,7 +86,13 @@ const AllReceivers = ({ navigation }) => {
                     <Text style={styles.noDataText}>No data found!</Text>
                 }
 
-                {receivers && list.map((receiver, index) => {
+                {searchValue === "" && receivers?.map((receiver, index) => {
+                    return (
+                        <UserList navigation={navigation} user={receiver} key={index} />
+                    )
+                })}
+
+                {searchList  && searchList?.map((receiver, index) => {
                     return (
                         <UserList navigation={navigation} user={receiver} key={index} />
                     )

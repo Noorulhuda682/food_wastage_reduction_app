@@ -28,16 +28,16 @@ import { SearchBar } from '../shared/index';
 const AllUsers = ({ navigation }) => {
     const [searchValue, setSearchValue] = useState("")
     const [users, setUsers] = useState(null)
-    const [searchList,setSearchList] = useState([]);
+    const [searchList, setSearchList] = useState([]);
     const storeData = useSelector(state => state);
     const { loading, error, data } = useQuery(USERS);
     const subscriptionUsers = useSubscription(USER_ADDED);
 
 
     // FOR SEARCHING DATA
-    useEffect( () => {
-        setSearchList( users !== null && users.filter( item => item.name.includes(searchValue)));
-    },[searchValue])
+    useEffect(() => {
+        setSearchList(users !== null && users.filter(item => item.name.includes(searchValue)));
+    }, [searchValue])
 
     //  FOR QUERY DATA
     useEffect(() => {
@@ -64,7 +64,7 @@ const AllUsers = ({ navigation }) => {
 
 
     // console.log("navigation**********************22", data);
-    let list = searchList.length ? searchList : users;
+    // let list = searchList.length ? searchList : users;
     return (
         <Container>
             <Header navigation={navigation} title="FWR Users" />
@@ -86,7 +86,7 @@ const AllUsers = ({ navigation }) => {
                 }
 
 
-                {list?.map((user, index) => {
+                {searchValue === "" && users?.map((user, index) => {
                     return (
                         <UserList navigation={navigation} user={user} key={index} />
                     )
@@ -94,7 +94,11 @@ const AllUsers = ({ navigation }) => {
 
 
 
-
+                {searchList && searchList?.map((user, index) => {
+                    return (
+                        <UserList navigation={navigation} user={user} key={index} />
+                    )
+                })}
 
             </Content>
         </Container>
