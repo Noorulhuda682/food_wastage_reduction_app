@@ -34,13 +34,6 @@ const userRoutes = [
         iconName: "check-square",
         iconSize: 24,
     },
-    {
-        routeName:"map",
-        label: "See Map",
-        iconCompnay: "MaterialCommunityIcons",
-        iconName: "google-maps",
-        iconSize: 24,
-    },
 ]
 
 const receiverRoutes = [
@@ -125,14 +118,6 @@ const adminRoutes = [
         iconName: "feedback",
         iconSize: 24,
     },
-    {
-        routeName: "complains",
-        label: "Complains",
-        iconCompnay: "MaterialIcons",
-        iconName: "error",
-        iconSize: 24,
-    },
-    
 ]
 
 

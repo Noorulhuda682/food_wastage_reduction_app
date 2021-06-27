@@ -38,7 +38,7 @@ const NewOrders = ({ navigation }) => {
     });
 
     useEffect(() => {
-        setSearchList(posts !== null && posts.filter(item => item.title.includes(searchValue) ));
+        setSearchList(posts !== null && posts.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()) ));
     }, [searchValue])
 
     //  FOR QUERY DATA
@@ -64,7 +64,7 @@ const NewOrders = ({ navigation }) => {
             <Header navigation={navigation} title="New Orders" />
             <View style={{ padding: 12 }}>
                 <SearchBar
-                    type="receivers"
+                    type="post"
                     value={searchValue}
                     onChange={setSearchValue}
                 />
@@ -75,7 +75,7 @@ const NewOrders = ({ navigation }) => {
                     <ActivityIndicator color="blue" />
                 }
 
-                {!loading && posts?.length === 0 &&
+                {(!loading && posts?.length === 0  || searchValue !== "" &&  searchList?.length === 0 ) && 
                     <Text style={{ color: "gray", textAlign: "center" }}>No data found!</Text>
                 }
 

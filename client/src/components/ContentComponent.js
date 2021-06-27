@@ -70,8 +70,6 @@ const DrawerContent = (props) => {
                 <Content style={styles.mainView}>
                     <View style={styles.profileView}>
 
-                  
-
                         <View>
                             {data?.user?.profileImage ?
                                 <Thumbnail
@@ -95,14 +93,6 @@ const DrawerContent = (props) => {
                         <Text style={styles.profileEmail}>{data?.user?.email}</Text>
                         <Text style={{marginTop:40,color:"navy",fontSize:11}}>ROLE : {data?.user?.role}</Text>
                     </View>
-                    <DrawerItem style={styles.drawerItem}
-                        icon={({ color, size }) => {
-                            return <FontAwesome name="home" size={22} color={icon} />
-                        }}
-                        label="Home"
-                        inactiveTintColor='gray'
-                        onPress={() => { navigation.navigate("home") }}
-                    />
 
                     {
                         displayRoutes.map((route, index) => {
@@ -135,24 +125,6 @@ const DrawerContent = (props) => {
                         })
                     }
 
-
-
-                    <List style={{ paddingTop: 100 }}>
-                        <ListItem>
-                            <Left>
-                                <Text style={{ color: 'gray', paddingVertical: 5 }}>Dark Mode</Text>
-                            </Left>
-                            <Right>
-                                <Switch
-                                    value={switchValue}
-                                    onValueChange={() => {
-                                        setSwitchValue(!switchValue);
-                                        dispatch(toggleTheme())
-                                    }}
-                                />
-                            </Right>
-                        </ListItem>
-                    </List>
 
                     <DrawerItem style={[styles.drawerItem, { paddingTop: 150 }]}
                         icon={({ color, size }) => {

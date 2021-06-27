@@ -73,7 +73,7 @@ const UserList = ({ navigation, user, index }) => {
 
                             </View>
                             <View style={{
-                                flex: 5.5, marginTop: -10,
+                                flex: 5.5, marginTop: -10,marginLeft:10,
                             }}>
                                 <Text style={{ color: "black", fontWeight: "bold", fontSize: 15 }}>{user.name}</Text>
                                 <Text style={{ color: "gray", fontSize: 11 }}>{user.email}</Text>

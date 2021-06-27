@@ -35,7 +35,7 @@ const AllReceivers = ({ navigation }) => {
 
     // SEARCHING LIST
     useEffect(() => {
-        setSearchList(receivers !== null && receivers.filter(item => item.name.includes(searchValue)));
+        setSearchList(receivers !== null && receivers.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase())));
     }, [searchValue])
 
     if (error) Alert.alert(`Error! ${error.message}`);
@@ -66,7 +66,7 @@ const AllReceivers = ({ navigation }) => {
     // let list = searchList.length ? searchList : receivers;
     return (
         <Container>
-            <Header navigation={navigation} title="FWR Receivers" />
+            <Header navigation={navigation} title="Receivers" />
             <View style={{ padding: 12 }}>
                 <SearchBar
                     type="receivers"
@@ -82,7 +82,7 @@ const AllReceivers = ({ navigation }) => {
                 }
 
 
-                {!loading && receivers?.length === 0 && noData &&
+                {(!loading && receivers?.length === 0  || searchValue !== "" &&  searchList?.length === 0 ) &&
                     <Text style={styles.noDataText}>No data found!</Text>
                 }
 

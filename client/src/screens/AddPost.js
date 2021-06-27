@@ -130,6 +130,11 @@ const AddPost = ({navigation}) => {
         Alert.alert(`Uploading Successfull`);
         console.log('Success===', data);
         setLoading(false);
+        setTitle('');
+        setDescription('');
+        setWeight('');
+        setQuantity('');
+        setImg1(null);
         navigation.navigate('newOrders');
         // you can do something with the response here
       })
@@ -140,13 +145,6 @@ const AddPost = ({navigation}) => {
       });
   };
 
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-          setTitle('');setDescription('');
-          setWeight('');setQuantity('');
-        });
-        return unsubscribe;
-    }, [navigation]);
 
   const launchImageLibraryHandler = () => {
     launchImageLibrary(options, response => {
@@ -198,9 +196,12 @@ const AddPost = ({navigation}) => {
                 justifyContent: 'center',
               }}>
               {img1 ? (
-                <TouchableOpacity style={[styles.cameraView,{width:"70%",height:120,margin:10}]}
-                onPress={() => setUploadImg(!uploadImg)}
-                >
+                <TouchableOpacity
+                  style={[
+                    styles.cameraView,
+                    {width: '70%', height: 120, margin: 10},
+                  ]}
+                  onPress={() => setUploadImg(!uploadImg)}>
                   <Image
                     style={{height: '100%', width: '100%'}}
                     source={{uri: img1}}
@@ -216,7 +217,7 @@ const AddPost = ({navigation}) => {
             </View>
             {uploadImg && (
               <Item style={{justifyContent: 'space-around', marginTop: 10}}>
-                <Button
+                {/* <Button
                   iconLeft
                   style={{paddingRight: 15}}
                   onPress={() => setUsingCamera(true)}>
@@ -224,7 +225,7 @@ const AddPost = ({navigation}) => {
                   <Text style={{marginLeft: 5, color: 'white'}}>
                     Take Photo
                   </Text>
-                </Button>
+                </Button> */}
                 <Button
                   iconLeft
                   style={{paddingHorizontal: 15, marginLeft: 10}}
