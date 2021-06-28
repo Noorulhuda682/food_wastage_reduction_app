@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ActivityIndicator,
@@ -10,32 +10,33 @@ import {
   Container,
   Content,
 } from 'native-base';
-import {useSelector} from 'react-redux';
-import {useQuery, useSubscription} from '@apollo/client';
-import {POSTS, POST_ADDED} from '../typeDefs/Post';
+import { useSelector } from 'react-redux';
+import { useQuery, useSubscription } from '@apollo/client';
+import { POSTS, POST_ADDED } from '../typeDefs/Post';
 import PostCard from '../shared/PostCard';
 import Header from '../shared/Header';
-import {SearchBar} from '../shared/index';
+import { SearchBar } from '../shared/index';
+let NEW_LIST = null ;
 
-const NewOrders = ({navigation}) => {
+const NewOrders = ({ navigation }) => {
   const storeData = useSelector(state => state);
   const [searchValue, setSearchValue] = useState('');
   const [posts, setPosts] = useState(null);
   const [searchList, setSearchList] = useState([]);
   const subscriptionPosts = useSubscription(POST_ADDED);
 
-  let payload = {status: 'NEW'};
+  let payload = { status: 'NEW' };
   if (storeData.user.role === 'USER') payload.userId = storeData.user._id;
-  const {loading, error, data} = useQuery(POSTS, {
+  const { loading, error, data } = useQuery(POSTS, {
     variables: payload,
   });
 
   useEffect(() => {
     setSearchList(
       posts !== null &&
-        posts.filter(item =>
-          item.title.toLowerCase().includes(searchValue.toLowerCase()),
-        ),
+      posts.filter(item =>
+        item.title.toLowerCase().includes(searchValue.toLowerCase()),
+      ),
     );
   }, [searchValue]);
 
@@ -49,29 +50,32 @@ const NewOrders = ({navigation}) => {
   //  FOR SUBSCRIPTION DATA
   useEffect(() => {
     if (subscriptionPosts.data && subscriptionPosts.data.postAdded) {
-        let NEW_LIST = subscriptionPosts.data.postAdded.filter( post => post.status === "NEW" )
-      setPosts(NEW_LIST);
+       NEW_LIST = subscriptionPosts.data.postAdded.filter(post => post.status === "NEW")
+      setPosts(subscriptionPosts.data.postAdded);
     }
   }, [subscriptionPosts]);
 
   if (error) Alert.alert(`Error! ${error.message}`);
 
-  console.log('DAA', posts?.length);
+  console.log('DAA====>', posts?.length); 
   return (
     <Container>
       <Header navigation={navigation} title="New Orders" />
-      <View style={{padding: 12}}>
+      <View style={{ padding: 12 }}>
         <SearchBar type="post" value={searchValue} onChange={setSearchValue} />
       </View>
+
       <Content style={styles.mainContent} padder>
+
+
         {loading && <ActivityIndicator color="blue" />}
 
         {((!loading && posts?.length === 0) ||
           (searchValue !== '' && searchList?.length === 0)) && (
-          <Text style={{color: 'gray', textAlign: 'center'}}>
-            No data found!
-          </Text>
-        )}
+            <Text style={styles.noData}>No data found!</Text>
+          )}
+
+        {posts?.length !== 0 && NEW_LIST?.length === 0 && <Text style={styles.noData}>No data found!</Text>}
 
         {searchValue === '' &&
           posts?.map((foodPost, key) => {
@@ -144,5 +148,9 @@ const styles = StyleSheet.create({
 
     elevation: 7,
   },
+  noData: {
+    color: 'gray',
+    textAlign: 'center'
+  }
 });
 export default NewOrders;

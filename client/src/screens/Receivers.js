@@ -66,7 +66,7 @@ const AllReceivers = ({ navigation }) => {
     // let list = searchList.length ? searchList : receivers;
     return (
         <Container>
-            <Header navigation={navigation} title="Receivers" />
+            <Header navigation={navigation} title="Riders" />
             <View style={{ padding: 12 }}>
                 <SearchBar
                     type="receivers"

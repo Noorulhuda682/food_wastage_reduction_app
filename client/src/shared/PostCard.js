@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   ActivityIndicator,
@@ -13,18 +13,20 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Foundation from 'react-native-vector-icons/Foundation';
-import {Button, Thumbnail} from 'native-base';
-import {useSelector} from 'react-redux';
-import {useMutation} from '@apollo/client';
-import {UPDATEPOST} from '../typeDefs/Post';
 
-const PostCard = ({navigation, foodPost, keyInd}) => {
+import Entypo from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Foundation from 'react-native-vector-icons/Foundation';
+import { Button, Thumbnail } from 'native-base';
+import { useSelector } from 'react-redux';
+import { useMutation } from '@apollo/client';
+import { UPDATEPOST } from '../typeDefs/Post';
+
+const PostCard = ({ navigation, foodPost, keyInd }) => {
   const storeData = useSelector(state => state);
   const [focusKey, setFocusKey] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [updatePost, {}] = useMutation(UPDATEPOST);
+  const [updatePost, { }] = useMutation(UPDATEPOST);
 
   const updatePostHandler = (postId, userId, status) => {
     let payload = {
@@ -45,9 +47,10 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
           "Accepting sucessfull",
           ToastAndroid.SHORT,
           ToastAndroid.CENTER
-      );
+        );
         // Alert.alert('Success accpted order');
-        // setLoading(false);
+        setLoading(false);
+        setFocusKey(null)
       })
       .catch(err => {
         setLoading(false);
@@ -55,11 +58,13 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
       });
   };
 
+  console.log("SEEPOst===", foodPost.user);
+
   return (
     <TouchableOpacity key={keyInd} style={styles.container}>
       <View style={styles.imageView}>
         {foodPost.img1 !== null ? (
-          <Image source={{uri: foodPost.img1}} style={styles.postImage} />
+          <Image source={{ uri: foodPost.img1 }} style={styles.postImage} />
         ) : (
           <Image
             source={require('../assets/images/foods.jpeg')}
@@ -70,7 +75,7 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
 
       <View style={styles.infoView}>
         <View style={styles.titleView}>
-          <Text style={{fontWeight: 'bold', fontSize: 15}}>
+          <Text style={styles.title}>
             {foodPost.title}
           </Text>
           {storeData?.user?.role !== 'ADMIN' && (
@@ -86,11 +91,11 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
             </TouchableOpacity>
           )}
         </View>
-        <Text style={{color: 'gray', fontSize: 14}}>
+        <Text style={{ color: 'gray', fontSize: 14 }}>
           Quantity: {foodPost.quantity}
         </Text>
-        <Text style={{color: 'gray'}}>Weight: {foodPost.weight}</Text>
-        <Text style={{color: 'gray', fontSize: 16}}>
+        <Text style={{ color: 'gray' }}>Weight: {foodPost.weight}</Text>
+        <Text style={{ color: 'gray', fontSize: 16 }}>
           Status: {foodPost.status} {` `}
           {foodPost.status === 'NEW' && (
             <Foundation name="burst-new" size={23} color="#FCC201" />
@@ -103,34 +108,46 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
           )}
         </Text>
 
-        <Button
-          transparent
-          style={{
-            width: '100%',
-          }}>
-          <Button transparent>
-            <Text
-              style={{
-                fontSize: 15,
-                fontWeight: 'bold',
-                color: 'gray',
-                marginRight: 3,
-              }}>
-              {storeData?.user?.role === 'USER' ? 'Receiver' : 'Uploader'}
-            </Text>
-            <Thumbnail
-              style={{height: 22, width: 22}}
-              source={require('../assets/images/profile.jpg')}
-            />
-            <Text style={{marginLeft: 5, fontSize: 11}}>Noorul Huda</Text>
-          </Button>
+        <Button transparent style={{ width: '100%' }}>
+          {storeData?.user?.role !== 'USER' ? (
+            foodPost.status === "PROGRESS" &&
+            <Button transparent>
+              <Text style={styles.uploader}>
+                Receiver :
+              </Text>
+              {!foodPost.receiver[0]?.profileImage ?
+                <EvilIcons name="user" size={30} color="gray" />
+                :
+                <Thumbnail style={styles.thumbnail}
+                source={{ uri: foodPost.receiver[0]?.profileImage }}
+              />
+              }
+              <Text  style={styles.uploaderName}>{foodPost.receiver[0]?.name}</Text>
+            </Button>
+          )
+            :
+            <Button transparent>
+              <Text style={styles.uploader}>
+                Uploader :
+              </Text>
+            
+              {!foodPost.user[0]?.profileImage ?
+                <EvilIcons name="user" size={30} color="gray" />
+                :
+                <Thumbnail style={styles.thumbnail}
+                source={{ uri: foodPost.user[0]?.profileImage }}
+              />
+              }
+              <Text  style={styles.uploaderName}>{foodPost.user[0]?.name}</Text>
+            </Button>
+          }
 
           {foodPost.status !== 'NEW' && (
             <TouchableOpacity
               transparent
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => navigation.navigate('map')}>
-              <Text style={{marginLeft: 5, fontSize: 11}}>
+              <Text style={{ marginLeft: 5, fontSize: 11 }}>
                 <MaterialCommunityIcons
                   name="map-marker"
                   size={20}
@@ -143,12 +160,12 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
         </Button>
 
         {focusKey === keyInd && (
-          <View style={{flex: 1, flexDirection: 'row', width: '60%'}}>
+          <View style={{ flex: 1, flexDirection: 'row', width: '60%' }}>
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity
-                  style={[crudButton, {backgroundColor: '#00203FFF'}]}>
-                  <Text style={{color: 'white'}}>
+                  style={[crudButton, { backgroundColor: '#00203FFF' }]}>
+                  <Text style={{ color: 'white' }}>
                     <Feather name="edit" size={15} color="white" />
                     {`  `}Edit{`  `}
                   </Text>
@@ -157,8 +174,8 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity
-                  style={[crudButton, {backgroundColor: '#ea1715'}]}>
-                  <Text style={{color: 'white'}}>
+                  style={[crudButton, { backgroundColor: '#ea1715' }]}>
+                  <Text style={{ color: 'white' }}>
                     <AntDesign name="delete" size={15} color="white" />
                     {` `}Delete
                   </Text>
@@ -170,7 +187,7 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
                   onPress={() =>
                     updatePostHandler(foodPost._id, foodPost.userId, 'PROGRESS')
                   }
-                  style={[styles.updateBtn, {backgroundColor: '#00203FFF'}]}>
+                  style={[styles.updateBtn, { backgroundColor: '#00203FFF' }]}>
                   {loading ? (
                     <ActivityIndicator color="lightgray" />
                   ) : (
@@ -180,7 +197,7 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
                       color="white"
                     />
                   )}
-                  <Text style={{color: 'white'}}>{`   `}Accept Receiving</Text>
+                  <Text style={{ color: 'white' }}>{`   `}Accept Receiving</Text>
                 </TouchableOpacity>
               ) : foodPost.status === 'PROGRESS' ? (
                 <TouchableOpacity
@@ -191,7 +208,7 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
                       'COMPLETED',
                     )
                   }
-                  style={[styles.updateBtn, {backgroundColor: '#b4006b'}]}>
+                  style={[styles.updateBtn, { backgroundColor: '#b4006b' }]}>
                   {loading ? (
                     <ActivityIndicator color="lightgray" />
                   ) : (
@@ -202,13 +219,13 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
                     />
                   )}
 
-                  <Text style={{color: 'white'}}>{` `} Received Food</Text>
+                  <Text style={{ color: 'white' }}>{` `} Received Food</Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  style={[styles.updateBtn, {backgroundColor: 'green'}]}>
+                  style={[styles.updateBtn, { backgroundColor: 'green' }]}>
                   <Entypo name="check" size={20} color="white" />
-                  <Text style={{color: 'white'}}>{` `}Delivered</Text>
+                  <Text style={{ color: 'white' }}>{` `}Delivered</Text>
                 </TouchableOpacity>
               ))}
           </View>
@@ -219,6 +236,10 @@ const PostCard = ({navigation, foodPost, keyInd}) => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    fontWeight: 'bold',
+    fontSize: 16
+  },
   updateBtn: {
     marginHorizontal: 2,
     borderRadius: 3,
@@ -263,5 +284,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
   },
+  uploader: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
+    marginRight: 3,
+  },
+  thumbnail: {
+    height: 24,
+    width: 24,
+  },
+  uploaderName:{
+    marginLeft: 5, 
+    fontSize: 11 
+  }
 });
 export default PostCard;

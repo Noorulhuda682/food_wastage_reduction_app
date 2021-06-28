@@ -85,9 +85,9 @@ const adminRoutes = [
     },
     {
         routeName: "receivers",
-        label: "Receivers",
-        iconCompnay: "FontAwesome",
-        iconName: "users",
+        label: "Riders",
+        iconCompnay: "FontAwesome5",
+        iconName: "biking",
         iconSize: 22,
     },
     {
