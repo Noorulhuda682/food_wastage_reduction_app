@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
 const USER = `
 user {
@@ -10,8 +10,16 @@ user {
   pushToken
   latitude
   longitude
+  verification
+  verificationCode
+  country
+  city
+  address
+  contactNumber
+  dateOfBirth
 }
-`
+`;
+
 const RECEIVER = `
 receiver {
   _id
@@ -21,8 +29,15 @@ receiver {
   pushToken
   latitude
   longitude
+  verification
+  verificationCode
+  country
+  city
+  address
+  contactNumber
+  dateOfBirth
 }
-`
+`;
 
 const ADDPOST = gql`
   mutation addPost(
@@ -57,6 +72,42 @@ const ADDPOST = gql`
     }
   }
 `;
+
+const UPDATEPOST = gql`
+  mutation updatePost(
+    $postId:String!
+    $userId: String!
+    $title: String
+    $description: String
+    $quantity: Int
+    $weight: String
+    $img1: String
+    $img2: String
+    $img3: String
+    $status:String
+    $receiverId:String
+  ) {
+    updatePost(
+      postId:$postId
+      userId: $userId
+      title: $title
+      description: $description
+      quantity: $quantity
+      weight: $weight
+      img1: $img1
+      img2: $img2
+      img3: $img3
+      status:$status
+      receiverId:$receiverId
+    ) {
+      _id
+      userId  
+      title
+    }
+  }
+`;
+
+
 
 const TEST = gql`
   mutation test($data: String) {
@@ -120,5 +171,4 @@ const POST_ADDED = gql`
   }
 `;
 
-
-export { ADDPOST, MYPOSTS, TEST, POSTS, POST_ADDED };
+export {ADDPOST, MYPOSTS, TEST, POSTS, POST_ADDED,UPDATEPOST};

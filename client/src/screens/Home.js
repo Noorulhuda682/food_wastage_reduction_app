@@ -65,8 +65,8 @@ const Home = ({navigation}) => {
           What we do
         </Text>
         <View style={styles.cardContainer}>
-          {cardListData.map(cardItem => (
-            <View style={styles.card}>
+          {cardListData.map((cardItem,key) => (
+            <View style={styles.card} key={key}>
               <Image style={styles.cardContentImg} source={cardItem.imgUrl} />
               <View style={styles.cardRight}>
                 <Text style={styles.cardTitle}>{cardItem.title}</Text>

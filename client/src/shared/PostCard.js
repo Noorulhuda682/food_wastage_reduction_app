@@ -3,108 +3,82 @@ import {
   View,
   ActivityIndicator,
   Text,
-  Dimensions,
   StyleSheet,
   Image,
   Alert,
-  TextInput,
+  ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
-
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import {
-  Container,
-  Header,
-  Left,
-  Body,
-  Right,
-  Button,
-  Icon,
-  Title,
-  Content,
-  Card,
-  CardItem,
-  H2,
-  Footer,
-  Thumbnail,
-  Fab,
-  Spinner,
-  SwipeRow,
-  Input,
-  Item,
-  // Text
-} from 'native-base';
-const {width, height} = Dimensions.get('window');
+import {Button, Thumbnail} from 'native-base';
 import {useSelector} from 'react-redux';
-import {useQuery} from '@apollo/client';
-import {MYPOSTS} from '../typeDefs/Post';
+import {useMutation} from '@apollo/client';
+import {UPDATEPOST} from '../typeDefs/Post';
 
-const PostCard = ({navigation, foodPost, key}) => {
+const PostCard = ({navigation, foodPost, keyInd}) => {
   const storeData = useSelector(state => state);
   const [focusKey, setFocusKey] = useState(null);
-  // console.log("PostCard=====", foodPost);
-  var user = foodPost?.user?.length ? foodPost?.user[0] : [];
-  var receiver = foodPost?.receiver?.length ? foodPost?.receiver[0] : [];
+  const [loading, setLoading] = useState(false);
+  const [updatePost, {}] = useMutation(UPDATEPOST);
+
+  const updatePostHandler = (postId, userId, status) => {
+    let payload = {
+      postId,
+      userId,
+      status,
+      receiverId: storeData.user._id,
+    };
+
+    setLoading(true);
+    updatePost({
+      variables: payload,
+    })
+      .then(res => {
+        console.log('Log1===', res);
+        // setFocusKey(null)
+        ToastAndroid.showWithGravity(
+          "Accepting sucessfull",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+      );
+        // Alert.alert('Success accpted order');
+        // setLoading(false);
+      })
+      .catch(err => {
+        setLoading(false);
+        Alert.alert(`Error : ${err}`);
+      });
+  };
 
   return (
-    <TouchableOpacity
-      key={key}
-      style={{
-        marginTop: 20,
-        borderBottomWidth: 1,
-        paddingBottom: 5,
-        borderColor: 'lightgray',
-        flex: 1,
-        flexDirection: 'row',
-        marginRight: 10,
-      }}>
-      <View style={{width: '30%'}}>
+    <TouchableOpacity key={keyInd} style={styles.container}>
+      <View style={styles.imageView}>
         {foodPost.img1 !== null ? (
-          <Image
-            source={{uri: foodPost.img1}}
-            style={{
-              height: 120,
-              width: null,
-              flex: 1,
-              borderRadius: 5,
-            }}
-          />
+          <Image source={{uri: foodPost.img1}} style={styles.postImage} />
         ) : (
           <Image
             source={require('../assets/images/foods.jpeg')}
-            style={{
-              height: 120,
-              width: null,
-              flex: 1,
-              borderRadius: 5,
-            }}
+            style={styles.postImage}
           />
         )}
       </View>
 
-      <View style={{marginLeft: '4%', backgroundColor: 'white', width: '66%'}}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
+      <View style={styles.infoView}>
+        <View style={styles.titleView}>
           <Text style={{fontWeight: 'bold', fontSize: 15}}>
             {foodPost.title}
           </Text>
           {storeData?.user?.role !== 'ADMIN' && (
             <TouchableOpacity
-              onPress={() => setFocusKey(focusKey === null ? key : null)}>
+              onPress={() => setFocusKey(focusKey === null ? keyInd : null)}>
               <MaterialIcons
                 name={
-                  focusKey === key ? 'keyboard-arrow-up' : 'keyboard-arrow-down'
+                  focusKey === keyInd ? 'keyboard-arrow-up' : 'keyboard-arrow-down'
                 }
                 size={27}
                 color="#1e319d"
@@ -151,7 +125,7 @@ const PostCard = ({navigation, foodPost, key}) => {
             <Text style={{marginLeft: 5, fontSize: 11}}>Noorul Huda</Text>
           </Button>
 
-          {foodPost.status !== 'NEW'  && (
+          {foodPost.status !== 'NEW' && (
             <TouchableOpacity
               transparent
               style={{marginTop: 10}}
@@ -168,57 +142,66 @@ const PostCard = ({navigation, foodPost, key}) => {
           )}
         </Button>
 
-        {focusKey === key && (
+        {focusKey === keyInd && (
           <View style={{flex: 1, flexDirection: 'row', width: '60%'}}>
-            {storeData?.user?.role === 'USER' && foodPost.status !== 'PROGRESS' && (
-              <TouchableOpacity
-                style={{
-                  backgroundColor: '#00203FFF',
-                  marginHorizontal: 2,
-                  borderRadius: 3,
-                  paddingHorizontal: 15,
-                  paddingVertical: 5,
-                }}>
-                <Text style={{color: 'white'}}>
-                  <Feather name="edit" size={15} color="white" />
-                  {`  `}Edit{`  `}
-                </Text>
-              </TouchableOpacity>
-            )}
-            {storeData?.user?.role === 'USER' && foodPost.status !== 'PROGRESS' && (
-              <TouchableOpacity
-                style={{
-                  backgroundColor: '#ea1715',
-                  marginHorizontal: 2,
-                  borderRadius: 3,
-                  paddingHorizontal: 15,
-                  paddingVertical: 5,
-                }}>
-                <Text style={{color: 'white'}}>
-                  <AntDesign name="delete" size={15} color="white" />
-                  {` `}Delete
-                </Text>
-              </TouchableOpacity>
-            )}
+            {storeData?.user?.role === 'USER' &&
+              foodPost.status !== 'PROGRESS' && (
+                <TouchableOpacity
+                  style={[crudButton, {backgroundColor: '#00203FFF'}]}>
+                  <Text style={{color: 'white'}}>
+                    <Feather name="edit" size={15} color="white" />
+                    {`  `}Edit{`  `}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            {storeData?.user?.role === 'USER' &&
+              foodPost.status !== 'PROGRESS' && (
+                <TouchableOpacity
+                  style={[crudButton, {backgroundColor: '#ea1715'}]}>
+                  <Text style={{color: 'white'}}>
+                    <AntDesign name="delete" size={15} color="white" />
+                    {` `}Delete
+                  </Text>
+                </TouchableOpacity>
+              )}
             {storeData?.user?.role === 'RECEIVER' &&
               (foodPost.status === 'NEW' ? (
                 <TouchableOpacity
+                  onPress={() =>
+                    updatePostHandler(foodPost._id, foodPost.userId, 'PROGRESS')
+                  }
                   style={[styles.updateBtn, {backgroundColor: '#00203FFF'}]}>
-                  <MaterialIcons
-                    name="delivery-dining"
-                    size={20}
-                    color="white"
-                  />
-                  <Text style={{color: 'white'}}>{`   `}Accept Delivering</Text>
+                  {loading ? (
+                    <ActivityIndicator color="lightgray" />
+                  ) : (
+                    <MaterialIcons
+                      name="delivery-dining"
+                      size={20}
+                      color="white"
+                    />
+                  )}
+                  <Text style={{color: 'white'}}>{`   `}Accept Receiving</Text>
                 </TouchableOpacity>
               ) : foodPost.status === 'PROGRESS' ? (
                 <TouchableOpacity
+                  onPress={() =>
+                    updatePostHandler(
+                      foodPost._id,
+                      foodPost.userId,
+                      'COMPLETED',
+                    )
+                  }
                   style={[styles.updateBtn, {backgroundColor: '#b4006b'}]}>
-                  <MaterialCommunityIcons
-                    name="cursor-pointer"
-                    size={19}
-                    color="white"
-                  />
+                  {loading ? (
+                    <ActivityIndicator color="lightgray" />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name="cursor-pointer"
+                      size={19}
+                      color="white"
+                    />
+                  )}
+
                   <Text style={{color: 'white'}}>{` `} Received Food</Text>
                 </TouchableOpacity>
               ) : (
@@ -245,6 +228,40 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  container: {
+    marginTop: 20,
+    borderBottomWidth: 1,
+    paddingBottom: 5,
+    borderColor: 'lightgray',
+    flex: 1,
+    flexDirection: 'row',
+    marginRight: 10,
+  },
+  postImage: {
+    height: 120,
+    width: null,
+    flex: 1,
+    borderRadius: 5,
+  },
+  infoView: {
+    marginLeft: '4%',
+    backgroundColor: 'white',
+    width: '66%',
+  },
+  titleView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  imageView: {
+    width: '30%',
+  },
+  crudButton: {
+    marginHorizontal: 2,
+    borderRadius: 3,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
   },
 });
 export default PostCard;
