@@ -13,7 +13,8 @@ import {
    CompletedOrders,
    ProgressOrders,
    Users,
-   Receivers
+   Receivers,
+   DetailsPage
  } from "../screens"
 import {useSelector,useDispatch} from "react-redux"
 
@@ -32,7 +33,7 @@ const MainHome = ({ navigation }) => {
   },[])
 
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="home"
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="detailsPage"
       screenOptions={{
         headerShown: false
       }}
@@ -51,9 +52,9 @@ const MainHome = ({ navigation }) => {
       {/* ADMIN ROUTES */}
       <Drawer.Screen name="users" component={Users} />
       <Drawer.Screen name="receivers" component={Receivers} />
-
+      <Drawer.Screen name="detailsPage" component={DetailsPage} />
     </Drawer.Navigator>
-  );
+  );  
 }
 
 export default MainHome;
