@@ -21,15 +21,17 @@ import { useQuery } from "@apollo/client";
 import { MYPOSTS } from "../typeDefs/Post";
 import PostCard from "../shared/PostCard"
 import Header from "../shared/Header";
+import {useRoute} from '@react-navigation/native';
 
-
-const UserList = ({ navigation, user, index }) => {
+const UserList = ({ navigation, user, index,routeName }) => {
 
     return (
 
-        <View key={index} style={{
-            marginTop: 10,
-        }}>
+        <View key={index}
+            // onPress={() => }
+            style={{
+                marginTop: 10,
+            }}>
             <SwipeRow
                 leftOpenValue={75}
                 rightOpenValue={-75}
@@ -39,11 +41,9 @@ const UserList = ({ navigation, user, index }) => {
                     </Button>
                 }
                 style={{
-                    // backgroundColor: "pink",
                     height: 70,
                     padding: 0,
                     margin: 0,
-                    // borderBottomWidth:0
                 }}
                 body={
                     <View style={{
@@ -73,16 +73,18 @@ const UserList = ({ navigation, user, index }) => {
 
                             </View>
                             <View style={{
-                                flex: 5.5, marginTop: -10,marginLeft:10,
+                                flex: 5.5, marginTop: -10, marginLeft: 10,
                             }}>
                                 <Text style={{ color: "black", fontWeight: "bold", fontSize: 15 }}>{user.name}</Text>
                                 <Text style={{ color: "gray", fontSize: 11 }}>{user.email}</Text>
                             </View>
                             <View style={{
                                 flex: 1, justifyContent: "center",
-                                alignItems: "flex-end"
+                                alignItems: "flex-end",
                             }}>
-                                <Text style={styles.detailsText}>details</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("detailsPage",{routeName,user})} style={styles.detailsButton}>
+                                    <Text style={styles.detailsText}>details</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -131,13 +133,17 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.55,
         shadowRadius: 3.84,
-
         elevation: 7,
+    },
+    detailsButton:{
+     backgroundColor:'#1e319d',
+     paddingHorizontal:8,
+     paddingVertical:6,
+     borderRadius:4,
     },
     detailsText: {
         fontSize: 13,
-        color: "#1e319d",
-        textDecorationLine: "underline",
+        color:"white"
     }
 
 })

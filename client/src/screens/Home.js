@@ -1,26 +1,46 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  Alert,
-  TouchableOpacity,
+  Alert
 } from 'react-native';
-
-import {Container, Icon, Content, Fab} from 'native-base';
+import { Container, Icon, Content, Fab } from 'native-base';
 import messaging from '@react-native-firebase/messaging';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import Header from '../shared/Header';
-import {cardListData} from '../config/homeCardList';
+import { cardListData } from '../config/homeCardList';
+import {useMutation} from "@apollo/client"
+import {UPDATE_USER} from "../typeDefs/User";
+import { UPDATE_RECEIVER} from "../typeDefs/Receiver";
+import { isEnumType } from 'graphql';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const storeData = useSelector(state => state);
+  const [updateUser,{}] = useMutation(storeData?.user?.role === "USER" ? UPDATE_USER : UPDATE_RECEIVER );
 
   const getTokens = async () => {
     let token = await messaging().getToken();
     console.log('token', token);
   };
+
+  // useEffect(() => {
+    
+  //   let payload = storeData?.user?.role === "USER" ? { userId:""} : {receiverId:""}
+  //   payload.pushToken = ""
+  //   payload.latitude = 122.3
+  //   payload.longitude = 122.2
+
+  //   updateUser({
+  //     variables: payload
+  //   }).then( res => {
+  //     Alert.alert(`Success`)
+  //   }).catch( err => {
+  //     Alert.alert(`${err}`)
+  //   })
+
+  // }, [])
 
   useEffect(() => {
     getTokens();
@@ -43,16 +63,17 @@ const Home = ({navigation}) => {
           );
         }
       });
+
   }, []);
 
   return (
     <Container>
       <Header navigation={navigation} title={'Menu'} />
       <View style={styles.homeTitleView}>
-        <View style={{flex: 1, paddingHorizontal: 10, height: 130}}>
+        <View style={{ flex: 1, paddingHorizontal: 10, height: 130 }}>
           <Text style={styles.heading}>Food Wastage Reduction</Text>
           <Text style={styles.para}>
-            Reducing the wastage of food can boot the economy of a country
+            Reducing the wastage of food can boost the economy of a country
           </Text>
         </View>
         <Image
@@ -60,12 +81,12 @@ const Home = ({navigation}) => {
           source={require('../assets/images/home-icon.jpg')}
         />
       </View>
-      <Content padder style={{marginTop: -60}}>
-        <Text style={[styles.heading, {paddingLeft: 10, color: 'black'}]}>
+      <Content padder style={{ marginTop: -60 }}>
+        <Text style={[styles.heading, { paddingLeft: 10, color: 'black' }]}>
           What we do
         </Text>
         <View style={styles.cardContainer}>
-          {cardListData.map((cardItem,key) => (
+          {cardListData.map((cardItem, key) => (
             <View style={styles.card} key={key}>
               <Image style={styles.cardContentImg} source={cardItem.imgUrl} />
               <View style={styles.cardRight}>
@@ -81,7 +102,7 @@ const Home = ({navigation}) => {
           active={true}
           direction="up"
           containerStyle={{}}
-          style={{backgroundColor: '#1e319d'}}
+          style={{ backgroundColor: '#1e319d' }}
           position="bottomRight"
           onPress={() => navigation.navigate('addPost')}>
           <Icon name="add" />
@@ -97,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#1e319d',
     textShadowColor: 'gray',
-    textShadowOffset: {width: -1, height: 1},
+    textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 1,
   },
   para: {
@@ -128,7 +149,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     borderRadius: 10,
-    shadowOffset: {width: 0, height: 0},
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 4,

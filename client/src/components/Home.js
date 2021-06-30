@@ -29,11 +29,11 @@ const MainHome = ({ navigation }) => {
       navigation.navigate("Home")
     }else{
       navigation.navigate("Login")
-    }
+    } 
   },[])
 
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="detailsPage"
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="home"
       screenOptions={{
         headerShown: false
       }}

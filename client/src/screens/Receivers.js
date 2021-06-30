@@ -88,13 +88,13 @@ const AllReceivers = ({ navigation }) => {
 
                 {searchValue === "" && receivers?.map((receiver, index) => {
                     return (
-                        <UserList navigation={navigation} user={receiver} key={index} />
+                        <UserList navigation={navigation} user={receiver} key={index} routeName={"receivers"} />
                     )
                 })}
 
                 {searchList  && searchList?.map((receiver, index) => {
                     return (
-                        <UserList navigation={navigation} user={receiver} key={index} />
+                        <UserList navigation={navigation} user={receiver} key={index} routeName={"receivers"} />
                     )
                 })}
 

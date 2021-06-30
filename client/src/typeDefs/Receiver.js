@@ -14,6 +14,42 @@ query receivers{
 }
 `
 
+const UPDATE_RECEIVER = gql`
+  mutation updateReceiver(
+    $receiverId: ID!
+    $name: String
+    $email: String
+    $profileImage: String
+    $pushToken: String
+    $latitude: Float
+    $longitude: Float
+    $verification: String
+    $verificationCode: Int
+    $country: String
+    $city: String
+    $address: String
+    $contactNumber: Float
+    $dateOfBirth: String
+  ) {
+    updateReceiver(
+      receiverId: $receiverId
+      name: $name
+      email: $email
+      profileImage: $profileImage
+      pushToken: $pushToken
+      latitude: $latitude
+      longitude: $longitude
+      verification: $verification
+      verificationCode: $verificationCode
+      country: $country
+      city: $city
+      address: $address
+      contactNumber: $contactNumber
+      dateOfBirth: $dateOfBirth
+    )
+  }
+`;
+
 const RECEIVER_ADDED = gql`
   subscription receiverAdded {
     receiverAdded {
@@ -31,6 +67,7 @@ const RECEIVER_ADDED = gql`
 
 
 export {
-    RECEIVERS,
-    RECEIVER_ADDED
+  RECEIVERS,
+  RECEIVER_ADDED,
+  UPDATE_RECEIVER
 }

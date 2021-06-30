@@ -30,12 +30,7 @@ import {
   Footer,
 } from 'native-base';
 
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useMutation} from '@apollo/client';
+
 import {useSelector, useDispatch} from 'react-redux';
 import {removeUser} from '../redux/actions/user';
 import {clearStorage} from '../config/setToken';
@@ -48,7 +43,7 @@ const CustomeHeader = ({navigation, title}) => {
   const dispatch = useDispatch();
 
   const route = useRoute();
-  console.log('PPP===', route.name);
+  // console.log('PPP===', route.name);
 
   // "#00203FFF" this is older blue
   return (

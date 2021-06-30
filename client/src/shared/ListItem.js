@@ -24,18 +24,20 @@ const ListItem = ({ navigation,title,name }) => {
         <View style={{marginTop:10}}>
             <View style={styles.listView}>
                 <View style={{ flexDirection: "row" }} >
-                    <Entypo name="list" size={21} color="rgba(0,0,0,0.3)" />
+                    <Entypo name="list" size={20} color="rgba(0,0,0,0.3)" />
                     <Text style={{
-                        color: "rgba(0,0,0,0.3)", fontWeight: "bold",
-                        fontSize: 16, marginLeft: 10
+                        color: "rgba(0,0,0,0.3)", 
+                        // fontWeight: "bold",
+                        fontSize: 15, marginLeft: 15
                     }}>
                         {title}
                     </Text>
                 </View>
                 <View>
                     <Text style={{
-                        color: "rgba(0,0,0,0.3)", fontWeight: "bold",
-                        fontSize: 16, marginLeft: 10
+                        color: "rgba(0,0,0,0.3)", 
+                        // fontWeight: "bold",
+                        fontSize: 15, marginLeft: 10
                     }}>
                         {name}
                     </Text>

@@ -69,7 +69,6 @@ const DrawerContent = (props) => {
             <DrawerContentScrollView {...props}>
                 <Content style={styles.mainView}>
                     <View style={styles.profileView}>
-
                         <View>
                             {data?.user?.profileImage ?
                                 <Thumbnail
@@ -124,8 +123,7 @@ const DrawerContent = (props) => {
                                 />)
                         })
                     }
-
-
+                    
                     <DrawerItem style={[styles.drawerItem, { paddingTop: 150 }]}
                         icon={({ color, size }) => {
                             return <AntDesign name="logout" size={23} color={icon} />

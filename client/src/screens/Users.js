@@ -109,12 +109,12 @@ const AllUsers = ({navigation}) => {
 
         {searchValue === '' &&
           users?.map((user, index) => {
-            return <UserList navigation={navigation} user={user} key={index} />;
+            return <UserList navigation={navigation} user={user} key={index} routeName={"users"} />;
           })}
 
         {searchList &&
           searchList?.map((user, index) => {
-            return <UserList navigation={navigation} user={user} key={index} />;
+            return <UserList navigation={navigation} user={user} key={index} routeName={"users"} />;
           })}
       </Content>
     </Container>

@@ -144,10 +144,14 @@ const Login = ({ navigation }) => {
                     />
 
 
-
-                    <TouchableOpacity onPress={() => navigation.navigate("forgotPassword")}>
-                        <Text style={styles.forgotPassword}>forgot-password</Text>
-                    </TouchableOpacity>
+                    <View style={styles.linksView}>
+                        <TouchableOpacity onPress={() => navigation.navigate("forgotPassword")}>
+                            <Text style={styles.forgotPassword}>forgot-password</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate("verifyAccount")}>
+                            <Text style={styles.forgotPassword}>verify-email</Text>
+                        </TouchableOpacity>
+                    </View>
 
                     <TouchableOpacity
                         onPress={login}
@@ -243,7 +247,6 @@ const styles = StyleSheet.create({
     },
     forgotPassword: {
         marginTop: 20,
-        textAlign: "right",
         color: "#4d61ff",
         fontWeight: "bold"
     },
@@ -251,6 +254,11 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginTop: 30,
         color: "lightgray"
+    },
+    linksView: {
+        flexDirection: "row-reverse",
+        paddingVertical: 5,
+        justifyContent: "space-between"
     }
 
 })

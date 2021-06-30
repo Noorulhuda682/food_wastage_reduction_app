@@ -86,7 +86,6 @@ const App = () => {
 
   // console.log("TOKENSASYNC=====", authTokenStorage);
   return (
-
     <ApolloProvider client={client}>
       <StatusBar hidden={true} />
       <Provider store={store}>

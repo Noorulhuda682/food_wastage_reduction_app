@@ -33,6 +33,13 @@ const USER_ADDED = gql`
       pushToken
       latitude
       longitude
+      verification
+      verificationCode
+      country
+      city
+      address
+      contactNumber
+      dateOfBirth
     }
   }
 `;

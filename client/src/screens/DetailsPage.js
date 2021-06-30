@@ -4,7 +4,7 @@ import {
     Text, Dimensions,
     StyleSheet, Image, ActivityIndicator
 } from 'react-native'
-import Entypo from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import {
@@ -12,35 +12,39 @@ import {
     Content, Item, Input,
     List,
 } from 'native-base';
-import { useQuery } from "@apollo/client";
-// import Header from "../shared/Header"
+import { useSelector } from "react-redux";
 import { POSTS } from "../typeDefs/Post";
 import { ListItem } from "../shared/index"
+import { NavigationContainer } from '@react-navigation/native';
 
-const DetailsPage = ({ navigation }) => {
+const DetailsPage = ({ route, navigation }) => {
     const [searchValue, setSearchValue] = useState("")
-    // const { loading, error, data } = useQuery(POSTS);
 
+    // console.log("DETAILPAGE====",route.params);
+    let { routeName, user } = route.params
     return (
         <Container>
             <Content>
                 <Content style={styles.content1}>
                     <Header style={{ backgroundColor: "#1e319d", elevation: 0, shadowOpacity: 0, }}>
                         <Left>
-                            <MaterialCommunityIcons onPress={() => navigation.goBack()} name="keyboard-backspace" size={24} color="white" />
+                            <MaterialCommunityIcons onPress={() => navigation.navigate(routeName)} name="keyboard-backspace" size={24} color="white" />
                         </Left>
                         <Right>
-                            <Text style={styles.home}>Home</Text>
+                            <Text onPress={() => navigation.navigate("home")} style={styles.home}>Home</Text>
                         </Right>
                     </Header>
                     <View style={styles.userInfo}>
-                        <Thumbnail
-                            size={50}
-                            style={styles.profileImage}
-                            large source={require("../assets/images/app-logo.jpeg")}
-                        />
-                        <Text style={styles.name}>Name</Text>
-                        <Text style={styles.email}>email</Text>
+                        {user.profileImage ?
+                            <Image
+                                style={styles.profileImage}
+                                large source={{uri:user.profileImage}}
+                            />
+                            :
+                            <EvilIcons name="user" size={130} color="white" />
+                        }
+                        <Text style={styles.name}>{user?.name}</Text>
+                        <Text style={styles.email}>{user?.email}</Text>
                     </View>
                     <View style={styles.actionsView}>
                         <View style={styles.postView}>
@@ -53,11 +57,17 @@ const DetailsPage = ({ navigation }) => {
                         </View>
                     </View>
                 </Content>
-                <Content style={{ backgroundColor: "white",paddingHorizontal:15 }} padder>
-                    <ListItem title="Name" name="Sher Zaman" />
-                    <ListItem title="Gender" name="Male" />
-                    <ListItem title="Country" name="Pakistan" />
-
+                <Content style={{ backgroundColor: "white", paddingHorizontal: 10 }} padder>
+                    <ListItem title="Name" name={user.name ? user.name : "Not Set"} />
+                    <ListItem title="Email" name={user.email ? user.email : "Not Set"} />
+                    <ListItem title="Role" name={user.role ? user.role : "Not Set"} />
+                    <ListItem title="UserId" name={user._id ? user._id : "Not Set"} />
+                    <ListItem title="Gender" name={user.gender ? user.gender : "Not Set"} />
+                    <ListItem title="Address" name={user.address ? user.address : "Not Set"} />
+                    <ListItem title="Contact Number" name={user.contactNumber ? user.contactNumber : "Not Set"} />
+                    <ListItem title="City" name={user.city ? user.city : "Not Set"} />
+                    <ListItem title="dateOfBirth" name={user.dateOfBirth ? user.dateOfBirth : "Not Set"} />
+                    <ListItem title="Country" name={user.country ? user.country : "Not Set"} />
                 </Content>
             </Content>
         </Container>
@@ -74,7 +84,15 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     home: {
-        color: "white"
+        color: "white",
+        borderWidth: 1,
+        textAlign: "center",
+        padding: 6,
+        fontSize: 13,
+        marginTop: 10,
+        paddingHorizontal: 10,
+        borderColor: "white",
+        borderRadius: 20,
     },
     userInfo: {
         flex: 1,
@@ -84,6 +102,7 @@ const styles = StyleSheet.create({
     profileImage: {
         height: 100,
         width: 100,
+        borderRadius: 50,
         borderColor: 'lightgray',
     },
     name: {
