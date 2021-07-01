@@ -56,7 +56,7 @@ const CustomeHeader = ({navigation, title}) => {
         />
       </Left>
       <Body style={{flex: 1}}>
-        <Title>{title}</Title>
+        <Title style={{fontSize:16}}>{title}</Title>
       </Body>
       <Right>
         {route.name !== 'home' && (

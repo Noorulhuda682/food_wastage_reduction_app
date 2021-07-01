@@ -4,46 +4,56 @@ import {
   Text,
   StyleSheet,
   Image,
-  Alert
+  Alert,
+  Platform,
+  PermissionsAndroid
 } from 'react-native';
 import { Container, Icon, Content, Fab } from 'native-base';
 import messaging from '@react-native-firebase/messaging';
 import { useSelector } from 'react-redux';
 import Header from '../shared/Header';
 import { cardListData } from '../config/homeCardList';
-import {useMutation} from "@apollo/client"
-import {UPDATE_USER} from "../typeDefs/User";
-import { UPDATE_RECEIVER} from "../typeDefs/Receiver";
-import { isEnumType } from 'graphql';
+import { useMutation } from "@apollo/client"
+import { UPDATE_USER } from "../typeDefs/User";
+import { UPDATE_RECEIVER } from "../typeDefs/Receiver";
+import Geolocation from '@react-native-community/geolocation';
 
 const Home = ({ navigation }) => {
   const storeData = useSelector(state => state);
-  const [updateUser,{}] = useMutation(storeData?.user?.role === "USER" ? UPDATE_USER : UPDATE_RECEIVER );
+  const [updateUser, { }] = useMutation(storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN" ? UPDATE_USER : UPDATE_RECEIVER);
 
-  const getTokens = async () => {
+
+  useEffect(async () => {
+
+    let position;
+     await requestLocationPermission()
+     .then( res => {  position = res }).catch( err =>  console.log("EE===",err) )
+    let {latitude,longitude} = position; 
+    console.log("Postion==>",latitude,longitude);
     let token = await messaging().getToken();
-    console.log('token', token);
-  };
+    // console.log('TTTToken', token);
 
-  // useEffect(() => {
-    
-  //   let payload = storeData?.user?.role === "USER" ? { userId:""} : {receiverId:""}
-  //   payload.pushToken = ""
-  //   payload.latitude = 122.3
-  //   payload.longitude = 122.2
+    let payload = storeData?.user?.role === "USER" ? { userId: storeData?.user?._id } : { receiverId: storeData?.user?._id }
+    token && (payload.pushToken = token)
+    latitude && (payload.latitude = latitude)
+    longitude && (payload.longitude = longitude)
+  
+    console.log("payload===",payload);
 
-  //   updateUser({
-  //     variables: payload
-  //   }).then( res => {
-  //     Alert.alert(`Success`)
-  //   }).catch( err => {
-  //     Alert.alert(`${err}`)
-  //   })
 
-  // }, [])
+
+    updateUser({
+      variables: payload
+    }).then(res => {
+      console.log("LOG===", res);
+    }).catch(err => {
+      Alert.alert(`QQQ  ${err}`)
+    })
+
+  }, [])
+
 
   useEffect(() => {
-    getTokens();
     messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
@@ -181,3 +191,51 @@ const styles = StyleSheet.create({
   },
 });
 export default Home;
+
+
+
+
+
+
+const requestLocationPermission = async () => {
+
+  const granted = await PermissionsAndroid.request(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    {
+      title: 'Location Access Required',
+      message: 'This App needs to Access your location',
+    },
+  );
+
+  return new Promise((resolve, reject) => {
+
+    if (Platform.OS === 'ios') {
+      // getOneTimeLocation();
+      // subscribeLocationLocation();
+    } else {
+      try {
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          let check = Geolocation.getCurrentPosition(
+            //Will give you the current location
+            position => resolve(position.coords),
+            error => reject(error),
+            {
+              enableHighAccuracy: true,
+              timeout: 30000,
+              maximumAge: 0
+            },
+          );
+          console.log("1positioning|||===>", check);
+         
+        } else {
+          // console.log("Permission Denied", error);
+          reject("Permission Denied")
+        }
+      } catch (err) {
+        console.warn(err);
+        reject(err)
+      }
+    }
+
+  });
+};

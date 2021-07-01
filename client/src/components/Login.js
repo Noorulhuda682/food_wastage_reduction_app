@@ -14,6 +14,7 @@ import {
     ToastAndroid
 } from 'react-native'
 import { Container, Header, Content, Item, Input, Icon, Spinner, Toast } from 'native-base';
+import { NavigationActions, StackActions } from '@react-navigation/native';
 import { useSelector, useDispatch } from "react-redux"
 import { addUser } from "../redux/actions/user"
 import { gql, useMutation } from "@apollo/client"
@@ -26,6 +27,8 @@ import InputText from "../shared/TextInput"
 import { ChangeTokenHandlerContext } from "../../App"
 import { LOGIN } from "../typeDefs/Auth"
 
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Login = ({ navigation }) => {
     const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
@@ -36,12 +39,11 @@ const Login = ({ navigation }) => {
     const [checkPassword, setCheckPassword] = useState(false)
     const [showPassword, setShowPassword] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [change, setChange] = useState(true);
     // const storeData = useSelector(state => state);
     // console.log("storeData===>", storeData.user.role);
     const dispatch = useDispatch();
 
-    // let userobj ={user:{ role: "USER",name:"noor",email:"noorulhuda@gmail.com" }}
+
 
 
     const [_login, { data, error }] = useMutation(LOGIN);
@@ -85,9 +87,11 @@ const Login = ({ navigation }) => {
                 ToastAndroid.CENTER
             );
             dispatch(addUser(data?.login?.user));
-            navigation.navigate("Home")
-            setChange(false)
             setLoading(false)
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }]
+            })
         }).catch(err => {
             setLoading(false)
             Alert.alert(`Error : ${err}`);
@@ -129,6 +133,7 @@ const Login = ({ navigation }) => {
                         type={"email"}
                         placeholder={"Email..."}
                         customStyle={{ marginTop: 50 }}
+                        icon={<Entypo name="email" size={17} color="lightgray" />}
                     />
 
                     <InputText
@@ -141,6 +146,7 @@ const Login = ({ navigation }) => {
                         showPassword={showPassword}
                         setShowPassword={setShowPassword}
                         customStyle={{ marginTop: 12 }}
+                        icon={<FontAwesome5 name="key" size={17} color="lightgray" />}
                     />
 
 

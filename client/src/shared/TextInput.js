@@ -41,6 +41,7 @@ const TextInput = ({
   customStyle,
   showPassword,
   setShowPassword,
+  icon
 }) => {
   useEffect(() => {
     let regex;
@@ -73,6 +74,7 @@ const TextInput = ({
       style={[{marginTop: 25}, styles.item, customStyle]}
       success={email !== '' && (checkEmail ? true : false)}
       error={email !== '' && (checkEmail ? false : true)}>
+       {icon} 
       <Input
         style={{fontSize: 14}}
         placeholder={placeholder}
@@ -106,7 +108,7 @@ const TextInput = ({
 
 const styles = StyleSheet.create({
   item: {
-    paddingLeft: 5,
+    paddingLeft: 8,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

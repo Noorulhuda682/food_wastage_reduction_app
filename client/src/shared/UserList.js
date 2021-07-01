@@ -21,9 +21,9 @@ import { useQuery } from "@apollo/client";
 import { MYPOSTS } from "../typeDefs/Post";
 import PostCard from "../shared/PostCard"
 import Header from "../shared/Header";
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
-const UserList = ({ navigation, user, index,routeName }) => {
+const UserList = ({ navigation, user, index, routeName }) => {
 
     return (
 
@@ -54,7 +54,7 @@ const UserList = ({ navigation, user, index,routeName }) => {
                             flex: 1,
                             flexDirection: "row"
                         }}>
-                            <View style={{ flex: 1.5, backgroundColor: "white", height: 60 }}>
+                            <View style={{ flex: 2, backgroundColor: "white", height: 60 }}>
                                 {user.profileImage ?
 
                                     <Image style={{
@@ -79,10 +79,10 @@ const UserList = ({ navigation, user, index,routeName }) => {
                                 <Text style={{ color: "gray", fontSize: 11 }}>{user.email}</Text>
                             </View>
                             <View style={{
-                                flex: 1, justifyContent: "center",
+                                flex: 2, justifyContent: "center",
                                 alignItems: "flex-end",
                             }}>
-                                <TouchableOpacity onPress={() => navigation.navigate("detailsPage",{routeName,user})} style={styles.detailsButton}>
+                                <TouchableOpacity onPress={() => navigation.navigate("detailsPage", { routeName, user })} style={styles.detailsButton}>
                                     <Text style={styles.detailsText}>details</Text>
                                 </TouchableOpacity>
                             </View>
@@ -135,15 +135,15 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 7,
     },
-    detailsButton:{
-     backgroundColor:'#1e319d',
-     paddingHorizontal:8,
-     paddingVertical:6,
-     borderRadius:4,
+    detailsButton: {
+        backgroundColor: '#1e319d',
+        paddingHorizontal: 8,
+        paddingVertical: 6,
+        borderRadius: 4,
     },
     detailsText: {
         fontSize: 13,
-        color:"white"
+        color: "white"
     }
 
 })

@@ -58,7 +58,7 @@ const PostCard = ({ navigation, foodPost, keyInd }) => {
       });
   };
 
-  console.log("SEEPOst===", foodPost.user);
+  // console.log("SEEPOst===", foodPost.user);
 
   return (
     <TouchableOpacity key={keyInd} style={styles.container}>
@@ -109,7 +109,7 @@ const PostCard = ({ navigation, foodPost, keyInd }) => {
         </Text>
 
         <Button transparent style={{ width: '100%' }}>
-          {storeData?.user?.role !== 'USER' ? (
+          {storeData?.user?.role === 'USER' ? (
             foodPost.status === "PROGRESS" &&
             <Button transparent>
               <Text style={styles.uploader}>
@@ -164,7 +164,7 @@ const PostCard = ({ navigation, foodPost, keyInd }) => {
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity
-                  style={[crudButton, { backgroundColor: '#00203FFF' }]}>
+                  style={[styles.crudButton, { backgroundColor: '#00203FFF' }]}>
                   <Text style={{ color: 'white' }}>
                     <Feather name="edit" size={15} color="white" />
                     {`  `}Edit{`  `}
@@ -174,7 +174,7 @@ const PostCard = ({ navigation, foodPost, keyInd }) => {
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity
-                  style={[crudButton, { backgroundColor: '#ea1715' }]}>
+                  style={[styles.crudButton, { backgroundColor: '#ea1715' }]}>
                   <Text style={{ color: 'white' }}>
                     <AntDesign name="delete" size={15} color="white" />
                     {` `}Delete

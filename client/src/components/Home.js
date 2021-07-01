@@ -1,36 +1,49 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import DrawerContent from "./ContentComponent"
 import {
-   Home, 
-   Profile,
-   AddPost,
-   MyPosts,
-   AllPosts,
-   Map,
-   Camera,
-   NewOrders,
-   CompletedOrders,
-   ProgressOrders,
-   Users,
-   Receivers,
-   DetailsPage
- } from "../screens"
-import {useSelector,useDispatch} from "react-redux"
+  Home,
+  Profile,
+  AddPost,
+  MyPosts,
+  AllPosts,
+  Map,
+  Camera,
+  NewOrders,
+  CompletedOrders,
+  ProgressOrders,
+  Users,
+  Receivers,
+  DetailsPage
+} from "../screens"
+import { useSelector, useDispatch } from "react-redux"
 
 const Drawer = createDrawerNavigator();
 
 const MainHome = ({ navigation }) => {
-  let stateData = useSelector( state => state);
+  let stateData = useSelector(state => state);
 
-  useEffect( () => {
-    console.log("MainHome====>",stateData?.user);
-    if(stateData?.user?.role){
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     console.log("navigation**********************");
+  //     navigation.dispatch(
+  //       StackActions.popToTop()
+  //     );
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
+
+
+
+
+  useEffect(() => {
+    console.log("MainHome====>", stateData?.user);
+    if (stateData?.user?.role) {
       navigation.navigate("Home")
-    }else{
+    } else {
       navigation.navigate("Login")
-    } 
-  },[])
+    }
+  }, [])
 
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="home"
@@ -54,7 +67,7 @@ const MainHome = ({ navigation }) => {
       <Drawer.Screen name="receivers" component={Receivers} />
       <Drawer.Screen name="detailsPage" component={DetailsPage} />
     </Drawer.Navigator>
-  );  
+  );
 }
 
 export default MainHome;
