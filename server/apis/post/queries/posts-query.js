@@ -1,7 +1,7 @@
 const Post = require("../../../models/Post");
 const mongoose = require("mongoose");
 
-const posts = async (_,{status,userId} , { dataSources }) => {
+const posts = async (_,{status,userId,receiverId}, { dataSources }) => {
 
   var aggregat = [
     {
@@ -23,12 +23,10 @@ const posts = async (_,{status,userId} , { dataSources }) => {
   ]
   
   var match = {}
-  if(userId){
-    match.userId = mongoose.Types.ObjectId(userId)
-  }
-  if(status){
-    match.status = status;
-  }
+  if(userId) match.userId = mongoose.Types.ObjectId(userId)
+  if(receiverId) match.receiverId = mongoose.Types.ObjectId(receiverId)
+  if(status) match.status = status;
+  
  
   console.log("AGGREgate",match);
   aggregat.push({ $match:match })

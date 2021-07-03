@@ -11,8 +11,8 @@ const addUser = async (_, { name, email, password }, { pubsub, SECRET }) => {
   if (checkUser) throw new Error("user already exists with this email");
 
   
-
-  var verificationCode = await sendEmail({name,email})
+  template_id = "d-b8fb3a5565b44814a7facccbd3e55f4b";
+  var verificationCode = await sendEmail({template_id,name,email})
 
   // hash password
   let passwordHashed = await  bcrypt.hash(password,12);

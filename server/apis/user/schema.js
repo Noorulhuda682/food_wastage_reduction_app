@@ -37,6 +37,8 @@ const user = gql`
 
     verifyEmail(email:String!):String
     checkCode(code:Int!):User
+    requestToResetPassword(email:String!):String
+    resetPassword(code:Int! newPassword:String!):String
   }
 
   type LoginRes {

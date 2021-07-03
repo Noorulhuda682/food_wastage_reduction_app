@@ -1,7 +1,9 @@
 const fetch = require("node-fetch");
 
-const sendEmail = async ({name,email}) => {
+const sendEmail = async ({template_id,name,email}) => {
 
+  console.log("sendEmail===",template_id,name,email);
+  
   var verificationCode = Math.floor(100000 + Math.random() * 900000);
   await fetch("https://api.sendgrid.com/v3/mail/send", {
     method: "POST",
@@ -27,7 +29,7 @@ const sendEmail = async ({name,email}) => {
           },
         },
       ],
-      template_id: "d-b8fb3a5565b44814a7facccbd3e55f4b",
+      template_id,
     }),
   })
     .then((data) => {

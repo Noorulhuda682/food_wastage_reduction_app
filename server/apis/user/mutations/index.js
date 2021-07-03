@@ -5,6 +5,8 @@ const deleteUser = require("./delete-user");
 const updateUser = require("./update-user");
 const verifyEmail = require("./verify-email");
 const checkCode = require("./check-otp-code");
+const requestToResetPassword = require("./request-to-reset-password");
+const resetPassword = require("./reset-password");
 
 const Mutation = {
     addUser,
@@ -13,7 +15,9 @@ const Mutation = {
     deleteUser,
     updateUser,
     verifyEmail,
-    checkCode
+    checkCode,
+    requestToResetPassword,
+    resetPassword
 }
 
 module.exports = Mutation;
