@@ -133,7 +133,7 @@ const Login = ({ navigation }) => {
                         type={"email"}
                         placeholder={"Email..."}
                         customStyle={{ marginTop: 50 }}
-                        icon={<Entypo name="email" size={17} color="lightgray" />}
+                        icon={<Entypo name="email" size={14} color="lightgray" />}
                     />
 
                     <InputText
@@ -146,7 +146,7 @@ const Login = ({ navigation }) => {
                         showPassword={showPassword}
                         setShowPassword={setShowPassword}
                         customStyle={{ marginTop: 12 }}
-                        icon={<FontAwesome5 name="key" size={17} color="lightgray" />}
+                        icon={<FontAwesome5 name="key" size={14} color="lightgray" />}
                     />
 
 

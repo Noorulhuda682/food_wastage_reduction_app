@@ -31,7 +31,6 @@ const Home = ({ navigation }) => {
     let {latitude,longitude} = position; 
     console.log("Postion==>",latitude,longitude);
     let token = await messaging().getToken();
-    // console.log('TTTToken', token);
 
     let payload = storeData?.user?.role === "USER" ? { userId: storeData?.user?._id } : { receiverId: storeData?.user?._id }
     token && (payload.pushToken = token)
@@ -178,16 +177,17 @@ const styles = StyleSheet.create({
   },
   cardRight: {
     flex: 2,
-    marginLeft: 7,
+    marginLeft: 10,
   },
   cardTitle: {
-    fontSize: 16,
-    marginTop: -4,
-    textShadowColor: 'blue',
-    textShadowRadius: 1,
+    fontSize: 17,
+    color:"navy"
+    // textShadowColor: 'blue',
+    // textShadowRadius: 1,
   },
   cardParagraph: {
     color: 'gray',
+    marginTop:5
   },
 });
 export default Home;

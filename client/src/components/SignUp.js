@@ -14,23 +14,19 @@ import {
 } from 'react-native';
 import {
   Container,
-  Header,
-  Content,
-  Item,
-  Input,
-  Icon,
-  Spinner,
-  Button,
+  Content
 } from 'native-base';
-import {Picker} from '@react-native-picker/picker';
+
 import DropDownInput from '../shared/DropDown';
 import InputText from '../shared/TextInput';
 import {useMutation} from '@apollo/client';
 import {ADDUSER, ADDRECEIVER} from '../typeDefs/Auth';
 import {ChangeTokenHandlerContext} from '../../App';
-import {saveData} from '../config/setToken';
 import {useDispatch} from 'react-redux';
-import {addUser} from '../redux/actions/user';
+
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const SignUp = ({navigation}) => {
   const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
@@ -139,6 +135,7 @@ const SignUp = ({navigation}) => {
               type={'name'}
               placeholder={'Name...'}
               customStyle={{marginTop: 50,marginRight:1}}
+              icon={<AntDesign name="user" size={14} color="lightgray" />}
             />
             <InputText
               email={email}
@@ -148,6 +145,7 @@ const SignUp = ({navigation}) => {
               type={'email'}
               placeholder={'Email...'}
               customStyle={{marginTop: 12,marginRight:1}}
+              icon={<Entypo name="email" size={14} color="lightgray" />}
             />
 
             <InputText
@@ -160,6 +158,7 @@ const SignUp = ({navigation}) => {
               showPassword={showPassword}
               setShowPassword={setShowPassword}
               customStyle={{marginTop: 12,marginRight:1}}
+              icon={<FontAwesome5 name="key" size={14} color="lightgray" />}
             />
 
             {password !== '' && !checkPassword && (

@@ -145,7 +145,6 @@ const AddPost = ({navigation}) => {
       });
   };
 
-
   const launchImageLibraryHandler = () => {
     launchImageLibrary(options, response => {
       console.log('Response = ', response);
@@ -173,7 +172,6 @@ const AddPost = ({navigation}) => {
       setUsingCamera(false);
       setUploadImg(false);
     }
-    z;
   };
 
   const takePhoto = async imgData => {
@@ -196,17 +194,22 @@ const AddPost = ({navigation}) => {
                 justifyContent: 'center',
               }}>
               {img1 ? (
-                <TouchableOpacity
-                  style={[
-                    styles.cameraView,
-                    {width: '70%', height: 120, margin: 10},
-                  ]}
-                  onPress={() => setUploadImg(!uploadImg)}>
-                  <Image
-                    style={{height: '100%', width: '100%'}}
-                    source={{uri: img1}}
-                  />
-                </TouchableOpacity>
+                <View style={{width:"100%",alignItems:"center"}}>
+                  <TouchableOpacity
+                    style={[
+                      styles.cameraView,
+                      {width: '70%', height: 120, margin: 10},
+                    ]}
+                    onPress={() => setUploadImg(!uploadImg)}>
+                    <Image
+                      style={{height: '100%', width: '100%'}}
+                      source={{uri: img1}}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={()=> setImg1(null)} style={{marginTop:-5}}>
+                    <Text style={{color:"blue"}}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
               ) : (
                 <TouchableOpacity
                   onPress={() => setUploadImg(!uploadImg)}
