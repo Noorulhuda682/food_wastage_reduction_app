@@ -1,27 +1,54 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-    View,
     Text, Dimensions,
-    StyleSheet, Image, PermissionsAndroid, Platform,
-
+    StyleSheet, PermissionsAndroid, Platform, View,
+    BackHandler,Alert
 } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Callout } from 'react-native-maps';
 import {
-    Container, Header, Left, Body, Right, Button, Icon, Title, Content,
-    Card, CardItem, H2, Footer, Thumbnail, List, ListItem,
-    // Text
+    Container, Content,
 } from 'native-base';
+import Header from '../shared/Header';
 import Geolocation from '@react-native-community/geolocation';
 const { width, height } = Dimensions.get('window')
+import PostCard from '../shared/PostCard';
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
 
-const Map = ({ navigation }) => {
+const Map = ({ route, navigation }) => {
+
+    // console.log("PARAMS===", route.params);
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert("Hold on!", "Are you sure you want to go back?", [
+                {
+                    text: "Cancel",
+                    onPress: () => null,
+                    style: "cancel"
+                },
+                { text: "YES", onPress: () => navigation.goBack("progressOrders") }
+            ]);
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, []);
+
+    let { post } = route.params;
+
     const [currentLongitude, setCurrentLongitude] = useState(null);
     const [currentLatitude, setCurrentLatitude] = useState(null);
     const [locationStatus, setLocationStatus] = useState('');
-
+    const [latitudeDelta, setLatitudeDelta] = useState(1.0)
+    const [longitudeDelta, setLongitudeDelta] = useState(1.0)
+    longitudeDelta
     const markerRef = useRef(null);
 
     const onRegionChangeComplete = () => {
@@ -29,6 +56,16 @@ const Map = ({ navigation }) => {
             markerRef.current.showCallout();
         }
     };
+
+    const [userLocation,setUserLocation] = useState({
+        latitude:post.user[0].latitude,
+        longitude:post.user[0].longitude
+    })
+
+    const [receiverLocation,setReceiverLocation] = useState({
+        latitude:post.receiver[0].latitude,
+        longitude:post.receiver[0].longitude
+    })
 
 
     useEffect(() => {
@@ -87,8 +124,8 @@ const Map = ({ navigation }) => {
             },
             {
                 enableHighAccuracy: true,
-                timeout: 30000,
-                maximumAge: 0
+                // timeout: 30000,
+                // maximumAge: 0
             },
         );
     };
@@ -118,27 +155,39 @@ const Map = ({ navigation }) => {
         );
     };
 
+    useEffect(
+        () =>
+            navigation.addListener('beforeRemove', (e) => {
+                // if (!hasUnsavedChanges) {
+                //   // If we don't have unsaved changes, then we don't need to do anything
+                //   return;
+                // }
+
+                // Prevent default behavior of leaving the screen
+                console.log("BACK===", e);
+                // e.preventDefault();
+
+            }),
+        [navigation]
+    );
 
 
-    console.log("currentLatitude=======", currentLatitude, currentLongitude);
+
+    // console.log("currentLatitude=======", currentLatitude, currentLongitude);
+
     return (
         <Container>
-            <Header style={{ backgroundColor: "#00203FFF" }}>
-                <Left>
-                    <Button transparent onPress={() => navigation.openDrawer()}>
-                        <Icon name='menu' />
-                    </Button>
-                </Left>
-                <Body>
-                    <Title>Map Area</Title>
-                </Body>
-                <Right>
-                    <Button transparent>
-                        <MaterialCommunityIcons name="dots-vertical" size={22} color="white" />
-                    </Button>
-                </Right>
-            </Header>
-            <Content>
+            <Header navigation={navigation} title="Map Area" />
+            <Content style={{
+                // borderWidth:2,borderColor:"red"
+            }}>
+                <View style={styles.cardView}>
+                    <PostCard
+                        navigation={navigation}
+                        foodPost={post}
+                        hideMapIcon
+                    />
+                </View>
                 <MapView
                     onRegionChangeComplete={onRegionChangeComplete}
                     provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -150,12 +199,12 @@ const Map = ({ navigation }) => {
                     initialRegion={{
                         latitude: currentLatitude ? currentLatitude : 24.8607,
                         longitude: currentLatitude ? currentLatitude : 67.0011,
-                        latitudeDelta: 0.015,
-                        longitudeDelta: 0.0121,
+                        latitudeDelta,
+                        longitudeDelta
                     }}
                 >
 
-
+{/* 
                     <Marker
                         coordinate={{
                             latitude: currentLatitude ? currentLatitude : 24.8607
@@ -167,12 +216,32 @@ const Map = ({ navigation }) => {
                         <Callout tooltip={false} >
                             <Text>Reciver</Text>
                         </Callout>
+                    </Marker> */}
+
+                    {/* <Marker
+                        coordinate={userLocation}
+                        ref={markerRef}
+                    >
+                        <MaterialCommunityIcons name="map-marker" size={50} color="#00238b" />
+                        <Callout tooltip={false} >
+                            <Text>User</Text>
+                        </Callout>
+                    </Marker> */}
+
+                    <Marker
+                        coordinate={userLocation}
+                        ref={markerRef}
+                    >
+                       <FontAwesome5 name="biking" size={30} color="#00238b"/>
+                        <Callout tooltip={false} >
+                            <Text>Rider</Text>
+                        </Callout>
                     </Marker>
 
 
-                    
 
-                     <Polyline
+
+                    <Polyline
                         coordinates={[
                             { latitude: 24.813625000000002, longitude: 67.04830333333332 },
                             { latitude: 24.8607, longitude: 67.0011, },
@@ -190,63 +259,17 @@ const Map = ({ navigation }) => {
                     />
 
                 </MapView>
-                <List>
-                    <ListItem thumbnail onPress={subscribeLocationLocation}>
-                        <Left>
-                            <Thumbnail square source={require('../assets/images/foods.jpeg')} />
-                        </Left>
-                        <Body>
-                            <Text>Sankhadeep {`${currentLongitude}`}</Text>
-                            <Text note numberOfLines={1}>Its time to help poorty . .</Text>
-                        </Body>
-                        <Right>
-                            <Button transparent>
-                                <Text>View</Text>
-                            </Button>
-                        </Right>
-                    </ListItem>
-                    <ListItem thumbnail>
-                        <Left>
-                            <Thumbnail square source={require('../assets/images/foods.jpeg')} />
-                        </Left>
-                        <Body>
-                            <Text>Sankhadeep</Text>
-                            <Text note numberOfLines={1}>Its time to help poorty . .</Text>
-                        </Body>
-                        <Right>
-                            <Button transparent>
-                                <Text>View</Text>
-                            </Button>
-                        </Right>
-                    </ListItem>
-                    <ListItem thumbnail>
-                        <Left>
-                            <Thumbnail square source={require('../assets/images/foods.jpeg')} />
-                        </Left>
-                        <Body>
-                            <Text>Sankhadeep</Text>
-                            <Text note numberOfLines={1}>Its time to help poorty . .</Text>
-                        </Body>
-                        <Right>
-                            <Button transparent>
-                                <Text>View</Text>
-                            </Button>
-                        </Right>
-                    </ListItem>
-                </List>
-            </Content>
-            {/* <Content style={{height:100}}>
-                <Text>
-                    User Information
-                </Text>
-            </Content> */}
 
+            </Content>
         </Container>
 
     );
 }
 
 const styles = StyleSheet.create({
-
+    cardView: {
+        paddingHorizontal: 10,
+        marginTop: -15,
+    }
 })
 export default Map;

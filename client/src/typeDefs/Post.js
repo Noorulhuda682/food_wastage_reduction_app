@@ -132,8 +132,8 @@ const MYPOSTS = gql`
 `;
 
 const POSTS = gql`
-  query posts($status: String $userId:String) {
-    posts(status: $status userId:$userId) {
+  query posts($status: String $userId:String $receiverId:String) {
+    posts(status: $status userId:$userId receiverId:$receiverId) {
       _id
       userId
       title

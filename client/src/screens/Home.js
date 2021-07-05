@@ -6,7 +6,8 @@ import {
   Image,
   Alert,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
+  BackHandler
 } from 'react-native';
 import { Container, Icon, Content, Fab } from 'native-base';
 import messaging from '@react-native-firebase/messaging';
@@ -22,32 +23,36 @@ const Home = ({ navigation }) => {
   const storeData = useSelector(state => state);
   const [updateUser, { }] = useMutation(storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN" ? UPDATE_USER : UPDATE_RECEIVER);
 
+  
 
   useEffect(async () => {
 
-    let position;
-     await requestLocationPermission()
-     .then( res => {  position = res }).catch( err =>  console.log("EE===",err) )
-    let {latitude,longitude} = position; 
-    console.log("Postion==>",latitude,longitude);
-    let token = await messaging().getToken();
+    if(storeData.user){
+      let position;
+      await requestLocationPermission()
+        .then(res => { position = res }).catch(err => console.log("EE===", err))
+      let { latitude, longitude } = position;
+      console.log("Postion==>", latitude, longitude);
+      let token = await messaging().getToken();
 
-    let payload = storeData?.user?.role === "USER" ? { userId: storeData?.user?._id } : { receiverId: storeData?.user?._id }
-    token && (payload.pushToken = token)
-    latitude && (payload.latitude = latitude)
-    longitude && (payload.longitude = longitude)
-  
-    console.log("payload===",payload);
+      let payload = storeData?.user?.role === "USER" ? { userId: storeData?.user?._id } : { receiverId: storeData?.user?._id }
+      token && (payload.pushToken = token)
+      latitude && (payload.latitude = latitude)
+      longitude && (payload.longitude = longitude)
+
+      // console.log("payload===", payload);
 
 
 
-    updateUser({
-      variables: payload
-    }).then(res => {
-      console.log("LOG===", res);
-    }).catch(err => {
-      Alert.alert(`QQQ  ${err}`)
-    })
+      updateUser({
+        variables: payload
+      }).then(res => {
+        // console.log("LOG===", res);
+      }).catch(err => {
+        Alert.alert(`QQQ  ${err}`)
+      })
+
+    }
 
   }, [])
 
@@ -74,6 +79,8 @@ const Home = ({ navigation }) => {
       });
 
   }, []);
+
+  // console.log("storeData", storeData);
 
   return (
     <Container>
@@ -181,13 +188,13 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 17,
-    color:"navy"
+    color: "navy"
     // textShadowColor: 'blue',
     // textShadowRadius: 1,
   },
   cardParagraph: {
     color: 'gray',
-    marginTop:5
+    marginTop: 5
   },
 });
 export default Home;
@@ -221,12 +228,12 @@ const requestLocationPermission = async () => {
             error => reject(error),
             {
               enableHighAccuracy: true,
-              timeout: 30000,
-              maximumAge: 0
+              timeout: 5000,
+              maximumAge:60000
             },
           );
           console.log("1positioning|||===>", check);
-         
+
         } else {
           // console.log("Permission Denied", error);
           reject("Permission Denied")

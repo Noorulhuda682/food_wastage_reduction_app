@@ -26,7 +26,7 @@ const CompletedOrders = ({navigation}) => {
 
   let payload = {status:"COMPLETED"};
   if (storeData.user.role === 'USER') payload.userId = storeData.user._id;
-//   if (storeData.user.role === 'RECEIVER') payload.userId = storeData.user._id;
+  if (storeData.user.role === 'RECEIVER') payload.receiverId = storeData.user._id;
 
   const {loading, error, data} = useQuery(POSTS, {
     variables: payload,
@@ -80,6 +80,17 @@ const CompletedOrders = ({navigation}) => {
               if (storeData.user.role === 'USER') {
                 return (
                   storeData.user._id === foodPost.userId && (
+                    <PostCard
+                      navigation={navigation}
+                      foodPost={foodPost}
+                      keyInd={key}
+                    />
+                  )
+                );
+              }
+              if (storeData.user.role === 'RECEIVER') {
+                return (
+                  storeData.user._id === foodPost.receiverId && (
                     <PostCard
                       navigation={navigation}
                       foodPost={foodPost}

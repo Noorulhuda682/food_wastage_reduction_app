@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 import { UPDATEPOST } from '../typeDefs/Post';
 
-const PostCard = ({ navigation, foodPost, keyInd }) => {
+const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon }) => {
   const storeData = useSelector(state => state);
   const [focusKey, setFocusKey] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -78,7 +78,7 @@ const PostCard = ({ navigation, foodPost, keyInd }) => {
           <Text style={styles.title}>
             {foodPost.title}
           </Text>
-          {storeData?.user?.role !== 'ADMIN' && (
+          {(storeData?.user?.role !== 'ADMIN' && !hideMapIcon) && (
             <TouchableOpacity
               onPress={() => setFocusKey(focusKey === null ? keyInd : null)}>
               <MaterialIcons
@@ -119,10 +119,10 @@ const PostCard = ({ navigation, foodPost, keyInd }) => {
                 <EvilIcons name="user" size={30} color="gray" />
                 :
                 <Thumbnail style={styles.thumbnail}
-                source={{ uri: foodPost.receiver[0]?.profileImage }}
-              />
+                  source={{ uri: foodPost.receiver[0]?.profileImage }}
+                />
               }
-              <Text  style={styles.uploaderName}>{foodPost.receiver[0]?.name}</Text>
+              <Text style={styles.uploaderName}>{foodPost.receiver[0]?.name}</Text>
             </Button>
           )
             :
@@ -130,23 +130,23 @@ const PostCard = ({ navigation, foodPost, keyInd }) => {
               <Text style={styles.uploader}>
                 Uploader :
               </Text>
-            
+
               {!foodPost.user[0]?.profileImage ?
                 <EvilIcons name="user" size={30} color="gray" />
                 :
                 <Thumbnail style={styles.thumbnail}
-                source={{ uri: foodPost.user[0]?.profileImage }}
-              />
+                  source={{ uri: foodPost.user[0]?.profileImage }}
+                />
               }
-              <Text  style={styles.uploaderName}>{foodPost.user[0]?.name}</Text>
+              <Text style={styles.uploaderName}>{foodPost.user[0]?.name}</Text>
             </Button>
           }
 
-          {foodPost.status !== 'NEW' && (
+          {hideMapIcon || (foodPost.status !== 'NEW' && foodPost.status !== 'COMPLETED') && (
             <TouchableOpacity
               transparent
               style={{ marginTop: 10 }}
-              onPress={() => navigation.navigate('map')}>
+              onPress={() => navigation.navigate('map', { post: foodPost })}>
               <Text style={{ marginLeft: 5, fontSize: 11 }}>
                 <MaterialCommunityIcons
                   name="map-marker"
@@ -294,9 +294,9 @@ const styles = StyleSheet.create({
     height: 24,
     width: 24,
   },
-  uploaderName:{
-    marginLeft: 5, 
-    fontSize: 11 
+  uploaderName: {
+    marginLeft: 5,
+    fontSize: 11
   }
 });
 export default PostCard;

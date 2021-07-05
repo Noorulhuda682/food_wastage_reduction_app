@@ -207,7 +207,7 @@ const AddPost = ({navigation}) => {
                     />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={()=> setImg1(null)} style={{marginTop:-5}}>
-                    <Text style={{color:"blue"}}>Cancel</Text>
+                    <Text style={{color:"red"}}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
               ) : (
@@ -220,15 +220,6 @@ const AddPost = ({navigation}) => {
             </View>
             {uploadImg && (
               <Item style={{justifyContent: 'space-around', marginTop: 10}}>
-                {/* <Button
-                  iconLeft
-                  style={{paddingRight: 15}}
-                  onPress={() => setUsingCamera(true)}>
-                  <Icon name="ios-camera" />
-                  <Text style={{marginLeft: 5, color: 'white'}}>
-                    Take Photo
-                  </Text>
-                </Button> */}
                 <Button
                   iconLeft
                   style={{paddingHorizontal: 15, marginLeft: 10}}

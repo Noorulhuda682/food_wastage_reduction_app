@@ -27,7 +27,7 @@ const ProgressOrders = ({ navigation }) => {
 
   let payload = { status: "PROGRESS" };
   if (storeData.user.role === 'USER') payload.userId = storeData.user._id;
-  //   if (storeData.user.role === 'RECEIVER') payload.userId = storeData.user._id;
+  if (storeData.user.role === 'RECEIVER') payload.receiverId = storeData.user._id;
 
   const { loading, error, data } = useQuery(POSTS, {
     variables: payload,
@@ -81,6 +81,17 @@ const ProgressOrders = ({ navigation }) => {
               if (storeData.user.role === 'USER') {
                 return (
                   storeData.user._id === foodPost.userId && (
+                    <PostCard
+                      navigation={navigation}
+                      foodPost={foodPost}
+                      keyInd={index}
+                    />
+                  )
+                );
+              }
+              if (storeData.user.role === 'RECEIVER') {
+                return (
+                  storeData.user._id === foodPost.receiverId && (
                     <PostCard
                       navigation={navigation}
                       foodPost={foodPost}
