@@ -11,6 +11,7 @@ import ProgressOrders from "./ProgressOrders";
 import Users from "./Users";
 import Receivers from "./Receivers";
 import DetailsPage from "./DetailsPage";
+import FoodDetailsPage from "./FoodDetailsPage";
 
 export {
     Home,
@@ -25,5 +26,6 @@ export {
     ProgressOrders,
     Users,
     Receivers,
-    DetailsPage
+    DetailsPage,
+    FoodDetailsPage
 }

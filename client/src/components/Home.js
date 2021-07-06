@@ -14,7 +14,8 @@ import {
   ProgressOrders,
   Users,
   Receivers,
-  DetailsPage
+  DetailsPage,
+  FoodDetailsPage
 } from "../screens"
 import { useSelector, useDispatch } from "react-redux"
 
@@ -46,7 +47,7 @@ const MainHome = ({ navigation }) => {
   }, [])
 
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="home"
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="foodDetailsPage"
       screenOptions={{
         headerShown: false
       }}
@@ -66,6 +67,7 @@ const MainHome = ({ navigation }) => {
       <Drawer.Screen name="users" component={Users} />
       <Drawer.Screen name="receivers" component={Receivers} />
       <Drawer.Screen name="detailsPage" component={DetailsPage} />
+      <Drawer.Screen name="foodDetailsPage" component={FoodDetailsPage} />
     </Drawer.Navigator>
   );
 }

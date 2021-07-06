@@ -62,7 +62,7 @@ const AddPost = ({navigation}) => {
 
   const [uploadImg, setUploadImg] = useState(false);
   const [usingCamera, setUsingCamera] = useState(false);
-
+  // https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYUzb2VVE2Kw9sI_bHK-Z5wYTMHNvGMths8A&usqp=CAU
   const [loading, setLoading] = useState(false);
   const [img1, setImg1] = useState(null);
   const datas = useSelector(state => state);

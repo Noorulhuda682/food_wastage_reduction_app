@@ -52,7 +52,7 @@ const UserList = ({ navigation, user, index, routeName }) => {
                         <View style={{
                             backgroundColor: "white",
                             flex: 1,
-                            flexDirection: "row"
+                            flexDirection: "row",
                         }}>
                             <View style={{ flex: 2, backgroundColor: "white", height: 60 }}>
                                 {user.profileImage ?

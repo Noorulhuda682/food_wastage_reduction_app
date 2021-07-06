@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
-    View,
-    Text, Dimensions,
-    StyleSheet, Image, ActivityIndicator
+    View,Text,
+    StyleSheet, Image, BackHandler
 } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,6 +21,21 @@ const DetailsPage = ({ route, navigation }) => {
 
     // console.log("DETAILPAGE====",route.params);
     let { routeName, user } = route.params
+
+    useEffect(() => {
+        const backAction = () => {
+            navigation.navigate(routeName);
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, [route]);
+
     return (
         <Container>
             <Content>
