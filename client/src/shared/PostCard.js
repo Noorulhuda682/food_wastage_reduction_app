@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 import { UPDATEPOST } from '../typeDefs/Post';
 
-const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon }) => {
+const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
   const storeData = useSelector(state => state);
   const [focusKey, setFocusKey] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -58,10 +58,11 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon }) => {
       });
   };
 
-  // console.log("SEEPOst===", foodPost.user);
+  // console.log("SEEPOst===", routeName);
 
   return (
-    <TouchableOpacity key={keyInd} style={styles.container}>
+    <TouchableOpacity onPress={() => navigation.navigate("foodDetailsPage",{routeName,foodPost})}
+    key={keyInd} style={styles.container}>
       <View style={styles.imageView}>
         {foodPost.img1 !== null ? (
           <Image source={{ uri: foodPost.img1 }} style={styles.postImage} />

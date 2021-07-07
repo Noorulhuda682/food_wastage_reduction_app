@@ -21,7 +21,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 const Home = ({ navigation }) => {
   const storeData = useSelector(state => state);
-  const [updateUser, { }] = useMutation(storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN" ? UPDATE_USER : UPDATE_RECEIVER);
+  const [updateUser, { }] = useMutation( (storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN") ? UPDATE_USER : UPDATE_RECEIVER);
 
   
 
@@ -35,21 +35,19 @@ const Home = ({ navigation }) => {
       console.log("Postion==>", latitude, longitude);
       let token = await messaging().getToken();
 
-      let payload = storeData?.user?.role === "USER" ? { userId: storeData?.user?._id } : { receiverId: storeData?.user?._id }
+      let payload = (storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN") ? { userId: storeData?.user?._id } : { receiverId: storeData?.user?._id }
       token && (payload.pushToken = token)
       latitude && (payload.latitude = latitude)
       longitude && (payload.longitude = longitude)
-
-      // console.log("payload===", payload);
-
 
 
       updateUser({
         variables: payload
       }).then(res => {
-        // console.log("LOG===", res);
+        console.log("LOG===", res);
       }).catch(err => {
         Alert.alert(`QQQ  ${err}`)
+        console.log("err===", res);
       })
 
     }

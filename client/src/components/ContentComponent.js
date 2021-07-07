@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 import {
     DrawerContentScrollView,
@@ -74,7 +75,7 @@ const DrawerContent = (props) => {
                                 <Thumbnail
                                     size={50}
                                     style={styles.profileImage}
-                                    large source={{uri:data?.user?.profileImage}}
+                                    large source={{ uri: data?.user?.profileImage }}
                                 /> :
                                 <Text style={{
                                     color: icon,
@@ -90,7 +91,13 @@ const DrawerContent = (props) => {
                         </View>
                         <Text style={[styles.profileName, { color: title }]} >{data?.user?.name}</Text>
                         <Text style={styles.profileEmail}>{data?.user?.email}</Text>
-                        <Text style={{marginTop:40,color:"navy",fontSize:11}}>ROLE : {data?.user?.role}</Text>
+
+                        <TouchableOpacity style={styles.roleBox}>
+                            <Text style={{
+                                fontSize: 11,color:"gray"
+                            }}>ROLE : {data?.user?.role}</Text>
+                        </TouchableOpacity>
+
                     </View>
 
                     {
@@ -100,21 +107,21 @@ const DrawerContent = (props) => {
                                     icon={({ color, size }) => {
                                         switch (route.iconCompnay) {
                                             case "MaterialCommunityIcons":
-                                                return <MaterialCommunityIcons name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <MaterialCommunityIcons name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                             case "FontAwesome":
-                                                return <FontAwesome name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <FontAwesome name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                             case "AntDesign":
-                                                return <AntDesign name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <AntDesign name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                             case "MaterialIcons":
-                                                return <MaterialIcons name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <MaterialIcons name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                             case "FontAwesome5":
-                                                return <FontAwesome5 name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <FontAwesome5 name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                             case "Foundation":
-                                                return <Foundation name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <Foundation name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                             case "Feather":
-                                                return <Feather name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <Feather name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                             case "EvilIcons":
-                                                return <EvilIcons name={route.iconName} size={route.iconSize} color={icon} />
+                                                return <EvilIcons name={route.iconName} size={route.iconSize} color={"#1e319d"} />
                                         }
                                     }}
                                     label={route.label}
@@ -123,10 +130,10 @@ const DrawerContent = (props) => {
                                 />)
                         })
                     }
-                    
+
                     <DrawerItem style={[styles.drawerItem, { paddingTop: 150 }]}
                         icon={({ color, size }) => {
-                            return <AntDesign name="logout" size={23} color={icon} />
+                            return <AntDesign name="logout" size={23} color={"#1e319d"} />
                         }}
                         label="Logout"
                         inactiveTintColor='gray'
@@ -165,7 +172,7 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     profileEmail: {
-        marginTop:-5,
+        marginTop: -5,
         color: 'gray',
     },
     drawerItem: {
@@ -179,6 +186,20 @@ const styles = StyleSheet.create({
         borderColor: "white",
         marginTop: -25,
         alignSelf: "flex-end"
+    },
+    roleBox:{
+        marginTop: 40,
+        color: "navy", fontSize: 11,
+        backgroundColor: "white",
+        height: 42,
+        paddingHorizontal:10,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 15,
+        shadowOpacity: 0.1,
+        shadowColor: "navy",
+        shadowRadius: 2,
+        elevation: 5,
     }
 
 })

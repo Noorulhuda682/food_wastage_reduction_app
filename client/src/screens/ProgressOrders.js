@@ -85,6 +85,7 @@ const ProgressOrders = ({ navigation }) => {
                       navigation={navigation}
                       foodPost={foodPost}
                       keyInd={index}
+                      routeName="progressOrders"
                     />
                   )
                 );
@@ -96,6 +97,7 @@ const ProgressOrders = ({ navigation }) => {
                       navigation={navigation}
                       foodPost={foodPost}
                       keyInd={index}
+                      routeName="progressOrders"
                     />
                   )
                 );
@@ -105,6 +107,7 @@ const ProgressOrders = ({ navigation }) => {
                     navigation={navigation}
                     foodPost={foodPost}
                     keyInd={index}
+                    routeName="progressOrders"
                   />
                 );
               }

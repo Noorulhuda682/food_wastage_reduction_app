@@ -120,11 +120,7 @@ const SignUp = ({navigation}) => {
         <Container>
           <Content style={styles.content}>
             <View style={styles.headingView}>
-              <Text style={styles.headingTitle}>Create Account /</Text>
-              <Text style={styles.headingText}>
-                SignUp to get starget with FWR !
-              </Text>
-              {/* <Text style={[styles.headingText,]}>ON FWR</Text> */}
+              <Text style={styles.headingTitle}>Create Account</Text>
             </View>
          
             <InputText

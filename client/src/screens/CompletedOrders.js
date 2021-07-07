@@ -84,6 +84,7 @@ const CompletedOrders = ({navigation}) => {
                       navigation={navigation}
                       foodPost={foodPost}
                       keyInd={key}
+                      routeName="completedOrders"
                     />
                   )
                 );
@@ -95,6 +96,7 @@ const CompletedOrders = ({navigation}) => {
                       navigation={navigation}
                       foodPost={foodPost}
                       keyInd={key}
+                      routeName="completedOrders"
                     />
                   )
                 );
@@ -104,6 +106,7 @@ const CompletedOrders = ({navigation}) => {
                     navigation={navigation}
                     foodPost={foodPost}
                     keyInd={key}
+                    routeName="completedOrders"
                   />
                 );
               }

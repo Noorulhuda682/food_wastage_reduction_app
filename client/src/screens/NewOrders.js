@@ -87,6 +87,7 @@ const NewOrders = ({ navigation }) => {
                       navigation={navigation}
                       foodPost={foodPost}
                       keyInd={key}
+                      routeName={"newOrders"}
                     />
                   )
                 );
@@ -96,6 +97,7 @@ const NewOrders = ({ navigation }) => {
                     navigation={navigation}
                     foodPost={foodPost}
                     keyInd={key}
+                    routeName={"newOrders"}
                   />
                 );
               }
@@ -108,6 +110,7 @@ const NewOrders = ({ navigation }) => {
               navigation={navigation}
               foodPost={foodPost}
               keyInd={key}
+              routeName={"newOrders"}
             />
           ))}
       </Content>

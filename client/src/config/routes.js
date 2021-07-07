@@ -106,7 +106,7 @@ const adminRoutes = [
     },
     {
         routeName: "completedOrders",
-        label: "My Completed Orderss",
+        label: "Completed Orderss",
         iconCompnay: "Feather",
         iconName: "check-square",
         iconSize: 24,

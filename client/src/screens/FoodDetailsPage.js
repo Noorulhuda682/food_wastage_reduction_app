@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     View, Text, ImageBackground,
-    StyleSheet, Image, BackHandler, TouchableOpacity
+    StyleSheet, Image, BackHandler, TouchableOpacity, Alert
 } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,77 +19,112 @@ import { NavigationContainer } from '@react-navigation/native';
 
 const FoodDetailsPage = ({ route, navigation }) => {
     const [searchValue, setSearchValue] = useState("")
-
-    // console.log("DETAILPAGE====",route.params);
+    let { routeName, foodPost } = route.params
+    // console.log("DETAILPAGE====", routeName, foodPost);
     // let { routeName, user } = route.params
 
-    // useEffect(() => {
-    //     const backAction = () => {
-    //         navigation.navigate(routeName);
-    //         return true;
-    //     };
+    useEffect(() => {
+        const backAction = () => {
+            navigation.navigate(routeName);
+            return true;
+        };
 
-    //     const backHandler = BackHandler.addEventListener(
-    //         "hardwareBackPress",
-    //         backAction
-    //     );
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
 
-    //     return () => backHandler.remove();
-    // }, [route]);
+        return () => backHandler.remove();
+    }, [route]);
 
     return (
         <Container>
             <Content style={{ backgroundColor: "white" }}>
                 <ImageBackground style={styles.coverPhoto}
                     resizeMode='cover'
-                    source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYUzb2VVE2Kw9sI_bHK-Z5wYTMHNvGMths8A&usqp=CAU" }}
+                    source={{ uri: foodPost.img1 }}
                 >
                     <Header style={{ backgroundColor: null, elevation: 0 }}>
                         <Left>
-                            <TouchableOpacity style={styles.squareBox}>
+                            <TouchableOpacity onPress={() => navigation.navigate(routeName)}
+                                style={styles.squareBox}>
                                 <MaterialCommunityIcons
-                                    onPress={() => navigation.navigate(routeName)}
                                     name="keyboard-backspace" size={24} color="gray" />
                             </TouchableOpacity>
                         </Left>
+                        <Body style={{ borderWidth: 0 }}>
+                            <TouchableOpacity
+                                style={[styles.squareBox, { width: "100%" }]}>
+                                <Text style={{ color: "gray" }}>Food Details</Text>
+                            </TouchableOpacity>
+                        </Body>
                         <Right>
-                            <TouchableOpacity style={styles.squareBox}>
+                            <TouchableOpacity onPress={() => navigation.navigate("home")}
+                                style={styles.squareBox}>
                                 <FontAwesome name="home" size={20} color="gray" />
                             </TouchableOpacity>
                         </Right>
                     </Header>
                 </ImageBackground>
                 <Content padder style={{ paddingTop: 20 }}>
-                    <Text style={styles.title}>Special Biryani</Text>
+                    <Text style={styles.title}>{foodPost.title}</Text>
                     <Text style={styles.line1}></Text>
                     <Text style={styles.line2}></Text>
 
                     <View style={{ flexDirection: "row", justifyContent: "space-around", flexWrap: "wrap" }}>
                         <TouchableOpacity style={styles.squareBoxBottom}>
                             <Text style={{ color: "gray" }}>Quantity</Text>
-                            <Text style={{ fontSize: 30, fontWeight: "bold" }}>50</Text>
+                            <Text style={{ fontSize: 30, fontWeight: "bold" }}>{foodPost.quantity}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.squareBoxBottom}>
                             <Text style={{ color: "gray" }}>Weight</Text>
-                            <Text style={{ fontSize: 25, fontWeight: "bold" }}>50kg</Text>
+                            <Text style={{ fontSize: 25, fontWeight: "bold" }}>{foodPost.weight}</Text>
                         </TouchableOpacity>
                     </View>
 
 
-                    <Text style={[styles.title, { marginTop: 20, fontSize: 15, color: "black" }]}>Description </Text>
-                    <Text style={{ color: "gray" }}>
-                        This is the app for needy people only
+                    <Text style={[styles.title, { marginTop: 25, fontSize: 15, color: "black" }]}>Description </Text>
+                    <Text style={{ color: "gray", marginTop: 5 }}>
+                        {foodPost.description}
                     </Text>
 
-                    <Text style={[styles.title,{marginTop:30}]}>Uploader</Text>
+                    <Text style={[styles.title, { marginTop: 30, fontSize: 22 }]}>Uploader</Text>
                     <Text style={styles.line1}></Text>
                     <Text style={styles.line2}></Text>
+                    <TouchableOpacity style={styles.userView}>
+                        {foodPost.user[0].profileImage ? <Image
+                            style={styles.userProfile}
+                            source={{ uri: foodPost.user[0].profileImage }}
+                        /> :
+                            <EvilIcons name="user" style={{ marginLeft: -20 }} size={130} color="lightgray" />
+                        }
+                        <View style={styles.userInfo}>
+                            <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>{foodPost.user[0].name}</Text>
+                            <Text style={{ fontSize: 13, color: "gray" }}>{foodPost.user[0].email}</Text>
+                        </View>
+                    </TouchableOpacity>
 
 
-                    <Text style={[styles.title,{marginTop:30}]}>Receiver</Text>
+                    <Text style={[styles.title, { marginTop: 30, fontSize: 22 }]}>Rider</Text>
                     <Text style={styles.line1}></Text>
                     <Text style={styles.line2}></Text>
-                    
+                    {foodPost.receiver.length ?
+                        <TouchableOpacity style={styles.userView}>
+                            {foodPost.receiver[0].profileImage ? <Image
+                                style={styles.userProfile}
+                                source={{ uri: foodPost.receiver[0].profileImage }}
+                            /> :
+                                <EvilIcons name="user" style={{ marginLeft: -20 }} size={130} color="lightgray" />
+                            }
+                            <View style={styles.userInfo}>
+                                <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>{foodPost.receiver[0].name}</Text>
+                                <Text style={{ fontSize: 13, color: "gray" }}>{foodPost.receiver[0].email}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        : <Text>No Rider</Text>
+                    }
+
+
                 </Content>
             </Content>
         </Container>
@@ -151,6 +186,20 @@ const styles = StyleSheet.create({
         borderColor: "lightgray",
         width: "60%",
         marginTop: -13
+    },
+    userView: {
+        flexDirection: "row",
+        paddingLeft: 10
+    },
+    userProfile: {
+        height: 90,
+        width: 90,
+        borderRadius: 50,
+        marginRight: 15,
+    },
+    userInfo: {
+        paddingVertical: 10,
+        justifyContent: "space-around"
     }
 })
 export default FoodDetailsPage;

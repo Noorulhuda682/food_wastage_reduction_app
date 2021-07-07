@@ -8,7 +8,6 @@ import {
   MyPosts,
   AllPosts,
   Map,
-  Camera,
   NewOrders,
   CompletedOrders,
   ProgressOrders,
@@ -37,17 +36,17 @@ const MainHome = ({ navigation }) => {
 
 
 
-  useEffect(() => {
-    console.log("MainHome====>", stateData?.user);
-    if (stateData?.user?.role) {
-      navigation.navigate("Home")
-    } else {
-      navigation.navigate("Login")
-    }
-  }, [])
+  // useEffect(() => {
+  //   console.log("MainHome====>", stateData?.user);
+  //   if (stateData?.user?.role) {
+  //     navigation.navigate("Home")
+  //   } else {
+  //     navigation.navigate("Login")
+  //   }
+  // }, [])
 
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="foodDetailsPage"
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} initialRouteName="home"
       screenOptions={{
         headerShown: false
       }}
