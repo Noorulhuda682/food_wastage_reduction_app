@@ -13,7 +13,7 @@ import {
 } from "./components/index"
 import { useSelector } from "react-redux";
 import { light, dark } from "./assets/themingColors"
-import {readData} from "./config/setToken";
+import { readData } from "./config/setToken";
 
 const Stack = createStackNavigator()
 
@@ -23,33 +23,33 @@ const StackNavigation = () => {
 
 
     return (
-        store.user.role ?
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home"
-                screenOptions={{
-                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-                    headerShown: false
-                }}
-            >
-                <Stack.Screen name="Home" component={MainHome} />
-            </Stack.Navigator>
-        </NavigationContainer>
-        :
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login"
-                screenOptions={{
-                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-                    headerShown: false
-                }}
-            >
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="SignUp" component={SignUp} />
-                <Stack.Screen name="forgotPassword" component={ForgotPassword} />
-                <Stack.Screen name="resetPassword" component={ResetPassword} />
-                <Stack.Screen name="verifyAccount" component={VerifyAccount} />
-                <Stack.Screen name="setProfile" component={SetProfile} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        store?.user?.role ?
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Home"
+                    screenOptions={{
+                        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                        headerShown: false
+                    }}
+                >
+                    <Stack.Screen name="Home" component={MainHome} />
+                </Stack.Navigator>
+            </NavigationContainer>
+            :
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Login"
+                    screenOptions={{
+                        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                        headerShown: false
+                    }}
+                >
+                    <Stack.Screen name="Login" component={Login} />
+                    <Stack.Screen name="SignUp" component={SignUp} />
+                    <Stack.Screen name="forgotPassword" component={ForgotPassword} />
+                    <Stack.Screen name="resetPassword" component={ResetPassword} />
+                    <Stack.Screen name="verifyAccount" component={VerifyAccount} />
+                    <Stack.Screen name="setProfile" component={SetProfile} />
+                </Stack.Navigator>
+            </NavigationContainer>
     )
 }
 
