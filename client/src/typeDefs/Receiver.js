@@ -50,6 +50,12 @@ const UPDATE_RECEIVER = gql`
   }
 `;
 
+const DELETE_RECEIVER = gql`
+  mutation deleteReceiver($receiverId:ID){
+  deleteReceiver(receiverId:$receiverId)
+  }
+`;
+
 const RECEIVER_ADDED = gql`
   subscription receiverAdded {
     receiverAdded {
@@ -69,5 +75,6 @@ const RECEIVER_ADDED = gql`
 export {
   RECEIVERS,
   RECEIVER_ADDED,
-  UPDATE_RECEIVER
+  UPDATE_RECEIVER,
+  DELETE_RECEIVER
 }

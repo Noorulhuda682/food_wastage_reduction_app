@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ActivityIndicator,
@@ -13,7 +13,7 @@ import {
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import {
   Container,
   Left,
@@ -37,31 +37,31 @@ import {
   ListItem,
   // Text
 } from 'native-base';
-const {width, height} = Dimensions.get('window');
-import {useSelector} from 'react-redux';
-import {useQuery, useSubscription} from '@apollo/client';
-import {MYPOSTS} from '../typeDefs/Post';
+const { width, height } = Dimensions.get('window');
+import { useSelector } from 'react-redux';
+import { useQuery, useSubscription } from '@apollo/client';
+import { MYPOSTS } from '../typeDefs/Post';
 import PostCard from '../shared/PostCard';
 import Header from '../shared/Header';
 import UserList from '../shared/UserList';
-import {USERS, USER_ADDED} from '../typeDefs/User';
-import {SearchBar} from '../shared/index';
+import { USERS, USER_ADDED } from '../typeDefs/User';
+import { SearchBar } from '../shared/index';
 
-const AllUsers = ({navigation}) => {
+const AllUsers = ({ navigation }) => {
   const [searchValue, setSearchValue] = useState('');
   const [users, setUsers] = useState(null);
   const [searchList, setSearchList] = useState([]);
   const storeData = useSelector(state => state);
-  const {loading, error, data} = useQuery(USERS);
+  const { loading, error, data } = useQuery(USERS);
   const subscriptionUsers = useSubscription(USER_ADDED);
 
   // FOR SEARCHING DATA
   useEffect(() => {
     setSearchList(
       users !== null &&
-        users.filter(item =>
-          item.name.toLowerCase().includes(searchValue.toLowerCase()),
-        ),
+      users.filter(item =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase()),
+      ),
     );
   }, [searchValue]);
 
@@ -92,7 +92,7 @@ const AllUsers = ({navigation}) => {
   return (
     <Container>
       <Header navigation={navigation} title="Users" />
-      <View style={{padding: 12}}>
+      <View style={{ padding: 12 }}>
         <SearchBar
           type="receivers"
           value={searchValue}
@@ -100,12 +100,12 @@ const AllUsers = ({navigation}) => {
         />
       </View>
       <Content style={styles.mainContent} padder>
-        {loading && <ActivityIndicator style={{marginTop: 30}} color="blue" />}
+        {loading && <ActivityIndicator style={{ marginTop: 30 }} color="blue" />}
 
         {((!loading && users?.length === 0) ||
           (searchValue !== '' && searchList?.length === 0)) && (
-          <Text style={styles.noDataText}>No data found!</Text>
-        )}
+            <Text style={styles.noDataText}>No data found!</Text>
+          )}
 
         {searchValue === '' &&
           users?.map((user, index) => {

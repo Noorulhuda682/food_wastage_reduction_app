@@ -82,7 +82,7 @@ const AllReceivers = ({ navigation }) => {
                 }
 
 
-                {(!loading && receivers?.length === 0  || searchValue !== "" &&  searchList?.length === 0 ) &&
+                {(!loading && receivers?.length === 0 || searchValue !== "" && searchList?.length === 0) &&
                     <Text style={styles.noDataText}>No data found!</Text>
                 }
 
@@ -92,7 +92,7 @@ const AllReceivers = ({ navigation }) => {
                     )
                 })}
 
-                {searchList  && searchList?.map((receiver, index) => {
+                {searchList && searchList?.map((receiver, index) => {
                     return (
                         <UserList navigation={navigation} user={receiver} key={index} routeName={"receivers"} />
                     )

@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
 
 const USERS = gql`
   query users {
@@ -79,6 +79,16 @@ const UPDATE_USER = gql`
     )
   }
 `;
+
+
+
+
+const DELETE_USER = gql`
+  mutation deleteUser($userId:ID){
+  deleteUser(userId:$userId)
+  }
+`;
+
 const GET_USER = gql`
   query getUser($userId: String!) {
     getUser(userId: $userId) {
@@ -101,4 +111,10 @@ const GET_USER = gql`
   }
 `;
 
-export {USERS, USER_ADDED, UPDATE_USER, GET_USER};
+export {
+  USERS,
+  USER_ADDED,
+  UPDATE_USER,
+  GET_USER,
+  DELETE_USER
+};
