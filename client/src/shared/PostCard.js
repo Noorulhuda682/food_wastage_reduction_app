@@ -20,13 +20,36 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import { Button, Thumbnail } from 'native-base';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
-import { UPDATEPOST } from '../typeDefs/Post';
+import { UPDATEPOST,DELETEPOST } from '../typeDefs/Post';
 
 const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
   const storeData = useSelector(state => state);
   const [focusKey, setFocusKey] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updatePost, { }] = useMutation(UPDATEPOST);
+  const [deletePost, { }] = useMutation(DELETEPOST);
+
+  const deletePostHandler = (postId) => {
+    // console.log("postId",postId);
+    setLoading(true);
+    deletePost({variables:{postId}})
+    .then(res => {
+      console.log('Log1===', res);
+      // setFocusKey(null)
+      ToastAndroid.showWithGravity(
+        "Deletion is sucessfull",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+      // Alert.alert('Success accpted order');
+      setLoading(false);
+      setFocusKey(null)
+    })
+    .catch(err => {
+      setLoading(false);
+      Alert.alert(`Error : ${err}`);
+    });
+}
 
   const updatePostHandler = (postId, userId, status) => {
     let payload = {
@@ -57,6 +80,8 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
         Alert.alert(`Error : ${err}`);
       });
   };
+
+
 
   // console.log("SEEPOst===", routeName);
 
@@ -175,11 +200,18 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity
+                    onPress={() =>
+                      deletePostHandler(foodPost._id)
+                    }
                   style={[styles.crudButton, { backgroundColor: '#ea1715' }]}>
-                  <Text style={{ color: 'white' }}>
+                     {loading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={{ color: 'white' }}>
                     <AntDesign name="delete" size={15} color="white" />
                     {` `}Delete
                   </Text>
+                  )}
                 </TouchableOpacity>
               )}
             {storeData?.user?.role === 'RECEIVER' &&

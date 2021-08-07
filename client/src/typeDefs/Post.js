@@ -75,7 +75,7 @@ const ADDPOST = gql`
 
 const UPDATEPOST = gql`
   mutation updatePost(
-    $postId:String!
+    $postId: String!
     $userId: String!
     $title: String
     $description: String
@@ -84,11 +84,11 @@ const UPDATEPOST = gql`
     $img1: String
     $img2: String
     $img3: String
-    $status:String
-    $receiverId:String
+    $status: String
+    $receiverId: String
   ) {
     updatePost(
-      postId:$postId
+      postId: $postId
       userId: $userId
       title: $title
       description: $description
@@ -97,17 +97,21 @@ const UPDATEPOST = gql`
       img1: $img1
       img2: $img2
       img3: $img3
-      status:$status
-      receiverId:$receiverId
+      status: $status
+      receiverId: $receiverId
     ) {
       _id
-      userId  
+      userId
       title
     }
   }
 `;
 
-
+const DELETEPOST = gql`
+  mutation deletePost($postId: String!) {
+    deletePost(postId: $postId)
+  }
+`;
 
 const TEST = gql`
   mutation test($data: String) {
@@ -171,4 +175,4 @@ const POST_ADDED = gql`
   }
 `;
 
-export {ADDPOST, MYPOSTS, TEST, POSTS, POST_ADDED,UPDATEPOST};
+export {ADDPOST, MYPOSTS, TEST, POSTS, POST_ADDED, UPDATEPOST, DELETEPOST};
