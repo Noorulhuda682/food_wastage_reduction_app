@@ -14,7 +14,8 @@ import {
   Users,
   Receivers,
   DetailsPage,
-  FoodDetailsPage
+  FoodDetailsPage,
+  EditPost
 } from "../screens"
 import { useSelector, useDispatch } from "react-redux"
 
@@ -57,6 +58,7 @@ const MainHome = ({ navigation }) => {
       <Drawer.Screen name="myPosts" component={MyPosts} />
       <Drawer.Screen name="map" component={Map} />
       <Drawer.Screen name="allPosts" component={AllPosts} />
+      <Drawer.Screen name="editPost" component={EditPost} />
 
       {/* RECEIVER ROUTES  */}
       <Drawer.Screen name="newOrders" component={NewOrders} />

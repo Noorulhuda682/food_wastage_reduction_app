@@ -51,6 +51,18 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
     });
 }
 
+const deletionConfirmationHandler = postId => {
+  Alert.alert('Hold on!', 'Are you sure you want to delete the post?', [
+    {
+      text: 'Cancel',
+      onPress: () => null,
+      style: 'cancel',
+    },
+    {text: 'YES', onPress: () => deletePostHandler(postId)},
+  ]);
+  return true;
+};
+
   const updatePostHandler = (postId, userId, status) => {
     let payload = {
       postId,
@@ -189,7 +201,9 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
           <View style={{ flex: 1, flexDirection: 'row', width: '60%' }}>
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
-                <TouchableOpacity
+                <TouchableOpacity onPress={() =>
+                 navigation.navigate("editPost",{routeName,foodPost})
+                }
                   style={[styles.crudButton, { backgroundColor: '#00203FFF' }]}>
                   <Text style={{ color: 'white' }}>
                     <Feather name="edit" size={15} color="white" />
@@ -201,7 +215,7 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity
                     onPress={() =>
-                      deletePostHandler(foodPost._id)
+                      deletionConfirmationHandler(foodPost._id)
                     }
                   style={[styles.crudButton, { backgroundColor: '#ea1715' }]}>
                      {loading ? (

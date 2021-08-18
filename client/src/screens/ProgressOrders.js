@@ -59,7 +59,7 @@ const ProgressOrders = ({ navigation }) => {
 
   if (error) Alert.alert(`Error! ${error.message}`);
 
-  console.log('DAA', posts?.length);
+  // console.log('DAA', posts?.length);
   return (
     <Container>
       <Header navigation={navigation} title="Progress Orders" />

@@ -12,6 +12,7 @@ import Users from "./Users";
 import Receivers from "./Receivers";
 import DetailsPage from "./DetailsPage";
 import FoodDetailsPage from "./FoodDetailsPage";
+import EditPost from "./EditPost";
 
 export {
     Home,
@@ -27,5 +28,6 @@ export {
     Users,
     Receivers,
     DetailsPage,
-    FoodDetailsPage
+    FoodDetailsPage,
+    EditPost
 }
