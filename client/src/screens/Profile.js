@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,10 +7,9 @@ import {
 } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector, useDispatch } from "react-redux";
 import {
-  Container, Content,Fab, Thumbnail, Item, Input
+  Container, Content, Item, Input
 } from "native-base"
 import Header from "../shared/Header"
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
@@ -18,13 +17,12 @@ import { useState } from 'react';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DropDownInput from "../shared/DropDown";
 import Divider from "../shared/Divider";
-import { UPDATE_USER } from "../typeDefs/User"
-import { useQuery, useMutation } from "@apollo/client";
-import { LOGIN } from '../typeDefs/Auth';
-import {GET_USER} from "../typeDefs/User"
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import { UPDATE_RECEIVER, GET_RECEIVER } from "../typeDefs/Receiver"
+import { UPDATE_USER, GET_USER } from "../typeDefs/User"
 import uploadImageToCloud from "../config/uploadImageToCloudinary";
 import setImageFileForCloudinary from "../config/setImageForCloudinary";
-import {addUser} from  "../redux/actions/user"
+import { addUser } from "../redux/actions/user"
 
 const options = {
   storageOptions: {
@@ -35,24 +33,35 @@ const options = {
 
 const Profile = ({ navigation }) => {
   const { user } = useSelector(state => state);
+  // const state = useSelector(state => state);
+  console.log("user", user);
   const [loader, setLoader] = useState(false);
   const [name, setName] = useState(user?.name)
-  const [gender, setGender] = useState("")
-  const [dateOfBirth, setDateOfBirth] = useState()
-  const [address, setAddress] = useState()
-  const [country, setCountry] = useState()
-  const [city, setCity] = useState()
-  const [contact, setContact] = useState(null)
+  const [gender, setGender] = useState(user?.gender)
+  const [dateOfBirth, setDateOfBirth] = useState(user?.dateOfBirth)
+  const [address, setAddress] = useState(user?.address)
+  const [country, setCountry] = useState(user?.country)
+  const [city, setCity] = useState(user?.city)
+  const [contact, setContact] = useState(user?.contactNumber)
   const [profile, setProfile] = useState(user?.profileImage)
 
   const dispatch = useDispatch();
-  const [updateUser, { data }] = useMutation(UPDATE_USER)
-  const {refetch } = useQuery(GET_USER,{ variables:{ userId:user?._id }});
+  const [updateUser, { }] = useMutation((user.role === "USER") ? UPDATE_USER : UPDATE_RECEIVER)
+  // const { refetch } = useQuery((user.role === "USER") ? GET_USER : GET_RECEIVER, { variables: (user.role === "USER") ? { userId: user?._id } : { receiverId: user?._id } });
   // console.log("USER**", user);
+  // var { refetch } = useQuery(GET_RECEIVER, { variables: { receiverId: user?._id } });
+
+  const [
+    getUser,
+    { loading, data, error }
+  ] = useLazyQuery(user.role === "USER" ? GET_USER : GET_RECEIVER);
+
+
+
   const launchCameraHandler = () => {
     launchImageLibrary(options, (response) => {
       checkPhotoValidation(response)
-  });
+    });
   }
 
   const checkPhotoValidation = async (response) => {
@@ -70,16 +79,23 @@ const Profile = ({ navigation }) => {
 
   const updateUserHandler = async () => {
     setLoader(true)
+
+
     var updateObj = {
-      userId: user._id,
       name,
-      // gender,
-       dateOfBirth,
+      gender,
+      dateOfBirth,
       address,
       country,
       city,
-      contactNumber:JSON.parse(contact),
+      contactNumber: parseFloat(contact),
     }
+
+
+    // console.log("1==============", updateObj);
+
+    if (user.role === "USER") updateObj.userId = user._id
+    else updateObj.receiverId = user._id
 
     // IMAGE UPLOADING TO CLOUDINARY 
     if (profile !== user?.profileImage) {
@@ -96,31 +112,52 @@ const Profile = ({ navigation }) => {
         return false
       }
     }
+
     // mutation
-    updateUser({
+    await updateUser({
       variables: updateObj
-    }).then(res => {
-      Alert.alert(`Success : ${res.data.updateUser}`);
-      refetch()
-      .then( userRes => {
-        Alert.alert(`UserRes-Success : sucessfull`);
-        console.log("UserRes-Success",userRes.data.getUser);
-        dispatch(addUser(userRes.data.getUser));
-      }).catch( error =>{
-        Alert.alert(`Error! : ${error}`);
-        setLoader(false)
-      })
-      console.log("Success",res);
+    }).then(async (res) => {
+      Alert.alert(`Changes Saved Successfully`);
+      if (user.role === "USER") await getUser({ variables: { userId: user?._id } })
+      else await getUser({ variables: { receiverId: user?._id } })
+
+      let updatedUser = { ...user };
+      updatedUser.name = name
+      updatedUser.gender = gender
+      updatedUser.dateOfBirth = dateOfBirth
+      updatedUser.address = address
+      updatedUser.country = country
+      updatedUser.city = city
+      updatedUser.contactNumber = contact;
+      if (updateObj.profileImage) updatedUser.profileImage = updateObj.profileImage
+
+      dispatch(addUser(updatedUser));
+      // console.log('11122[][][][][', data, "]]]]]]]]", getProfile.current);
       setLoader(false)
     }).catch(error => {
       setLoader(false)
-      console.log("GEtting Err:",error);
+      console.log("GEtting Err:", error);
       Alert.alert(`Error! : ${error}`);
     })
     // console.log("OBJ=======", updateObj);
   }
 
-console.log("profile====",user);
+  // if (data?.getReceiver && handler) {
+  //   dispatch(addUser(data?.getReceiver));
+  //   setHandler(false)
+  // }
+  // if (data?.getUser && handler) {
+  //   dispatch(addUser(data?.getUser));
+  //   setHandler(false)
+  // }
+
+  // console.log('[][][][][', data,);
+
+  // useEffect(() => {
+  //   // console.log('[][][][][', data, "]]]]]]]]", getProfile.current);
+  //   // if (data?.getReceiver) dispatch(addUser(data?.getReceiver));
+  //   // if (data?.getUser) dispatch(addUser(data?.getUser));
+  // }, [handler, data]);
 
   return (
     <Container >
@@ -179,7 +216,7 @@ console.log("profile====",user);
               onChangeText={(emails) => setName(emails)}
               placeholder="example Aijaz Khan"
               placeholderTextColor="lightgray"
-              
+
             />
           </Item>
 
@@ -189,6 +226,7 @@ console.log("profile====",user);
             onChange={setGender}
             customeStyle={{ elevation: 0, height: 45, borderBottomWidth: 1, borderColor: "lightgray" }}
             pickerStyle={{ fontSize: 14 }}
+            selectedValue={gender}
           />
           <Divider />
           <DropDownInput
@@ -196,6 +234,7 @@ console.log("profile====",user);
             onChange={setCountry}
             customeStyle={{ elevation: 0, height: 45, borderBottomWidth: 1, borderColor: "lightgray" }}
             pickerStyle={{ fontSize: 14 }}
+            selectedValue={country}
           />
           <Divider />
           <DropDownInput
@@ -203,6 +242,7 @@ console.log("profile====",user);
             onChange={setCity}
             customeStyle={{ elevation: 0, height: 45, borderBottomWidth: 1, borderColor: "lightgray" }}
             pickerStyle={{ fontSize: 14 }}
+            selectedValue={city}
           />
           <Divider />
 
@@ -229,7 +269,7 @@ console.log("profile====",user);
           <Text style={styles.grayText} >Contact#</Text>
           <Item style={styles.item}>
             <Input
-              value={contact}
+              value={contact.toString()}
               style={styles.input}
               keyboardType="numeric"
               placeholder="example 03341828064"
@@ -239,15 +279,12 @@ console.log("profile====",user);
           </Item>
         </Content>
         <View style={styles.btnsView} padder>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.btnText}>Cancel</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={updateUserHandler}
-            style={[styles.button, styles.activeBtn,{marginLeft:10}]}
+            style={[styles.button, styles.activeBtn, { marginLeft: 10 }]}
           >
             <Text style={[styles.btnText, styles.activeBtnText]}>
-             {!loader ? "Save Changes" : "Saving..." } 
+              {!loader ? "Save Changes" : "Saving..."}
             </Text>
 
           </TouchableOpacity>
@@ -281,13 +318,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding:30,
-    paddingBottom:150,
+    padding: 30,
+    paddingBottom: 150,
     marginTop: 25
   },
   button: {
-    borderColor: "#00203FFF",
-    flexBasis:"35%",
+    borderColor: "#1e319d",
+    flexBasis: "35%",
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: "white",
@@ -295,11 +332,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   btnText: {
-    color: "#00203FFF",
+    color: "#1e319d",
     // fontWeight: 'bold',
   },
   activeBtn: {
-    backgroundColor: "#00203FFF",
+    backgroundColor: "#1e319d",
     borderRadius: 3
   },
   activeBtnText: {

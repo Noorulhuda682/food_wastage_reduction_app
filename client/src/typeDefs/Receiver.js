@@ -26,6 +26,7 @@ const UPDATE_RECEIVER = gql`
     $verification: String
     $verificationCode: Int
     $country: String
+    $gender:String
     $city: String
     $address: String
     $contactNumber: Float
@@ -42,6 +43,7 @@ const UPDATE_RECEIVER = gql`
       verification: $verification
       verificationCode: $verificationCode
       country: $country
+      gender:$gender
       city: $city
       address: $address
       contactNumber: $contactNumber
@@ -71,10 +73,32 @@ const RECEIVER_ADDED = gql`
   }
 `;
 
+const GET_RECEIVER = gql`
+  query getReceiver($receiverId: String!) {
+    getReceiver(receiverId: $receiverId) {
+      _id
+      name
+      email
+      role
+      profileImage
+      pushToken
+      latitude
+      longitude
+      verification
+      verificationCode
+      country
+      city
+      address
+      contactNumber
+      dateOfBirth
+    }
+  }
+`;
 
 export {
   RECEIVERS,
   RECEIVER_ADDED,
   UPDATE_RECEIVER,
-  DELETE_RECEIVER
+  DELETE_RECEIVER,
+  GET_RECEIVER
 }

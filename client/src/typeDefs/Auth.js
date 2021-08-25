@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
 
 const ADDUSER = gql`
   mutation addUser($name: String, $email: String!, $password: String!) {
@@ -52,6 +52,7 @@ const LOGIN = gql`
         verificationCode
         country
         city
+        gender
         address
         contactNumber
         dateOfBirth
@@ -83,4 +84,4 @@ const CHECK_CODE = gql`
   }
 `;
 
-export {ADDUSER, ADDRECEIVER, LOGIN,CHECK_CODE};
+export { ADDUSER, ADDRECEIVER, LOGIN, CHECK_CODE };

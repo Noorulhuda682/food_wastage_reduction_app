@@ -57,6 +57,7 @@ const UPDATE_USER = gql`
     $verificationCode: Int
     $country: String
     $city: String
+    $gender:String
     $address: String
     $contactNumber: Float
     $dateOfBirth: String
@@ -72,6 +73,7 @@ const UPDATE_USER = gql`
       verification: $verification
       verificationCode: $verificationCode
       country: $country
+      gender:$gender
       city: $city
       address: $address
       contactNumber: $contactNumber

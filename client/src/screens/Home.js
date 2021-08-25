@@ -21,13 +21,13 @@ import Geolocation from '@react-native-community/geolocation';
 
 const Home = ({ navigation }) => {
   const storeData = useSelector(state => state);
-  const [updateUser, { }] = useMutation( (storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN") ? UPDATE_USER : UPDATE_RECEIVER);
+  const [updateUser, { }] = useMutation((storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN") ? UPDATE_USER : UPDATE_RECEIVER);
 
-  
+
 
   useEffect(async () => {
 
-    if(storeData.user){
+    if (storeData.user) {
       let position;
       await requestLocationPermission()
         .then(res => { position = res }).catch(err => console.log("EE===", err))
@@ -44,7 +44,7 @@ const Home = ({ navigation }) => {
       updateUser({
         variables: payload
       }).then(res => {
-        console.log("LOG===", res);
+        // console.log("LOG===", res);
       }).catch(err => {
         Alert.alert(`QQQ  ${err}`)
         console.log("err===", res);
@@ -227,7 +227,7 @@ const requestLocationPermission = async () => {
             {
               enableHighAccuracy: true,
               timeout: 5000,
-              maximumAge:60000
+              maximumAge: 60000
             },
           );
           console.log("1positioning|||===>", check);

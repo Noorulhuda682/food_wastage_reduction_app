@@ -83,24 +83,40 @@ const FoodDetailsPage = ({ route, navigation }) => {
                     </View>
 
 
+
                     <Text style={[styles.title, { marginTop: 25, fontSize: 15, color: "black" }]}>Description </Text>
                     <Text style={{ color: "gray", marginTop: 5 }}>
                         {foodPost.description}
                     </Text>
 
+                    <View style={{ flexDirection: "row", justifyContent: "space-around", flexWrap: "wrap", marginTop: 30 }}>
+                        <TouchableOpacity style={[styles.squareBoxBottom, {
+                            borderWidth: 1, padding: 12,
+                            borderColor: foodPost.status === "NEW" ? "#FCC201" : foodPost.status === "PROGRESS" ? "#b4006b" : "green",
+                        }]}>
+                            <Text style={{ color: "gray" }}>STATUS</Text>
+                            <Text style={{
+                                fontSize: 18, fontWeight: "bold",
+                                color: foodPost.status === "NEW" ? "#FCC201" : foodPost.status === "PROGRESS" ? "#b4006b" : "green",
+                            }}>{foodPost.status}</Text>
+                        </TouchableOpacity>
+                    </View>
+
+
+
                     <Text style={[styles.title, { marginTop: 30, fontSize: 22 }]}>Uploader</Text>
                     <Text style={styles.line1}></Text>
                     <Text style={styles.line2}></Text>
                     <TouchableOpacity style={styles.userView}>
-                        {foodPost.user[0].profileImage ? <Image
+                        {foodPost?.user[0]?.profileImage ? <Image
                             style={styles.userProfile}
-                            source={{ uri: foodPost.user[0].profileImage }}
+                            source={{ uri: foodPost?.user[0]?.profileImage }}
                         /> :
                             <EvilIcons name="user" style={{ marginLeft: -20 }} size={130} color="lightgray" />
                         }
                         <View style={styles.userInfo}>
-                            <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>{foodPost.user[0].name}</Text>
-                            <Text style={{ fontSize: 13, color: "gray" }}>{foodPost.user[0].email}</Text>
+                            <Text style={{ fontSize: 20, color: "black", fontWeight: "bold" }}>{foodPost?.user[0]?.name}</Text>
+                            <Text style={{ fontSize: 13, color: "gray" }}>{foodPost?.user[0]?.email}</Text>
                         </View>
                     </TouchableOpacity>
 
