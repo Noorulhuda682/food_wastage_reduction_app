@@ -20,9 +20,9 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import { Button, Thumbnail } from 'native-base';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
-import { UPDATEPOST,DELETEPOST } from '../typeDefs/Post';
+import { UPDATEPOST, DELETEPOST } from '../typeDefs/Post';
 
-const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
+const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon, routeName }) => {
   const storeData = useSelector(state => state);
   const [focusKey, setFocusKey] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,36 +32,36 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon,routeName }) => {
   const deletePostHandler = (postId) => {
     // console.log("postId",postId);
     setLoading(true);
-    deletePost({variables:{postId}})
-    .then(res => {
-      console.log('Log1===', res);
-      // setFocusKey(null)
-      ToastAndroid.showWithGravity(
-        "Deletion is sucessfull",
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER
-      );
-      // Alert.alert('Success accpted order');
-      setLoading(false);
-      setFocusKey(null)
-    })
-    .catch(err => {
-      setLoading(false);
-      Alert.alert(`Error : ${err}`);
-    });
-}
+    deletePost({ variables: { postId } })
+      .then(res => {
+        console.log('Log1===', res);
+        // setFocusKey(null)
+        ToastAndroid.showWithGravity(
+          "Deletion is sucessfull",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+        // Alert.alert('Success accpted order');
+        setLoading(false);
+        setFocusKey(null)
+      })
+      .catch(err => {
+        setLoading(false);
+        Alert.alert(`Error : ${err}`);
+      });
+  }
 
-const deletionConfirmationHandler = postId => {
-  Alert.alert('Hold on!', 'Are you sure you want to delete the post?', [
-    {
-      text: 'Cancel',
-      onPress: () => null,
-      style: 'cancel',
-    },
-    {text: 'YES', onPress: () => deletePostHandler(postId)},
-  ]);
-  return true;
-};
+  const deletionConfirmationHandler = postId => {
+    Alert.alert('Hold on!', 'Are you sure you want to delete the post?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      { text: 'YES', onPress: () => deletePostHandler(postId) },
+    ]);
+    return true;
+  };
 
   const updatePostHandler = (postId, userId, status) => {
     let payload = {
@@ -76,7 +76,7 @@ const deletionConfirmationHandler = postId => {
       variables: payload,
     })
       .then(res => {
-        console.log('Log1===', res);
+        // console.log('Log1===', res);
         // setFocusKey(null)
         ToastAndroid.showWithGravity(
           "Accepting sucessfull",
@@ -95,11 +95,10 @@ const deletionConfirmationHandler = postId => {
 
 
 
-  // console.log("SEEPOst===", routeName);
-
+  console.log('Log1===', keyInd);
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("foodDetailsPage",{routeName,foodPost})}
-    key={keyInd} style={styles.container}>
+    <TouchableOpacity onPress={() => navigation.navigate("foodDetailsPage", { routeName, foodPost })}
+      key={keyInd} style={styles.container}>
       <View style={styles.imageView}>
         {foodPost.img1 !== null ? (
           <Image source={{ uri: foodPost.img1 }} style={styles.postImage} />
@@ -202,7 +201,7 @@ const deletionConfirmationHandler = postId => {
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity onPress={() =>
-                 navigation.navigate("editPost",{routeName,foodPost})
+                  navigation.navigate("editPost", { routeName, foodPost })
                 }
                   style={[styles.crudButton, { backgroundColor: '#00203FFF' }]}>
                   <Text style={{ color: 'white' }}>
@@ -214,17 +213,17 @@ const deletionConfirmationHandler = postId => {
             {storeData?.user?.role === 'USER' &&
               foodPost.status !== 'PROGRESS' && (
                 <TouchableOpacity
-                    onPress={() =>
-                      deletionConfirmationHandler(foodPost._id)
-                    }
+                  onPress={() =>
+                    deletionConfirmationHandler(foodPost._id)
+                  }
                   style={[styles.crudButton, { backgroundColor: '#ea1715' }]}>
-                     {loading ? (
+                  {loading ? (
                     <ActivityIndicator color="white" />
                   ) : (
                     <Text style={{ color: 'white' }}>
-                    <AntDesign name="delete" size={15} color="white" />
-                    {` `}Delete
-                  </Text>
+                      <AntDesign name="delete" size={15} color="white" />
+                      {` `}Delete
+                    </Text>
                   )}
                 </TouchableOpacity>
               )}

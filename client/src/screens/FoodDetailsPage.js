@@ -36,7 +36,7 @@ const FoodDetailsPage = ({ route, navigation }) => {
 
         return () => backHandler.remove();
     }, [route]);
-
+    console.log("foodPost?.user[0]", foodPost?.user[0]);
     return (
         <Container>
             <Content style={{ backgroundColor: "white" }}>
@@ -121,10 +121,11 @@ const FoodDetailsPage = ({ route, navigation }) => {
                     </TouchableOpacity>
 
 
+                    <Text style={{ borderBottomWidth: 1, borderColor: "lightgray" }}></Text>
                     <Text style={[styles.title, { marginTop: 30, fontSize: 22 }]}>Rider</Text>
                     <Text style={styles.line1}></Text>
                     <Text style={styles.line2}></Text>
-                    {foodPost.receiver.length ?
+                    {foodPost?.receiver?.length ?
                         <TouchableOpacity style={styles.userView}>
                             {foodPost.receiver[0].profileImage ? <Image
                                 style={styles.userProfile}

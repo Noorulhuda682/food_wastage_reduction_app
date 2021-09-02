@@ -47,7 +47,7 @@ const Home = ({ navigation }) => {
         // console.log("LOG===", res);
       }).catch(err => {
         Alert.alert(`QQQ  ${err}`)
-        console.log("err===", res);
+        // console.log("err===", res);
       })
 
     }
@@ -230,7 +230,7 @@ const requestLocationPermission = async () => {
               maximumAge: 60000
             },
           );
-          console.log("1positioning|||===>", check);
+          // console.log("1positioning|||===>", check);
 
         } else {
           // console.log("Permission Denied", error);

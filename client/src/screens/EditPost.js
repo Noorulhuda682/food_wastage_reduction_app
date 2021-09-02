@@ -43,12 +43,12 @@ const options = {
 
 const EditPost = ({ route, navigation }) => {
   let { routeName, foodPost } = route.params
-  // console.log("foodPost",foodPost.img1);
   const [title, setTitle] = useState(foodPost.title ? foodPost.title : "");
+  // console.log("foodPost", foodPost.title, title);
   const [checkTitle, setCheckTitle] = useState(false);
   const [description, setDescription] = useState(foodPost.description ? foodPost.description : "");
   const [checkDescription, setCheckDescription] = useState(false);
-  const [quantity, setQuantity] = useState(foodPost.quantity ? foodPost.quantity : "");
+  const [quantity, setQuantity] = useState(foodPost.quantity ? foodPost.quantity : 0);
   const [checkQuantity, setCheckQuantity] = useState(false);
   const [weight, setWeight] = useState(foodPost.weight ? foodPost.weight : "");
   const [checkWeight, setCheckWeight] = useState(false);
@@ -64,16 +64,14 @@ const EditPost = ({ route, navigation }) => {
   // console.log('AddPOSST===>', datas?.user?._id);
 
   useEffect(() => {
-    const backAction = () => {
-      navigation.navigate(routeName);
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-    return () => backHandler.remove();
-  }, [route]);
+    console.log("route.params===", route.params);
+    setImg1(foodPost.img1 ? foodPost.img1 : null)
+    setTitle(foodPost.title ? foodPost.title : "")
+    setDescription(foodPost.description ? foodPost.description : "")
+    setQuantity(foodPost.quantity ? foodPost.quantity : "")
+    setWeight(foodPost.weight ? foodPost.weight : "")
+    setUpdateImg1(null)
+  }, [route.params])
 
   const updatePostHandler = async () => {
     if (title === '') {
@@ -107,7 +105,7 @@ const EditPost = ({ route, navigation }) => {
       userId: datas?.user?._id,
       title,
       description,
-      quantity,
+      quantity: parseFloat(quantity),
       weight,
     };
 
@@ -212,8 +210,8 @@ const EditPost = ({ route, navigation }) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          {img1 &&
-            <View style={{ width: "100%", alignItems: "center" }}>
+          {(img1 || updateImg1) &&
+            (<View style={{ width: "100%", alignItems: "center" }}>
               <TouchableOpacity
                 style={[
                   styles.cameraView,
@@ -228,8 +226,15 @@ const EditPost = ({ route, navigation }) => {
               <TouchableOpacity onPress={() => setUploadImg(!uploadImg)} style={{ marginTop: -5 }}>
                 <Text style={{ color: "blue" }}>edit image</Text>
               </TouchableOpacity>
-            </View>
+            </View>)
           }
+          {(!img1 && !updateImg1) && (
+            <TouchableOpacity
+              onPress={() => setUploadImg(!uploadImg)}
+              style={styles.cameraView}>
+              <FontAwesome name="photo" size={24} color="gray" />
+            </TouchableOpacity>
+          )}
         </View>
         {uploadImg && (
           <Item style={{ justifyContent: 'space-around', marginTop: 10 }}>
@@ -270,7 +275,7 @@ const EditPost = ({ route, navigation }) => {
 
         <Text style={styles.grayText}>Food Quantity</Text>
         <PostTextInput
-          email={quantity}
+          email={quantity.toString()}
           setEmail={setQuantity}
           checkEmail={checkQuantity}
           setCheckEmail={setCheckQuantity}

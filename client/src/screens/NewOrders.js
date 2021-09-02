@@ -16,7 +16,7 @@ import { POSTS, POST_ADDED } from '../typeDefs/Post';
 import PostCard from '../shared/PostCard';
 import Header from '../shared/Header';
 import { SearchBar } from '../shared/index';
-let NEW_LIST = null ;
+let NEW_LIST = null;
 
 const NewOrders = ({ navigation }) => {
   const storeData = useSelector(state => state);
@@ -50,7 +50,7 @@ const NewOrders = ({ navigation }) => {
   //  FOR SUBSCRIPTION DATA
   useEffect(() => {
     if (subscriptionPosts.data && subscriptionPosts.data.postAdded) {
-       NEW_LIST = subscriptionPosts.data.postAdded.filter(post => post.status === "NEW")
+      NEW_LIST = subscriptionPosts.data.postAdded.filter(post => post.status === "NEW")
       setPosts(subscriptionPosts.data.postAdded);
     }
   }, [subscriptionPosts]);
@@ -88,6 +88,7 @@ const NewOrders = ({ navigation }) => {
                       foodPost={foodPost}
                       keyInd={key}
                       routeName={"newOrders"}
+                      key={key}
                     />
                   )
                 );
@@ -98,6 +99,7 @@ const NewOrders = ({ navigation }) => {
                     foodPost={foodPost}
                     keyInd={key}
                     routeName={"newOrders"}
+                    key={key}
                   />
                 );
               }
@@ -111,6 +113,7 @@ const NewOrders = ({ navigation }) => {
               foodPost={foodPost}
               keyInd={key}
               routeName={"newOrders"}
+              key={key}
             />
           ))}
       </Content>

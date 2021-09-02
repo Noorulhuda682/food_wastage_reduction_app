@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-    View,Text,
+    View, Text,
     StyleSheet, Image, BackHandler
 } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -19,8 +19,8 @@ import { NavigationContainer } from '@react-navigation/native';
 const DetailsPage = ({ route, navigation }) => {
     const [searchValue, setSearchValue] = useState("")
 
-    // console.log("DETAILPAGE====",route.params);
     let { routeName, user } = route.params
+    console.log("DETAILPAGE====", route.params);
 
     useEffect(() => {
         const backAction = () => {
@@ -49,10 +49,10 @@ const DetailsPage = ({ route, navigation }) => {
                         </Right>
                     </Header>
                     <View style={styles.userInfo}>
-                        {user.profileImage ?
+                        {user?.profileImage ?
                             <Image
                                 style={styles.profileImage}
-                                large source={{uri:user.profileImage}}
+                                large source={{ uri: user?.profileImage }}
                             />
                             :
                             <EvilIcons name="user" size={130} color="white" />
@@ -72,16 +72,16 @@ const DetailsPage = ({ route, navigation }) => {
                     </View>
                 </Content>
                 <Content style={{ backgroundColor: "white", paddingHorizontal: 10 }} padder>
-                    <ListItem title="Name" name={user.name ? user.name : "Not Set"} />
-                    <ListItem title="Email" name={user.email ? user.email : "Not Set"} />
-                    <ListItem title="Role" name={user.role ? user.role : "Not Set"} />
-                    <ListItem title="UserId" name={user._id ? user._id : "Not Set"} />
-                    <ListItem title="Gender" name={user.gender ? user.gender : "Not Set"} />
-                    <ListItem title="Address" name={user.address ? user.address : "Not Set"} />
-                    <ListItem title="Contact Number" name={user.contactNumber ? user.contactNumber : "Not Set"} />
-                    <ListItem title="City" name={user.city ? user.city : "Not Set"} />
-                    <ListItem title="dateOfBirth" name={user.dateOfBirth ? user.dateOfBirth : "Not Set"} />
-                    <ListItem title="Country" name={user.country ? user.country : "Not Set"} />
+                    <ListItem title="Name" name={user?.name ? user.name : "Not Set"} />
+                    <ListItem title="Email" name={user?.email ? user.email : "Not Set"} />
+                    <ListItem title="Role" name={user?.role ? user.role : "Not Set"} />
+                    <ListItem title="UserId" name={user?._id ? user._id : "Not Set"} />
+                    <ListItem title="Gender" name={user?.gender ? user.gender : "Not Set"} />
+                    <ListItem title="Address" name={user?.address ? user.address : "Not Set"} />
+                    <ListItem title="Contact Number" name={user?.contactNumber ? user.contactNumber : "Not Set"} />
+                    <ListItem title="City" name={user?.city ? user.city : "Not Set"} />
+                    <ListItem title="dateOfBirth" name={user?.dateOfBirth ? user.dateOfBirth : "Not Set"} />
+                    <ListItem title="Country" name={user?.country ? user.country : "Not Set"} />
                 </Content>
             </Content>
         </Container>

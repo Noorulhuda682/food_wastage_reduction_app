@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ActivityIndicator,
@@ -10,34 +10,34 @@ import {
   Container,
   Content,
 } from 'native-base';
-import {useSelector} from 'react-redux';
-import {useQuery, useSubscription} from '@apollo/client';
-import {POSTS, POST_ADDED} from '../typeDefs/Post';
+import { useSelector } from 'react-redux';
+import { useQuery, useSubscription } from '@apollo/client';
+import { POSTS, POST_ADDED } from '../typeDefs/Post';
 import PostCard from '../shared/PostCard';
 import Header from '../shared/Header';
-import {SearchBar} from '../shared/index';
+import { SearchBar } from '../shared/index';
 
-const CompletedOrders = ({navigation}) => {
+const CompletedOrders = ({ navigation }) => {
   const storeData = useSelector(state => state);
   const [searchValue, setSearchValue] = useState('');
   const [posts, setPosts] = useState(null);
   const [searchList, setSearchList] = useState([]);
   const subscriptionPosts = useSubscription(POST_ADDED);
 
-  let payload = {status:"COMPLETED"};
+  let payload = { status: "COMPLETED" };
   if (storeData.user.role === 'USER') payload.userId = storeData.user._id;
   if (storeData.user.role === 'RECEIVER') payload.receiverId = storeData.user._id;
 
-  const {loading, error, data} = useQuery(POSTS, {
+  const { loading, error, data } = useQuery(POSTS, {
     variables: payload,
   });
 
   useEffect(() => {
     setSearchList(
       posts !== null &&
-        posts.filter(item =>
-          item.title.toLowerCase().includes(searchValue.toLowerCase()),
-        ),
+      posts.filter(item =>
+        item.title.toLowerCase().includes(searchValue.toLowerCase()),
+      ),
     );
   }, [searchValue]);
 
@@ -61,7 +61,7 @@ const CompletedOrders = ({navigation}) => {
   return (
     <Container>
       <Header navigation={navigation} title="Completed Orders" />
-      <View style={{padding: 12}}>
+      <View style={{ padding: 12 }}>
         <SearchBar type="post" value={searchValue} onChange={setSearchValue} />
       </View>
       <Content style={styles.mainContent} padder>
@@ -69,10 +69,10 @@ const CompletedOrders = ({navigation}) => {
 
         {((!loading && posts?.length === 0) ||
           (searchValue !== '' && searchList?.length === 0)) && (
-          <Text style={{color: 'gray', textAlign: 'center'}}>
-            No data found!
-          </Text>
-        )}
+            <Text style={{ color: 'gray', textAlign: 'center' }}>
+              No data found!
+            </Text>
+          )}
 
         {searchValue === '' &&
           posts?.map((foodPost, key) => {
@@ -85,6 +85,7 @@ const CompletedOrders = ({navigation}) => {
                       foodPost={foodPost}
                       keyInd={key}
                       routeName="completedOrders"
+                      key={key}
                     />
                   )
                 );
@@ -97,6 +98,7 @@ const CompletedOrders = ({navigation}) => {
                       foodPost={foodPost}
                       keyInd={key}
                       routeName="completedOrders"
+                      key={key}
                     />
                   )
                 );
@@ -107,6 +109,7 @@ const CompletedOrders = ({navigation}) => {
                     foodPost={foodPost}
                     keyInd={key}
                     routeName="completedOrders"
+                    key={key}
                   />
                 );
               }
