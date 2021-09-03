@@ -32,7 +32,7 @@ const Home = ({ navigation }) => {
       await requestLocationPermission()
         .then(res => { position = res }).catch(err => console.log("EE===", err))
       let { latitude, longitude } = position;
-      console.log("Postion==>", latitude, longitude);
+      // console.log("Postion==>", latitude, longitude);
       let token = await messaging().getToken();
 
       let payload = (storeData?.user?.role === "USER" || storeData?.user?.role === "ADMIN") ? { userId: storeData?.user?._id } : { receiverId: storeData?.user?._id }
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   cardTitle: {
-    fontSize: 17,
+    fontSize: 18,
     color: "navy"
     // textShadowColor: 'blue',
     // textShadowRadius: 1,

@@ -36,7 +36,7 @@ const FoodDetailsPage = ({ route, navigation }) => {
 
         return () => backHandler.remove();
     }, [route]);
-    console.log("foodPost?.user[0]", foodPost?.user[0]);
+    // console.log("foodPost?.user[0]", foodPost?.user[0]);
     return (
         <Container>
             <Content style={{ backgroundColor: "white" }}>
@@ -49,19 +49,19 @@ const FoodDetailsPage = ({ route, navigation }) => {
                             <TouchableOpacity onPress={() => navigation.navigate(routeName)}
                                 style={styles.squareBox}>
                                 <MaterialCommunityIcons
-                                    name="keyboard-backspace" size={24} color="gray" />
+                                    name="keyboard-backspace" size={24} color='#1e319d' />
                             </TouchableOpacity>
                         </Left>
                         <Body style={{ borderWidth: 0 }}>
                             <TouchableOpacity
                                 style={[styles.squareBox, { width: "100%" }]}>
-                                <Text style={{ color: "gray" }}>Food Details</Text>
+                                <Text style={{ color: '#1e319d' }}>Food Details</Text>
                             </TouchableOpacity>
                         </Body>
                         <Right>
                             <TouchableOpacity onPress={() => navigation.navigate("home")}
                                 style={styles.squareBox}>
-                                <FontAwesome name="home" size={20} color="gray" />
+                                <FontAwesome name="home" size={20} color='#1e319d' />
                             </TouchableOpacity>
                         </Right>
                     </Header>
@@ -159,7 +159,8 @@ const styles = StyleSheet.create({
     },
     coverPhoto: {
         height: 220,
-        borderRadius: 50
+        borderRadius: 50,
+        width: "100%"
     },
     squareBox: {
         backgroundColor: "white",

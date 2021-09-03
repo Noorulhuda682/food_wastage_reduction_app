@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -19,16 +19,16 @@ import {
 
 import DropDownInput from '../shared/DropDown';
 import InputText from '../shared/TextInput';
-import {useMutation} from '@apollo/client';
-import {ADDUSER, ADDRECEIVER} from '../typeDefs/Auth';
-import {ChangeTokenHandlerContext} from '../../App';
-import {useDispatch} from 'react-redux';
+import { useMutation } from '@apollo/client';
+import { ADDUSER, ADDRECEIVER } from '../typeDefs/Auth';
+import { ChangeTokenHandlerContext } from '../../App';
+import { useDispatch } from 'react-redux';
 
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const SignUp = ({navigation}) => {
+const SignUp = ({ navigation }) => {
   const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
   const dispatch = useDispatch();
 
@@ -42,8 +42,8 @@ const SignUp = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState('');
 
-  const [addingUser, {}] = useMutation(ADDUSER);
-  const [addingReceiver, {}] = useMutation(ADDRECEIVER);
+  const [addingUser, { }] = useMutation(ADDUSER);
+  const [addingReceiver, { }] = useMutation(ADDRECEIVER);
 
   const signUp = () => {
     if (name === '' || name === undefined || name === ' ' || name === null) {
@@ -99,7 +99,7 @@ const SignUp = ({navigation}) => {
           password,
         },
       })
-        .then(({data}) => {
+        .then(({ data }) => {
           // var {token, user} = role === 'USER' ? data.addUser : data.addReceiver;
           console.log('REGISTER=======', data, '***************');
           // saveData(token);
@@ -117,90 +117,91 @@ const SignUp = ({navigation}) => {
   };
 
   return (
-        <Container>
-          <Content style={styles.content}>
-            <View style={styles.headingView}>
-              <Text style={styles.headingTitle}>Create Account</Text>
-            </View>
-         
-            <InputText
-              email={name}
-              setEmail={setName}
-              checkEmail={checkName}
-              setCheckEmail={setCheckName}
-              type={'name'}
-              placeholder={'Name...'}
-              customStyle={{marginTop: 50,marginRight:1}}
-              icon={<AntDesign name="user" size={14} color="lightgray" />}
-            />
-            <InputText
-              email={email}
-              setEmail={setEmail}
-              checkEmail={checkEmail}
-              setCheckEmail={setCheckEmail}
-              type={'email'}
-              placeholder={'Email...'}
-              customStyle={{marginTop: 12,marginRight:1}}
-              icon={<Entypo name="email" size={14} color="lightgray" />}
-            />
+    <Container>
+      <Content style={styles.content}>
+        <View style={styles.headingView}>
+          <Text style={styles.headingTitle}>Create Account</Text>
+        </View>
 
-            <InputText
-              email={password}
-              setEmail={setPassword}
-              checkEmail={checkPassword}
-              setCheckEmail={setCheckPassword}
-              type={'password'}
-              placeholder={'Password...'}
-              showPassword={showPassword}
-              setShowPassword={setShowPassword}
-              customStyle={{marginTop: 12,marginRight:1}}
-              icon={<FontAwesome5 name="key" size={14} color="lightgray" />}
-            />
+        <InputText
+          email={name}
+          setEmail={setName}
+          checkEmail={checkName}
+          setCheckEmail={setCheckName}
+          type={'name'}
+          placeholder={'Name...'}
+          customStyle={{ marginTop: 50, marginRight: 1 }}
+          icon={<AntDesign name="user" size={14} color="lightgray" />}
+        />
+        <InputText
+          email={email}
+          setEmail={setEmail}
+          checkEmail={checkEmail}
+          setCheckEmail={setCheckEmail}
+          type={'email'}
+          placeholder={'Email...'}
+          customStyle={{ marginTop: 12, marginRight: 1 }}
+          icon={<Entypo name="email" size={14} color="lightgray" />}
+        />
 
-            {password !== '' && !checkPassword && (
-              <Text style={{color: 'red', fontSize: 13}}>
-                Password should container at least one digit, one lower case,
-                one upper case, 8 mentioned characters!
+        <InputText
+          email={password}
+          setEmail={setPassword}
+          checkEmail={checkPassword}
+          setCheckEmail={setCheckPassword}
+          type={'password'}
+          placeholder={'Password...'}
+          showPassword={showPassword}
+          setShowPassword={setShowPassword}
+          customStyle={{ marginTop: 12, marginRight: 1 }}
+          icon={<FontAwesome5 name="key" size={14} color="lightgray" />}
+        />
+
+        {password !== '' && !checkPassword && (
+          <Text style={{ color: 'red', fontSize: 13 }}>
+            Password should container at least one digit, one lower case,
+            one upper case, 8 mentioned characters!
+          </Text>
+        )}
+
+        <DropDownInput
+          pickerItems={['Account Type', 'USER', 'RECEIVER']}
+          onChange={setRole}
+          selectedValue={role}
+        />
+
+        <TouchableOpacity onPress={signUp} style={{ marginTop: 50 }}>
+          <View style={styles.loginButton}>
+            {loading ? (
+              <ActivityIndicator color="white" size="small" />
+            ) : (
+              <Text style={{ color: 'white', textAlign: 'center' }}>
+                Sign Up
               </Text>
             )}
+          </View>
+        </TouchableOpacity>
 
-            <DropDownInput
-              pickerItems={['Account Type', 'USER', 'RECEIVER']}
-              onChange={setRole}
-            />
+        <Text style={styles.greyLine}>
+          ------------------------------------------------------------------
+        </Text>
 
-            <TouchableOpacity onPress={signUp} style={{marginTop: 50}}>
-              <View style={styles.loginButton}>
-                {loading ? (
-                  <ActivityIndicator color="white" size="small" />
-                ) : (
-                  <Text style={{color: 'white', textAlign: 'center'}}>
-                    Sign Up
-                  </Text>
-                )}
-              </View>
-            </TouchableOpacity>
-
-            <Text style={styles.greyLine}>
-              ------------------------------------------------------------------
-            </Text>
-
-            <TouchableOpacity
-              style={{marginBottom: 100}}
-              onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.signUp}>
-                Already have an account?{' '}
-                <Text style={styles.signUpBlue}>Log In</Text>
-              </Text>
-            </TouchableOpacity>
-          </Content>
-        </Container>
+        <TouchableOpacity
+          style={{ marginBottom: 100 }}
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.signUp}>
+            Already have an account?{' '}
+            <Text style={styles.signUpBlue}>Log In</Text>
+          </Text>
+        </TouchableOpacity>
+      </Content>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
-    paddingTop:30,
+    paddingTop: 30,
     paddingHorizontal: 30,
   },
   headingView: {
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     textShadowColor: 'black',
-    textShadowOffset: {width: -1, height: 2},
+    textShadowOffset: { width: -1, height: 2 },
     textShadowRadius: 1,
   },
   headingText: {
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     paddingLeft: 5,
     textShadowColor: 'black',
-    textShadowOffset: {width: -1, height: 1},
+    textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 1,
     borderBottomWidth: 1,
     paddingBottom: 5,

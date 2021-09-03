@@ -72,7 +72,7 @@ const EditPost = ({ route, navigation }) => {
     setWeight(foodPost.weight ? foodPost.weight : "")
     setUpdateImg1(null)
   }, [route.params])
-
+  // fwr-key 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
   const updatePostHandler = async () => {
     if (title === '') {
       ToastAndroid.showWithGravity(
