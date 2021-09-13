@@ -23,15 +23,15 @@ const SearchBar = ({ navigation, value, type, onChange }) => {
         }}>
             <Icon name="ios-search" style={{ color: "#1e319d" }} />
             <Input
-                placeholder="Search"
+                placeholder="Search by name"
                 value={value}
                 onChangeText={(newValue) => { onChange(newValue) }}
             />
-            {type === "post" ?
+            {/* {type === "post" ?
                 <MaterialCommunityIcons name="post-outline" size={24} color="#1e319d" />
                 :
                 <Icon name="ios-people" style={{ color: "#1e319d" }} />
-            }
+            } */}
         </Item>
     );
 }
