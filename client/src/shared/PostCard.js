@@ -34,7 +34,7 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon, routeName }) => {
     setLoading(true);
     deletePost({ variables: { postId } })
       .then(res => {
-        console.log('Log1===', res);
+        // console.log('Log1===', res);
         // setFocusKey(null)
         ToastAndroid.showWithGravity(
           "Deletion is sucessfull",
@@ -95,9 +95,10 @@ const PostCard = ({ navigation, foodPost, keyInd, hideMapIcon, routeName }) => {
 
 
 
-  console.log('Log1===', keyInd);
+  // console.log('Log1===', keyInd);
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("foodDetailsPage", { routeName, foodPost })}
+    <TouchableOpacity
+      onPress={() => navigation.navigate("foodDetailsPage", { routeName, foodPost })}
       key={keyInd} style={styles.container}>
       <View style={styles.imageView}>
         {foodPost.img1 !== null ? (

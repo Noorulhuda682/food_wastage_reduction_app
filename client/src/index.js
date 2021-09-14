@@ -9,7 +9,8 @@ import {
     ForgotPassword,
     ResetPassword,
     VerifyAccount,
-    SetProfile
+    SetProfile,
+    VerifyAccountRequest
 } from "./components/index"
 import { useSelector } from "react-redux";
 import { light, dark } from "./assets/themingColors"
@@ -19,7 +20,7 @@ const Stack = createStackNavigator()
 
 const StackNavigation = () => {
     const store = useSelector(state => state)
-    console.log("chnageLightTheme", store.user);
+    // console.log("chnageLightTheme", store.user);
 
 
     return (
@@ -47,6 +48,7 @@ const StackNavigation = () => {
                     <Stack.Screen name="forgotPassword" component={ForgotPassword} />
                     <Stack.Screen name="resetPassword" component={ResetPassword} />
                     <Stack.Screen name="verifyAccount" component={VerifyAccount} />
+                    <Stack.Screen name="verifyAccountRequest" component={VerifyAccountRequest} />
                     <Stack.Screen name="setProfile" component={SetProfile} />
                 </Stack.Navigator>
             </NavigationContainer>

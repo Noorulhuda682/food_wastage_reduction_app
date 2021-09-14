@@ -84,4 +84,22 @@ const CHECK_CODE = gql`
   }
 `;
 
-export { ADDUSER, ADDRECEIVER, LOGIN, CHECK_CODE };
+const REQUEST_TO_RESET_PASSWORD = gql`
+  mutation requestToResetPassword($email: String!) {
+    requestToResetPassword(email: $email)
+  }
+`
+
+const RESET_PASSWORD = gql`
+   mutation resetPassword($code:Int!, $newPassword: String!) {
+    resetPassword(code:$code, newPassword: $newPassword)
+  }
+`
+const VERIFY_EMAIL = gql`
+  mutation verifyEmail($email: String!) {
+    verifyEmail(email: $email)
+  }
+`
+
+
+export { ADDUSER, ADDRECEIVER, LOGIN, CHECK_CODE, REQUEST_TO_RESET_PASSWORD, RESET_PASSWORD, VERIFY_EMAIL };

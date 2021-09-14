@@ -5,6 +5,7 @@ import ForgotPassword from "./ForgotPassword"
 import ResetPassword from "./ResetPassword"
 import VerifyAccount from "./VerifyAccount";
 import SetProfile from "./SetProfile";
+import VerifyAccountRequest from "./VerifyAccountRequest";
 
 export {
     MainHome,
@@ -13,5 +14,6 @@ export {
     ForgotPassword,
     ResetPassword,
     VerifyAccount,
-    SetProfile
+    SetProfile,
+    VerifyAccountRequest
 }

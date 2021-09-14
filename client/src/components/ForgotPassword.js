@@ -27,21 +27,7 @@ import {
     passwordRegex
 } from "../config/Regex"
 import InputText from "../shared/TextInput"
-
-const LOGIN = gql`
- mutation login($email:String! $password:String!){
-  login(email:$email password:$password){
-    token
-    user {
-      _id
-      name
-      email
-      role
-    }
-  }
-}
-
-`;
+import { REQUEST_TO_RESET_PASSWORD } from "../typeDefs/Auth"
 
 const ForgotPassword = ({ navigation }) => {
 
@@ -51,28 +37,41 @@ const ForgotPassword = ({ navigation }) => {
     const [change, setChange] = useState(true);
     const dispatch = useDispatch();
 
-    const [_login, { data, error }] = useMutation(LOGIN);
-    console.log("login===", data, error);
+    const [requestToResetPass, { data, error }] = useMutation(REQUEST_TO_RESET_PASSWORD);
 
 
 
 
     const sendRequest = async () => {
-      Alert.alert("Chal gaya")
-        // if (email === "") {
-        //     ToastAndroid.showWithGravity(
-        //         `Enter ${password === "" ? "email and password" : "email"}`,
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.CENTER
-        //     );
-        //     return false
-        // }
+        if (email === "" || email === " " || email === undefined || email === null) {
+            ToastAndroid.showWithGravity(
+                "Empty input email",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            return false
+        }
+        // 
+        setLoading(true)
+        requestToResetPass({
+            variables: {
+                email,
+            }
+        }).then(({ data }) => {
+            ToastAndroid.showWithGravity(
+                "Request sent successfully",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            setLoading(false)
+            // console.log("data", data);
+            navigation.navigate("resetPassword")
+        }).catch(err => {
+            setLoading(false)
+            Alert.alert(`Error : ${err}`);
+        })
 
-        // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
-        navigation.navigate("resetPassword")
         // setLoading(false)
-
-
     }
 
 
@@ -91,15 +90,15 @@ const ForgotPassword = ({ navigation }) => {
                     </View>
 
                     <Text
-                    style={{
-                        backgroundColor:'#e6e9ff',
-                        borderRadius:10,
-                        paddingHorizontal:7,
-                        paddingVertical:10,
-                        color:"#4d61ff",
-                        borderColor:"#808eff",
-                        // borderWidth:2
-                    }}
+                        style={{
+                            backgroundColor: '#e6e9ff',
+                            borderRadius: 10,
+                            paddingHorizontal: 7,
+                            paddingVertical: 10,
+                            color: "#4d61ff",
+                            borderColor: "#808eff",
+                            // borderWidth:2
+                        }}
                     >Type your email below to get OTP code in respect to reset your password </Text>
                     <InputText
                         email={email}
@@ -198,8 +197,7 @@ const styles = StyleSheet.create({
         textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 1,
         fontWeight: "bold",
-        marginBottom:100,
-       
+        marginBottom: 100,
     },
     signUp: {
         textAlign: "center",
@@ -224,3 +222,5 @@ const styles = StyleSheet.create({
 })
 
 export default ForgotPassword;
+
+

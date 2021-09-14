@@ -13,7 +13,7 @@ import {
 import Header from '../shared/Header';
 import Geolocation from '@react-native-community/geolocation';
 const { width, height } = Dimensions.get('window')
-import PostCard from '../shared/PostCard';
+import MapPostBar from '../shared/MapPostBar';
 // "AIzaSyDG6vNwyXyphQygBpy-HDmz36ppHI4bOQY"
 const SCREEN_HEIGHT = height
 const SCREEN_WIDTH = width
@@ -122,7 +122,7 @@ const Map = ({ route, navigation }) => {
                 // borderWidth:2,borderColor:"red"
             }}>
                 <View style={styles.cardView}>
-                    <PostCard
+                    <MapPostBar
                         navigation={navigation}
                         foodPost={post}
                         hideMapIcon
@@ -167,7 +167,7 @@ const Map = ({ route, navigation }) => {
                             <Text>Rider</Text>
                         </Callout> */}
                     </Marker>
-                   
+
 
 
                     <Polyline

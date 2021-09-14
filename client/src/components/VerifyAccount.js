@@ -27,7 +27,7 @@ import {
     passwordRegex
 } from "../config/Regex"
 import InputText from "../shared/TextInput"
-import {CHECK_CODE} from "../typeDefs/Auth"
+import { CHECK_CODE } from "../typeDefs/Auth"
 
 
 const VerifyAccount = ({ navigation }) => {
@@ -43,12 +43,12 @@ const VerifyAccount = ({ navigation }) => {
 
     const _verifyCode = async () => {
 
-        if(checkCode){
+        if (checkCode) {
             setLoading(true)
             console.log("che=======", code);
             _code({
                 variables: {
-                   code:JSON.parse(code),
+                    code: JSON.parse(code),
                 }
             }).then(data => {
                 // console.log("Sucess=======", data);
@@ -63,19 +63,19 @@ const VerifyAccount = ({ navigation }) => {
             // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
             // navigation.navigate("Home")
             // setLoading(false)
-    
+
             // }
-        }else{
-            if(code === "") ToastAndroid.showWithGravity(
-               "Empty verification code",
-                ToastAndroid.SHORT,ToastAndroid.CENTER
+        } else {
+            if (code === "") ToastAndroid.showWithGravity(
+                "Empty verification code",
+                ToastAndroid.SHORT, ToastAndroid.CENTER
             )
             else ToastAndroid.showWithGravity(
                 "Invalid verification code",
-                 ToastAndroid.SHORT,ToastAndroid.CENTER
-             );
+                ToastAndroid.SHORT, ToastAndroid.CENTER
+            );
         }
-      
+
 
     }
 
@@ -90,24 +90,24 @@ const VerifyAccount = ({ navigation }) => {
                             borderRadius:100,
                             borderColor:'#d1d8ff'}} source={require("../assets/images/app-logo.jpeg")} /> */}
                         <Text style={styles.logoTitle}>
-                        Email Verification
+                            Email Verification
                         </Text>
                     </View>
 
                     <Text
-                    style={{
-                        backgroundColor:'#e6e9ff',
-                        borderRadius:5,
-                        paddingHorizontal:7,
-                        paddingVertical:10,
-                        color:"#4d61ff",
-                        marginTop:50
-                    }}
+                        style={{
+                            backgroundColor: '#e6e9ff',
+                            borderRadius: 5,
+                            paddingHorizontal: 7,
+                            paddingVertical: 10,
+                            color: "#4d61ff",
+                            marginTop: 50
+                        }}
                     >
-                    We sent you 6 digits  verification code on your email.
-                    Enter that to verify in order to get access to fwr app.
-                      </Text> 
-                
+                        We sent you 6 digits  verification code on your email.
+                        Enter that to verify in order to get access to fwr app.
+                    </Text>
+
 
                     <InputText
                         email={code}
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     forgotPassword: {
         marginTop: 20,
         textAlign: "right",
-        color:"#4d61ff",
+        color: "#4d61ff",
         fontWeight: "bold"
     },
     greyLine: {

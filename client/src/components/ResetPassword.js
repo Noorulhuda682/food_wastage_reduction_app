@@ -28,25 +28,12 @@ import {
 } from "../config/Regex"
 import InputText from "../shared/TextInput"
 
-const LOGIN = gql`
- mutation login($email:String! $password:String!){
-  login(email:$email password:$password){
-    token
-    user {
-      _id
-      name
-      email
-      role
-    }
-  }
-}
-
-`;
+import { RESET_PASSWORD } from "../typeDefs/Auth"
 
 const ResetPassword = ({ navigation }) => {
 
-    const [email, setEmail] = useState("");
-    const [checkEmail, setCheckEmail] = useState(false)
+    const [code, setCode] = useState("");
+    const [checkCode, setCheckCode] = useState(false)
     const [password, setPassword] = useState("");
     const [checkPassword, setCheckPassword] = useState(false)
     const [showPassword, setShowPassword] = useState(true);
@@ -57,57 +44,53 @@ const ResetPassword = ({ navigation }) => {
     // let userobj ={user:{ role: "USER",name:"noor",email:"noorulhuda@gmail.com" }}
 
 
-    const [_login, { data, error }] = useMutation(LOGIN);
+    const [resetPass, { data, error }] = useMutation(RESET_PASSWORD);
 
 
 
 
     const login = async () => {
 
-        // if (email === "") {
-        //     ToastAndroid.showWithGravity(
-        //         `Enter ${password === "" ? "email and password" : "email"}`,
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.CENTER
-        //     );
-        //     return false
-        // }
-
-        // if (password === "") ToastAndroid.showWithGravity(
-        //     "Enter password",
-        //     ToastAndroid.SHORT,
-        //     ToastAndroid.CENTER
-        // );
-        // setLoading(true)
-        // if (checkEmail && checkPassword) {
-        // Alert.alert("Run Login api")
-
-
-        _login({
-            variables: {
-                email: "sad@gmail.com",
-                password: "Saad1234"
-            }
-        }).then(data => {
-            console.log("LOGIN=======", data);
-            saveData(data?.login?.token);
+        if (!checkCode) {
             ToastAndroid.showWithGravity(
-                "Login Successfull",
+                "Invalide or unacceptable value of OTP input",
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
-            dispatch(addUser(data?.login?.user));
-            navigation.navigate("Home")
-            setChange(false)
+            return false
+        }
+
+        if (!checkPassword) {
+            ToastAndroid.showWithGravity(
+                "Invalid or unacceptable password",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            return false
+        }
+
+
+        setLoading(true)
+        resetPass({
+            variables: {
+                code: JSON.parse(code),
+                newPassword: password
+            }
+        }).then(({ data }) => {
+            ToastAndroid.showWithGravity(
+                "Password updated successfully",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+            setLoading(false)
+            console.log("data", data);
+            navigation.navigate("Login")
         }).catch(err => {
+            setLoading(false)
             Alert.alert(`Error : ${err}`);
         })
 
-        // dispatch(addUser({ role: "RECEIVER" ,name:"noor",email:"noorulhuda@gmail.com" }));
-        // navigation.navigate("Home")
-        // setLoading(false)
-
-        // }
+        setLoading(false)
 
     }
 
@@ -122,33 +105,35 @@ const ResetPassword = ({ navigation }) => {
                             borderRadius:100,
                             borderColor:'#d1d8ff'}} source={require("../assets/images/app-logo.jpeg")} /> */}
                         <Text style={styles.logoTitle}>
-                           Reset Password
+                            Reset Password
                         </Text>
                     </View>
 
                     <Text
-                    style={{
-                        backgroundColor:'#e6e9ff',
-                        borderRadius:5,
-                        paddingHorizontal:7,
-                        paddingVertical:10,
-                        color:"#4d61ff",
-                        marginTop:50
-                        // borderColor:"#808eff",
-                        // borderWidth:1
-                    }}
+                        style={{
+                            backgroundColor: '#e6e9ff',
+                            borderRadius: 5,
+                            paddingHorizontal: 7,
+                            paddingVertical: 10,
+                            color: "#4d61ff",
+                            marginTop: 50
+                            // borderColor:"#808eff",
+                            // borderWidth:1
+                        }}
                     >
-                    We sent you the OTP code on your gmail. enter the code below then type new password.     
+                        We sent you the OTP code on your gmail. enter the code below then type new password.
                     </Text>
-                
+
+
+
 
                     <InputText
-                        email={email}
-                        setEmail={setEmail}
-                        checkEmail={checkEmail}
-                        setCheckEmail={setCheckEmail}
-                        type={"email"}
-                        placeholder={"OTP Code"}
+                        email={code}
+                        setEmail={setCode}
+                        checkEmail={checkCode}
+                        setCheckEmail={setCheckCode}
+                        type={"code"}
+                        placeholder="OTP Code"
                         customStyle={{ marginTop: 50 }}
                     />
 
@@ -263,7 +248,7 @@ const styles = StyleSheet.create({
     forgotPassword: {
         marginTop: 20,
         textAlign: "right",
-        color:"#4d61ff",
+        color: "#4d61ff",
         fontWeight: "bold"
     },
     greyLine: {

@@ -94,7 +94,7 @@ const DrawerContent = (props) => {
 
                         <TouchableOpacity style={styles.roleBox}>
                             <Text style={{
-                                fontSize: 11,color:"gray"
+                                fontSize: 11, color: "gray"
                             }}>ROLE : {data?.user?.role}</Text>
                         </TouchableOpacity>
 
@@ -131,7 +131,7 @@ const DrawerContent = (props) => {
                         })
                     }
 
-                    <DrawerItem style={[styles.drawerItem, { paddingTop: 150 }]}
+                    <DrawerItem style={[styles.drawerItem, { paddingTop: 100 }]}
                         icon={({ color, size }) => {
                             return <AntDesign name="logout" size={23} color={"#1e319d"} />
                         }}
@@ -187,12 +187,12 @@ const styles = StyleSheet.create({
         marginTop: -25,
         alignSelf: "flex-end"
     },
-    roleBox:{
+    roleBox: {
         marginTop: 40,
         color: "navy", fontSize: 11,
         backgroundColor: "white",
         height: 42,
-        paddingHorizontal:10,
+        paddingHorizontal: 10,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 15,

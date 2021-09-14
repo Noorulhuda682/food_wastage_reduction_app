@@ -1,5 +1,5 @@
 import React, {
-    useState, useEffect, useContext
+    useState, useEffect
 } from 'react';
 import {
     View,
@@ -14,89 +14,64 @@ import {
     ToastAndroid
 } from 'react-native'
 import { Container, Header, Content, Item, Input, Icon, Spinner, Toast } from 'native-base';
-import { NavigationActions, StackActions } from '@react-navigation/native';
 import { useSelector, useDispatch } from "react-redux"
 import { addUser } from "../redux/actions/user"
 import { gql, useMutation } from "@apollo/client"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
     saveData,
+    readData
 } from "../config/setToken"
-
+import {
+    emailRegex,
+    passwordRegex
+} from "../config/Regex"
 import InputText from "../shared/TextInput"
-import { ChangeTokenHandlerContext } from "../../App"
-import { LOGIN } from "../typeDefs/Auth"
+import { VERIFY_EMAIL } from "../typeDefs/Auth"
 
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-const Login = ({ navigation }) => {
-    const ChangeTokenHandler = useContext(ChangeTokenHandlerContext);
+const VerifyAccountRequest = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [checkEmail, setCheckEmail] = useState(false)
-    const [password, setPassword] = useState("");
-    const [checkPassword, setCheckPassword] = useState(false)
-    const [showPassword, setShowPassword] = useState(true);
     const [loading, setLoading] = useState(false);
-    // const storeData = useSelector(state => state);
-    // console.log("storeData===>", storeData.user.role);
+    const [change, setChange] = useState(true);
     const dispatch = useDispatch();
 
+    const [requestToVerifyAccount, { data, error }] = useMutation(VERIFY_EMAIL);
 
 
 
-    const [_login, { data, error }] = useMutation(LOGIN);
 
-
-    const login = async () => {
-
-        if (email === "") {
+    const sendRequest = async () => {
+        if (email === "" || email === " " || email === undefined || email === null) {
             ToastAndroid.showWithGravity(
-                `Enter ${password === "" ? "email and password" : "email"}`,
+                "Empty input email",
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
             return false
         }
-
-        if (password === "") ToastAndroid.showWithGravity(
-            "Enter password",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
+        // 
         setLoading(true)
-
-        _login({
+        requestToVerifyAccount({
             variables: {
                 email,
-                password
             }
         }).then(({ data }) => {
-            // console.log("LOGIN=======", data);
-            if (data?.login?.user?.verification !== "VERIFIED") {
-                Alert.alert("Sorry! Your email is not verified")
-                setLoading(false)
-                return false;
-            }
-            saveData(data?.login?.token);
-            ChangeTokenHandler(data?.login?.token);
             ToastAndroid.showWithGravity(
-                "Login Successfull",
+                "Request is successfull",
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER
             );
-            dispatch(addUser(data?.login?.user));
             setLoading(false)
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Home' }]
-            })
+            // console.log("data", data);
+            navigation.navigate('verifyAccount');
         }).catch(err => {
             setLoading(false)
             Alert.alert(`Error : ${err}`);
         })
 
+        // setLoading(false)
     }
 
 
@@ -106,66 +81,47 @@ const Login = ({ navigation }) => {
             <ScrollView>
                 <Container style={styles.container}>
                     <View style={styles.logoView}>
-                        <Image style={{
-                            width: 150, height: 150, borderWidth: 5,
-                            borderRadius: 100,
-                            borderColor: '#d1d8ff',
-                            shadowColor: "#000",
-                            shadowOffset: {
-                                width: 0,
-                                height: 1,
-                            },
-                            shadowOpacity: 0.22,
-                            shadowRadius: 2.22,
-                            elevation: 3,
-                        }} source={require("../assets/images/app-logo.jpeg")} />
+                        {/* <Image style={{ width: 170, height: 170,borderWidth:2,
+                            borderRadius:100,
+                            borderColor:'#d1d8ff'}} source={require("../assets/images/app-logo.jpeg")} /> */}
                         <Text style={styles.logoTitle}>
-                            Food Wastage Reduction
+                            Verify Email
                         </Text>
                     </View>
 
-
+                    <Text
+                        style={{
+                            backgroundColor: '#e6e9ff',
+                            borderRadius: 10,
+                            paddingHorizontal: 7,
+                            paddingVertical: 10,
+                            color: "#4d61ff",
+                            borderColor: "#808eff",
+                            // borderWidth:2
+                        }}
+                    >Type your email below to get 6 digit code in respect to verify your email  </Text>
                     <InputText
                         email={email}
                         setEmail={setEmail}
                         checkEmail={checkEmail}
                         setCheckEmail={setCheckEmail}
                         type={"email"}
-                        placeholder={"Email..."}
+                        placeholder={"type email... "}
                         customStyle={{ marginTop: 50 }}
-                        icon={<Entypo name="email" size={14} color="lightgray" />}
-                    />
-
-                    <InputText
-                        email={password}
-                        setEmail={setPassword}
-                        checkEmail={checkPassword}
-                        setCheckEmail={setCheckPassword}
-                        type={"password"}
-                        placeholder={"Password..."}
-                        showPassword={showPassword}
-                        setShowPassword={setShowPassword}
-                        customStyle={{ marginTop: 12 }}
-                        icon={<FontAwesome5 name="key" size={14} color="lightgray" />}
                     />
 
 
-                    <View style={styles.linksView}>
-                        <TouchableOpacity onPress={() => navigation.navigate("forgotPassword")}>
-                            <Text style={styles.forgotPassword}>forgot-password</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate("verifyAccountRequest")}>
-                            <Text style={styles.forgotPassword}>verify-email</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.forgotPassword}>back-to-login</Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={login}
-                        style={{ marginTop: 20 }}>
+                        onPress={sendRequest}
+                        style={{ marginTop: 50 }}>
                         <View style={styles.loginButton} >
                             {loading ? <ActivityIndicator color='white' size="small" />
                                 :
-                                <Text style={{ color: "white", textAlign: "center" }} >LOGIN</Text>
+                                <Text style={{ color: "white", textAlign: "center" }} >Send Request</Text>
                             }
                         </View>
                     </TouchableOpacity>
@@ -192,12 +148,11 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
     },
     scrollView: {
-        paddingBottom: 400,
+
     },
     container: {
-        marginTop: 100,
+        marginTop: 160,
         paddingHorizontal: 40,
-
     },
     logoView: {
         display: "flex",
@@ -242,6 +197,7 @@ const styles = StyleSheet.create({
         textShadowOffset: { width: -1, height: 1 },
         textShadowRadius: 1,
         fontWeight: "bold",
+        marginBottom: 100,
     },
     signUp: {
         textAlign: "center",
@@ -253,20 +209,18 @@ const styles = StyleSheet.create({
     },
     forgotPassword: {
         marginTop: 20,
+        textAlign: "right",
         color: "#4d61ff",
         fontWeight: "bold"
     },
     greyLine: {
         textAlign: "center",
-        marginTop: 30,
+        marginTop: 50,
         color: "lightgray"
-    },
-    linksView: {
-        flexDirection: "row-reverse",
-        paddingVertical: 5,
-        justifyContent: "space-between"
     }
 
 })
 
-export default Login;
+export default VerifyAccountRequest;
+
+

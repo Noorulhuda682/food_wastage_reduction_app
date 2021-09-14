@@ -99,11 +99,11 @@ const Profile = ({ navigation }) => {
 
     // IMAGE UPLOADING TO CLOUDINARY 
     if (profile !== user?.profileImage) {
-      Alert.alert(`running`)
+      // Alert.alert(`running`)
       let imageFile = setImageFileForCloudinary(profile)
       let data = await uploadImageToCloud(imageFile)
       var { uploading, message, url } = data
-      console.log("URL=======", url);
+      // console.log("URL=======", url);
       if (uploading) {
         updateObj.profileImage = url
       } else {
@@ -246,7 +246,7 @@ const Profile = ({ navigation }) => {
           />
           <Divider />
 
-          <Text style={styles.grayText} >Date of Birth</Text>
+          {/* <Text style={styles.grayText} >Date of Birth</Text>
           <Item style={styles.item}>
             <Input
               value={dateOfBirth}
@@ -255,7 +255,7 @@ const Profile = ({ navigation }) => {
               placeholderTextColor="lightgray"
               onChangeText={(emails) => setDateOfBirth(emails)}
             />
-          </Item>
+          </Item> */}
 
           <Text style={styles.grayText} >Address</Text>
           <Item style={styles.item}>
@@ -269,7 +269,7 @@ const Profile = ({ navigation }) => {
           <Text style={styles.grayText} >Contact#</Text>
           <Item style={styles.item}>
             <Input
-              value={contact.toString()}
+              value={contact?.toString()}
               style={styles.input}
               keyboardType="numeric"
               placeholder="example 03341828064"

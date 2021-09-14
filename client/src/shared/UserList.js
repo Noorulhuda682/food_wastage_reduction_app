@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   ActivityIndicator,
@@ -15,24 +15,24 @@ import {
   Icon,
   SwipeRow,
 } from 'native-base';
-import {useMutation} from '@apollo/client';
-import {DELETE_USER} from '../typeDefs/User';
-import {DELETE_RECEIVER} from '../typeDefs/Receiver';
+import { useMutation } from '@apollo/client';
+import { DELETE_USER } from '../typeDefs/User';
+import { DELETE_RECEIVER } from '../typeDefs/Receiver';
 
-const UserList = ({navigation, user, index, routeName}) => {
+const UserList = ({ navigation, user, index, routeName }) => {
   const [loading, setLoading] = useState(false);
   const leftSwap = useRef("");
 
-  const [deleteUserOrReceiver, {}] = useMutation(
+  const [deleteUserOrReceiver, { }] = useMutation(
     user.role === 'USER' ? DELETE_USER : DELETE_RECEIVER,
   );
 
   const deletionHandler = async id => {
     setLoading(true);
-    let payload = user.role === 'USER' ? {userId: id} : {receiverId: id};
-    await deleteUserOrReceiver({variables: payload})
+    let payload = user.role === 'USER' ? { userId: id } : { receiverId: id };
+    await deleteUserOrReceiver({ variables: payload })
       .then(res => {
-        console.log('Log1===', res);
+        // console.log('Log1===', res);
         ToastAndroid.showWithGravity(
           'Deletion is sucessfull',
           ToastAndroid.SHORT,
@@ -56,7 +56,7 @@ const UserList = ({navigation, user, index, routeName}) => {
         onPress: () => null,
         style: 'cancel',
       },
-      {text: 'YES', onPress: () => deletionHandler(id)},
+      { text: 'YES', onPress: () => deletionHandler(id) },
     ]);
     return true;
   };
@@ -69,7 +69,7 @@ const UserList = ({navigation, user, index, routeName}) => {
       }}>
       <SwipeRow
         disableLeftSwipe={true}
-        ref={(c) => leftSwap.current = c }
+        ref={(c) => leftSwap.current = c}
         leftOpenValue={75}
         // stopLeftSwipe={75}
         rightOpenValue={-75}
@@ -80,7 +80,7 @@ const UserList = ({navigation, user, index, routeName}) => {
             ) : (
               <TouchableOpacity
                 onPress={() => confirmationHandler(user._id)}
-                style={{backgroundColor: null}}>
+                style={{ backgroundColor: null }}>
                 <Icon active name="trash" />
               </TouchableOpacity>
             )}
@@ -102,8 +102,8 @@ const UserList = ({navigation, user, index, routeName}) => {
                 flex: 1,
                 flexDirection: 'row',
               }}>
-              <View style={{flex: 2, backgroundColor: 'white', height: 60}}>
-              
+              <View style={{ flex: 2, backgroundColor: 'white', height: 60 }}>
+
                 {user.profileImage ? (
                   <Image
                     style={{
@@ -111,7 +111,7 @@ const UserList = ({navigation, user, index, routeName}) => {
                       width: 60,
                       marginTop: -13,
                     }}
-                    source={{uri: user.profileImage}}
+                    source={{ uri: user.profileImage }}
                   />
                 ) : (
                   <Text
@@ -135,10 +135,10 @@ const UserList = ({navigation, user, index, routeName}) => {
                   marginLeft: 10,
                 }}>
                 <Text
-                  style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+                  style={{ color: 'black', fontWeight: 'bold', fontSize: 15 }}>
                   {user.name}
                 </Text>
-                <Text style={{color: 'gray', fontSize: 11}}>{user.email}</Text>
+                <Text style={{ color: 'gray', fontSize: 11 }}>{user.email}</Text>
               </View>
               <View
                 style={{
@@ -148,7 +148,7 @@ const UserList = ({navigation, user, index, routeName}) => {
                 }}>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('detailsPage', {routeName, user})
+                    navigation.navigate('detailsPage', { routeName, user })
                   }
                   style={styles.detailsButton}>
                   <Text style={styles.detailsText}>details</Text>

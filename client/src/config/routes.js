@@ -111,13 +111,13 @@ const adminRoutes = [
         iconName: "check-square",
         iconSize: 24,
     },
-    {
-        routeName: "feedbacks",
-        label: "Feedbacks",
-        iconCompnay: "MaterialIcons",
-        iconName: "feedback",
-        iconSize: 24,
-    },
+    // {
+    //     routeName: "feedbacks",
+    //     label: "Feedbacks",
+    //     iconCompnay: "MaterialIcons",
+    //     iconName: "feedback",
+    //     iconSize: 24,
+    // },
 ]
 
 
